@@ -19,7 +19,7 @@ const SearchSC = styled.div`
             grid-template-columns: repeat(2, 1fr);
         }
     }
-
+ 
     [data-div='no-result']{
         margin: 0.8rem 1rem;
         h1 {
