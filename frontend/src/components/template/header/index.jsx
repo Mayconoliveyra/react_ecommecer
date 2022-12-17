@@ -1,7 +1,9 @@
 import styled from "styled-components"
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
+
+import StoreContext from "../../../context/store"
 
 const HeaderSC = styled.header`
     background-color: ${({ theme }) => theme.colors.secondaryColor};
@@ -31,6 +33,7 @@ const HeaderSC = styled.header`
 `
 export default function Header() {
     const router = useRouter()
+    const store = useContext(StoreContext)
     const [inputSearch, setInputSearch] = useState('')
     const { query: { search } } = router
 
@@ -46,28 +49,12 @@ export default function Header() {
 
     return (
         <HeaderSC>
-            {router.pathname != '/produto/[id]' ? (
-                <div>
-                    <Link href="/">
-                        <h1>Pet Friends Acessories</h1>
-                    </Link>
-
-                    <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
-
-
-                </div>
-
-            ) :
-                (
-                    <div>
-                        <Link href="/">
-                            <h1>
-                                Detalhes do Produto
-                            </h1>
-                        </Link>
-                    </div>
-                )
-            }
+            <div id="a-header">
+                <Link href="/">
+                    <h1>{store.nome}</h1>
+                </Link>
+                <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
+            </div>
         </HeaderSC >
     )
 }

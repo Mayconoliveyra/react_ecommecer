@@ -1,4 +1,7 @@
 module.exports = (app) => {
+  app.route("/store")
+    .get(app.api.store.get)
+
   app.route("/products")
     .get(app.api.products.get)
     .post(app.api.products.save);

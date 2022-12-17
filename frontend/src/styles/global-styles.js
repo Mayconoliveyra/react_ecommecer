@@ -18,6 +18,7 @@ export const GlobalStyles = createGlobalStyle`
       padding: 0;
       margin: 0;
       box-sizing: border-box;
+      scroll-behavior: smooth !important;
   }
 
   @media (max-width: 1080px){
@@ -50,15 +51,17 @@ export const GlobalStyles = createGlobalStyle`
  
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.font.family.medium};
-    margin: ${({ theme }) => theme.spacings.xsmall} 0;
     font-weight: normal;
+    margin: 0px;
+    padding: 0px;
   }
   p {
-    margin: ${({ theme }) => theme.spacings.medium} 0;
+    margin: 0px;
+    padding: 0px;
   }
   ul, ol {
-    margin: ${({ theme }) => theme.spacings.medium};
-    padding: ${({ theme }) => theme.spacings.medium};
+    margin: 0px;
+    padding: 0px;
   }
   li{
     list-style-type: none;
