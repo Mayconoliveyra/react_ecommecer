@@ -7,7 +7,6 @@ const SectionSC = styled.section`
     margin-top: 12px;
     max-width: calc(100vw - 15px);
     overflow: hidden;
-
     [data-div="name"] {
         h2 {
             margin: 0px;

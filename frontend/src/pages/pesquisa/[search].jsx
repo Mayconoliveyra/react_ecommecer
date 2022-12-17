@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CardSearch from "./components/cardSearch";
 
 const SearchSC = styled.div`
+    border: solid 1px red;
     [data-div="title"]{
         >h1 {
             font-size: 1.3rem;

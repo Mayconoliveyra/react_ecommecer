@@ -40,15 +40,12 @@ export const GlobalStyles = createGlobalStyle`
     font-family: ${({ theme }) => theme.font.family.regular};
     color:  #333333; 
   }
-  #__next {
-    min-height: 100vh;
-  }
 
   main {
     max-width: 1120px;
     width: 100%;
     margin: 0px auto;
-    min-height: 160vh;
+    min-height:calc( 100vh - 200px);
   }
  
   h1, h2, h3, h4, h5, h6 {

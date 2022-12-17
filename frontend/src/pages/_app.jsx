@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import MyCartContext from "../context/myCart"
 import Header from "../components/Template/Header"
 import Content from "../components/template/content"
-import Footer from "../components/template/footer"
+import Nav from "../components/template/nav"
 import { useEffect, useState } from "react";
 
 export default function MyApp({ Component, pageProps }) {
@@ -43,7 +43,7 @@ export default function MyApp({ Component, pageProps }) {
         <Content>
           <Component {...pageProps} />
         </Content>
-        <Footer />
+        <Nav />
       </MyCartContext.Provider>
     </ThemeProvider>
   )

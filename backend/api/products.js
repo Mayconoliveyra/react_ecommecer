@@ -1,6 +1,5 @@
 module.exports = (app) => {
     const { existeOuErro, utility_console, msgErrorDefault, formatBody, notExistOrErrorDB } = app.api.utilities;
-    const { LimitOFFSET, orderBy, whereNullDeleted } = app.api.queries;
     const { simplify } = app.api.search;
 
     const table = "products";
@@ -83,7 +82,7 @@ module.exports = (app) => {
                 .then(products => res.json(products))
                 .catch((error) => {
                     utility_console({
-                        name: "products.get.id",
+                        name: "products.get.search",
                         type: "ERROR",
                         message: "Não foi possível consultar",
                         error: error

@@ -26,6 +26,11 @@ export const theme = {
       xhuge: "2.2rem",
     },
   },
+  width: {
+    small: "17.5rem",
+    medium: "35rem",
+    large: "70rem",
+  },
   media: {
     lteMedium: "(max-width: 768px)",
   },
