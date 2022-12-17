@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { moneyMask } from "../../../../../masks"
+import { moneyMask } from "../../../masks"
 import Link from "next/link"
 
 const CardSearchSC = styled(Link)`
@@ -83,7 +83,7 @@ const CardSearchSC = styled(Link)`
             }
         }
 `
-export default function CardSearch({ id, url_img, name, price, price_promotion, promotion }) {
+export const CardSearch = ({ id, url_img, name, price, price_promotion, promotion }) => {
     return (
         <CardSearchSC href={`/produto/${id}`}>
             <div>
