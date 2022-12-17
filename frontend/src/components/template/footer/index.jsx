@@ -35,13 +35,15 @@ const NavSC = styled.footer`
         }
     }
     [data-div='media']{
-        /* backdrop-filter: brightness(60%); */
-        max-width: ${({ theme }) => theme.width.large};
-        text-align: center;
-        margin: 0px auto;
+        /* backdrop-filter: brightness(80%); */
         padding: 0.7rem 0.5rem;
         >div{
+            max-width: ${({ theme }) => theme.width.large};
+            margin: 0px auto;
             padding: 0.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             h5{
                 margin: 0px;
                 margin-bottom: 1.3rem;
@@ -55,7 +57,7 @@ const NavSC = styled.footer`
         }
     }
     [data-div='terms']{
-        /* backdrop-filter: opacity(20%); */
+        backdrop-filter: brightness(80%);
         padding: 1rem 1rem;
         div {
             max-width:${({ theme }) => theme.width.large};
