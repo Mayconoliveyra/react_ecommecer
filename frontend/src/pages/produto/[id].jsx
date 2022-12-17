@@ -103,7 +103,7 @@ const FootCardSC = styled.footer`
     bottom: 0px;
     width: 100%;
     border-top: solid 1px #EDEDED;
-    opacity: 999;
+    z-index: 999;
     border-top: solid 1px #d6d6d6;
     background-color: #FFFFFF;
     div {

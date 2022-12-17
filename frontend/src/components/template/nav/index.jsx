@@ -11,7 +11,7 @@ const NavSC = styled.footer`
     width:100%;
     border-top: solid 1px #d6d6d6;
     background-color: #FFFFFF;
-    opacity: 999;
+    z-index: 999;
     div {
         display: flex;
         justify-content:space-around;
