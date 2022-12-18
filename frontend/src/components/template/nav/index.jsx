@@ -51,7 +51,7 @@ export default function Nav() {
                     <HouseDoor />
                     <p>Home</p>
                 </Link>
-                <Link href="/">
+                <Link href="/carrinho">
                     <Cart3 />
                     <p>Carrinho({myCart && myCart.length ? myCart.length : 0})</p>
                 </Link>

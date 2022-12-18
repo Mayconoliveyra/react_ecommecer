@@ -43,7 +43,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   main {
-    max-width: 1120px;
+    max-width: ${({ theme }) => theme.width.large};
     width: 100%;
     margin: 0px auto;
     min-height:calc( 100vh - 200px);

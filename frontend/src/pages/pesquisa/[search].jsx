@@ -1,6 +1,12 @@
-import { getSearch } from "../../adapters/products";
+import Head from "next/head";
 import styled from "styled-components";
+
 import { CardSearch } from "../../components/card/cardSearch"
+
+import StoreContext from "../../context/store";
+
+import { getSearch } from "../../adapters/products";
+import { useContext } from "react";
 
 const SearchSC = styled.div`
     [data-div="title"]{
@@ -36,26 +42,32 @@ const SearchSC = styled.div`
 `
 
 export default function Search({ data, search }) {
+    const store = useContext(StoreContext)
     return (
-        <SearchSC>
-            {data.length > 0 ?
-                <>
-                    <div data-div="title"><h1>RESULTADOS</h1></div>
-                    <div data-div="cads">
-                        {data && data.map((item) => {
-                            return <CardSearch key={item.id} {...item} />
-                        })}
-                    </div>
-                </>
-                :
-                <>
-                    <div data-div='no-result'>
-                        <h1>Nenhum resultado para {search}.</h1>
-                        <p> Tente verificar a ortografia ou usar termos mais genéricos</p>
-                    </div>
-                </>
-            }
-        </SearchSC>
+        <>
+            <Head>
+                <title>{store.nome} : {search}</title>
+            </Head>
+            <SearchSC>
+                {data.length > 0 ?
+                    <>
+                        <div data-div="title"><h1>RESULTADOS</h1></div>
+                        <div data-div="cads">
+                            {data && data.map((item) => {
+                                return <CardSearch key={item.id} {...item} />
+                            })}
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div data-div='no-result'>
+                            <h1>Nenhum resultado para {search}.</h1>
+                            <p> Tente verificar a ortografia ou usar termos mais genéricos</p>
+                        </div>
+                    </>
+                }
+            </SearchSC>
+        </>
     );
 }
 

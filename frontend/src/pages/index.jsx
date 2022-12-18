@@ -1,12 +1,21 @@
-import { getAll } from "../adapters/products"
+import Head from "next/head";
+import { useContext } from "react";
 
 import CategoriesNav from "../components/categoriesNav";
 import CardsNav from "../components/cardsNav";
 import { CardHome } from "../components/card/cardHome"
 
+import StoreContext from "../context/store";
+
+import { getAll } from "../adapters/products"
+
 export default function Home({ camas, brinquedos, cozinhas }) {
+  const store = useContext(StoreContext)
   return (
     <>
+      <Head>
+        <title>{store.nome}</title>
+      </Head>
       <CategoriesNav />
       <CardsNav name={"Camas"}>
         {camas.map((item) => {

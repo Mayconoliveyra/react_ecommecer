@@ -1,12 +1,13 @@
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { Dash, Plus } from "react-bootstrap-icons"
 
-import { getByID } from "../../adapters/products"
-import { moneyMask } from "../../../masks"
 import MyCartContext from "../../context/myCart";
+import { moneyMask } from "../../../masks"
 
+import { getByID } from "../../adapters/products"
 
 const SectionSC = styled.section`
     display: flex;
@@ -190,39 +191,45 @@ export default function Product({ data }) {
     }
 
     return (
-        <SectionSC>
-            <div data-div="product">
-                <div data-div="img-main">
-                    <div>
-                        {!!product.promotion && (<span>{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}% OFF</span>)}
-                        <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.name} />
-                    </div>
-                </div>
-                <div data-div="name">
-                    <h2>{product.name}</h2>
-                </div>
-                <div data-div="description">
-                    <p>{product.description}</p>
-                </div>
+        <>
+            <Head>
+                <title>{product.name}</title>
+            </Head>
 
-                <div data-div="observation">
-                    <label htmlFor="observation">Observações: <span>{observation ? observation.length : 0}/255</span></label>
-                    <textarea value={observation} onChange={(e) => setObservation(e.target.value)} id="observation" name="observation" rows="3" maxLength={255} />
-                </div>
-            </div>
-            <FootCardSC>
-                <div>
-                    <div data-div="input-div">
-                        <button type="button" onClick={() => handleQuantity(Number(quantity - 1))}><Dash /></button>
-                        <input ref={refQuantily} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
-                        <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
+            <SectionSC>
+                <div data-div="product">
+                    <div data-div="img-main">
+                        <div>
+                            {!!product.promotion && (<span>{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}% OFF</span>)}
+                            <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.name} />
+                        </div>
                     </div>
-                    <button onClick={() => handleAddMyCart(product)} type="button" data-div="btn-div">
-                        Adicionar  <span>{!!product.promotion ? moneyMask(product.price_promotion) : moneyMask(product.price)} </span>
-                    </button>
+                    <div data-div="name">
+                        <h2>{product.name}</h2>
+                    </div>
+                    <div data-div="description">
+                        <p>{product.description}</p>
+                    </div>
+
+                    <div data-div="observation">
+                        <label htmlFor="observation">Observações: <span>{observation ? observation.length : 0}/255</span></label>
+                        <textarea value={observation} onChange={(e) => setObservation(e.target.value)} id="observation" name="observation" rows="3" maxLength={255} />
+                    </div>
                 </div>
-            </FootCardSC>
-        </SectionSC>
+                <FootCardSC>
+                    <div>
+                        <div data-div="input-div">
+                            <button type="button" onClick={() => handleQuantity(Number(quantity - 1))}><Dash /></button>
+                            <input ref={refQuantily} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
+                            <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
+                        </div>
+                        <button onClick={() => handleAddMyCart(product)} type="button" data-div="btn-div">
+                            Adicionar  <span>{!!product.promotion ? moneyMask(product.price_promotion) : moneyMask(product.price)} </span>
+                        </button>
+                    </div>
+                </FootCardSC>
+            </SectionSC>
+        </>
     );
 }
 
