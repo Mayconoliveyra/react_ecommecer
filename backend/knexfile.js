@@ -1,11 +1,11 @@
-const { mysqlServerConect } = require("./.env");
+const { BASE_CONNECT } = require("./.env");
 
 module.exports = {
   client: "mysql2",
-  connection: mysqlServerConect,
+  connection: BASE_CONNECT,
   pool: {
     min: 2,
-    max: 7,
+    max: 10
   },
   migrations: {
     tableName: "wpp_migrations",

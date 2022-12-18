@@ -10,4 +10,7 @@ module.exports = (app) => {
     .get(app.api.products.get)
     .put(app.api.products.save)
     .delete(app.api.products.remove);
+
+  app.route("/cart")
+    .get(app.api.cart.getProducts)
 };

@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import MyCartContext from "../context/myCart"
 import StoreContext from "../context/store";
 import { get } from "../adapters/store";
+import { getCartProducts } from "../adapters/cart";
+
 
 import Header from "../components/Template/Header"
 import Content from "../components/template/content"
@@ -32,7 +34,10 @@ export default function MyApp({ Component, pageProps }) {
     const myCartStorage = localStorage.getItem("myCart");
 
     if (myCartStorage) {
-      setMyCart(JSON.parse(myCartStorage))
+      localStorage.removeItem("myCart")
+      const myCartDB = await getCartProducts(myCartStorage).then((res) => res.data)
+      localStorage.setItem('myCart', JSON.stringify(myCartDB))
+      setMyCart(myCartDB)
     }
   }
 

@@ -182,7 +182,6 @@ export default function Product({ data }) {
             quantity: quantity,
             observation: observation
         }
-
         myCartStorage.push(modelAdd)
 
         localStorage.setItem('myCart', JSON.stringify(myCartStorage))

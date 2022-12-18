@@ -73,7 +73,6 @@ module.exports = (app) => {
         const search = req.query._search ?? null
 
         if (search) {
-            console.log(simplify(search))
             await app.db(table)
                 .whereNull("deleted_at")
                 .limit(limit).offset(page * limit - limit)
