@@ -3,7 +3,7 @@ import { CartPlusFill } from "react-bootstrap-icons"
 import { moneyMask } from "../../../masks"
 import Link from "next/link"
 
-const CardSC = styled(Link)`
+const CardHomeSC = styled(Link)`
     display: flex;
     flex-direction: column;
     border: solid 1px #D9D9D9;
@@ -87,9 +87,9 @@ const CardSC = styled(Link)`
         }
     }
 `
-export default function Card({ id, url_img, name, price, price_promotion, promotion }) {
+export const CardHome = ({ id, url_img, name, price, price_promotion, promotion }) => {
     return (
-        <CardSC href={`/produto/${id}`}>
+        <CardHomeSC href={`/produto/${id}`}>
             <div data-div="img">
                 {!!promotion && (<span>{(Number(price - price_promotion) / Number(price) * 100).toFixed(0)}% OFF</span>)}
                 <img src={url_img ? url_img : '/assets/images/default_product.png'} alt={name} />
@@ -115,6 +115,6 @@ export default function Card({ id, url_img, name, price, price_promotion, promot
                     <CartPlusFill />
                 </div>
             </div>
-        </CardSC>
+        </CardHomeSC>
     )
 }

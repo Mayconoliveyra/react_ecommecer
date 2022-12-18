@@ -1,6 +1,6 @@
 import { getSearch } from "../../adapters/products";
 import styled from "styled-components";
-import { CardSearch } from "./cardSearch";
+import { CardSearch } from "../../components/card/cardSearch"
 
 const SearchSC = styled.div`
     [data-div="title"]{
