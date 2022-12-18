@@ -44,7 +44,7 @@ const CardSearchSC = styled(Link)`
                     h2 {
                         margin: 3px 0px;
                         font-size: ${({ theme }) => theme.font.sizes.small};
-                        font-family: ${({ theme }) => theme.font.family.regular};
+                        font-family: ${({ theme }) => theme.font.family.medium};
 
                         @media (max-width: 720px){
                             font-size: 1.15rem;

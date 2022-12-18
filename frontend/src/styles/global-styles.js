@@ -39,7 +39,7 @@ export const GlobalStyles = createGlobalStyle`
   body, input, textarea, select, button, a{
     font-size: ${({ theme }) => theme.font.sizes.xsmall};
     font-family: ${({ theme }) => theme.font.family.regular};
-    color:  #333333; 
+    color: #0F1111;
   }
 
   main {

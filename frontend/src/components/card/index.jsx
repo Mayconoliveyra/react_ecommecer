@@ -26,15 +26,15 @@ const CardSC = styled(Link)`
         align-items: center;
         justify-content:center;
         span {
-            font-size: ${({ theme }) => theme.font.sizes.xsmall};
-            color: #FFFFFF;
             position:absolute;
-            background-color: #77D500;
-            border-radius: 3px;
+            border-radius: 2px;
             border-top-left-radius: 0px;
-            padding: 1px 5px;
             top: 0px;
             left: -1px;
+            font-size: 0.9rem;
+            background-color: #7fda69;
+            color: #111;
+            padding: 2px 5px;
         }
         img {
             max-width: 140px;
@@ -47,7 +47,7 @@ const CardSC = styled(Link)`
         
         h2 {
             font-size: ${({ theme }) => theme.font.sizes.small};
-            font-family: ${({ theme }) => theme.font.family.regular};
+            font-family: ${({ theme }) => theme.font.family.medium};
 
             overflow: hidden;
             text-overflow: ellipsis;
