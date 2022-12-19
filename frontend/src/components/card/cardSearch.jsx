@@ -25,8 +25,8 @@ const CardSearchSC = styled(Link)`
                 background-color: #F8F8F8;
                 padding: 0.5rem;
                 img {
-                    max-width: 150px;
-                    max-height: 200px;
+                    max-width: 145px;
+                    max-height: 135px;
                 }
             }
 
@@ -44,7 +44,6 @@ const CardSearchSC = styled(Link)`
                     h2 {
                         margin: 3px 0px;
                         font-size: ${({ theme }) => theme.font.sizes.small};
-                        font-family: ${({ theme }) => theme.font.family.medium};
 
                         @media (max-width: 720px){
                             font-size: 1.15rem;
@@ -64,12 +63,14 @@ const CardSearchSC = styled(Link)`
                     display: flex;
                     margin-top: 2px;
                     span:nth-child(1) {
+                        margin-right: 1px;
                         position:relative;
-                        top: 0.2rem;
-                        font-size: 1.1rem;;
+                        top: 0.1rem;
+                        font-size: 1rem;
+                        font-family: ${({ theme }) => theme.font.family.bold};
                     }
                     span:nth-child(2) {
-                        font-size: 1.6rem;
+                        font-size: 1.5rem;
                         font-family: ${({ theme }) => theme.font.family.medium};
                     }
                     span:nth-child(3) {

@@ -11,22 +11,19 @@ module.exports = (app) => {
 
             for (let index = 0; index < mycartArray.length; index++) {
                 const item = mycartArray[index];
-                const data = await app.db.raw(`SELECT 
-                products.id, 
-                products.name, 
-                products.url_img, 
-                products.price, 
-                products.price_promotion, 
-                products.promotion, 
-                products.description, 
-                categories.name AS id_category, 
+                const data = await app.db.raw(`
+                SELECT 
+                id, 
+                name, 
+                url_img, 
+                price, 
+                price_promotion, 
+                promotion,  
                 ${item.quantity} AS quantity, price*${item.quantity} AS amount, 
-                price_promotion*${item.quantity} AS amount_promotion, 
-                "${item.observation ?? ''}" AS observation
-                FROM products INNER JOIN categories 
-                ON products.id_category = categories.id
-                WHERE (((products.id)=${item.id}) 
-                AND ((products.deleted_at) Is Null));
+                price_promotion*${item.quantity} AS amount_promotion
+                FROM products
+                WHERE id=${item.id} 
+                AND deleted_at Is Null;
                 `).then((res) => res[0][0])
                 dataReturn.push(data)
             }

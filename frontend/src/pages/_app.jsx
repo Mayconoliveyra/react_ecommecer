@@ -1,21 +1,19 @@
 import { GlobalStyles } from "../styles/global-styles"
 import { ThemeProvider } from "styled-components"
-import { theme } from "../styles/theme"
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
 
-import MyCartContext from "../context/myCart"
-import StoreContext from "../context/store";
-import { get } from "../adapters/store";
-import { getCartProducts } from "../adapters/cart";
-
-
 import Header from "../components/Template/Header"
 import Content from "../components/template/content"
 import Nav from "../components/template/nav"
+import { theme } from "../styles/theme"
 
+import { get } from "../adapters/store";
+import { cartLocalStorage } from "../adapters/cart";
+
+import StoreContext from "../context/store";
+import MyCartContext from "../context/myCart"
 
 export default function MyApp({ Component, pageProps }) {
   const [myCart, setMyCart] = useState([])
@@ -31,14 +29,7 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   const handleMyCart = async () => {
-    const myCartStorage = localStorage.getItem("myCart");
-
-    if (myCartStorage) {
-      localStorage.removeItem("myCart")
-      const myCartDB = await getCartProducts(myCartStorage).then((res) => res.data)
-      localStorage.setItem('myCart', JSON.stringify(myCartDB))
-      setMyCart(myCartDB)
-    }
+    setMyCart(await cartLocalStorage())
   }
 
   return (

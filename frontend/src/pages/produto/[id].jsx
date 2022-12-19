@@ -4,10 +4,13 @@ import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { Dash, Plus } from "react-bootstrap-icons"
 
-import MyCartContext from "../../context/myCart";
+
 import { moneyMask } from "../../../masks"
 
 import { getByID } from "../../adapters/products"
+import { cartLocalStorage } from "../../adapters/cart";
+
+import MyCartContext from "../../context/myCart";
 
 const SectionSC = styled.section`
     display: flex;
@@ -71,30 +74,6 @@ const SectionSC = styled.section`
                 font-size: ${({ theme }) => theme.font.sizes.small};
                 margin: 0px;
                 padding: 0px;
-            }
-        }
-
-        [data-div="observation"] {
-            display: flex;
-            flex-direction: column;
-
-            label {
-                margin-top: 1rem;
-                margin-bottom: 0.4rem;
-                color: ${({ theme }) => theme.colors.secondaryColor};
-                font-family: ${({ theme }) => theme.font.family.medium};
-                font-size: ${({ theme }) => theme.font.sizes.small};
-                display: flex;
-                span {
-                    margin-left: auto;
-                    color: #B8B8B8;
-                    font-size: 0.7rem;;
-                }
-            }
-
-            textarea {
-                border-radius: 4px;
-                padding: 0.1rem 0.3rem;
             }
         }
     }
@@ -165,7 +144,6 @@ export default function Product({ data }) {
     const { setMyCart } = useContext(MyCartContext)
     const refQuantily = useRef();
     const [quantity, setQuantity] = useState(1)
-    const [observation, setObservation] = useState()
     const router = useRouter()
 
     const handleQuantity = (newValue) => {
@@ -176,17 +154,8 @@ export default function Product({ data }) {
         setQuantity(refQuantily.current.value)
     }
 
-    const handleAddMyCart = (product) => {
-        const myCartStorage = JSON.parse(localStorage.getItem('myCart')) ?? []
-        const modelAdd = {
-            id: product.id,
-            quantity: quantity,
-            observation: observation
-        }
-        myCartStorage.push(modelAdd)
-
-        localStorage.setItem('myCart', JSON.stringify(myCartStorage))
-        setMyCart(myCartStorage)
+    const handleAddMyCart = async (id, quantity) => {
+        setMyCart(await cartLocalStorage(id, quantity))
         router.push("/")
     }
 
@@ -210,11 +179,6 @@ export default function Product({ data }) {
                     <div data-div="description">
                         <p>{product.description}</p>
                     </div>
-
-                    <div data-div="observation">
-                        <label htmlFor="observation">Observações: <span>{observation ? observation.length : 0}/255</span></label>
-                        <textarea value={observation} onChange={(e) => setObservation(e.target.value)} id="observation" name="observation" rows="3" maxLength={255} />
-                    </div>
                 </div>
                 <FootCardSC>
                     <div>
@@ -223,7 +187,7 @@ export default function Product({ data }) {
                             <input ref={refQuantily} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
                             <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
                         </div>
-                        <button onClick={() => handleAddMyCart(product)} type="button" data-div="btn-div">
+                        <button onClick={() => handleAddMyCart(product.id, quantity)} type="button" data-div="btn-div">
                             Adicionar  <span>{!!product.promotion ? moneyMask(product.price_promotion) : moneyMask(product.price)} </span>
                         </button>
                     </div>

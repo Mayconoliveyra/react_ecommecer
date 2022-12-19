@@ -47,7 +47,6 @@ const CardHomeSC = styled(Link)`
         
         h2 {
             font-size: ${({ theme }) => theme.font.sizes.small};
-            font-family: ${({ theme }) => theme.font.family.medium};
 
             overflow: hidden;
             text-overflow: ellipsis;
