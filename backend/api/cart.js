@@ -2,6 +2,11 @@ module.exports = (app) => {
     const { existeOuErro, utility_console, msgErrorDefault } = app.api.utilities;
 
     const getProducts = async (req, res) => {
+
+        const ipCliente = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+        console.log(ipCliente)
+        const ipCliente2 = req.ip
+        console.log(ipCliente2)
         const mycart = req.query._mycart
         const dataReturn = [];
 
@@ -34,13 +39,43 @@ module.exports = (app) => {
         } catch (error) {
             utility_console({
                 name: "cart.getProducts",
-                type: "ERROR",
-                message: "Não foi possível consultar",
                 error: error
             });
             res.status(500).send(msgErrorDefault)
         }
     };
+    const incrementProduct = async (req, res) => {
+        const body = req.body
+        const modelo = {
+            ip_user: req.ip,
+            id_product: body.id_product,
+            quantity: body.quantity,
+        }
 
-    return { getProducts };
+
+        try {
+            existeOuErro(modelo.ip_user, "ip_user não pode ser nulo.")
+            existeOuErro(modelo.id_product, "id_product não pode ser nulo.")
+            existeOuErro(modelo.quantity, "quantity não pode ser nulo.")
+
+            app.db("temp_cart")
+                .insert(modelo)
+                .then(() => res.status(204).send())
+                .catch((error) => {
+                    utility_console({
+                        name: "cart.incrementProduct",
+                        error: error,
+                    });
+                    return res.status(500).send(msgErrorDefault);
+                });
+        } catch (error) {
+            utility_console({
+                name: "cart.incrementProduct",
+                error: error,
+            });
+            res.status(500).send(msgErrorDefault)
+        }
+    };
+
+    return { getProducts, incrementProduct };
 };

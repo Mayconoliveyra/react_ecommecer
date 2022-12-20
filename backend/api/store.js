@@ -9,8 +9,6 @@ module.exports = (app) => {
             .catch((error) => {
                 utility_console({
                     name: "store.get",
-                    type: "ERROR",
-                    message: "Não foi possível consultar",
                     error: error
                 });
                 return res.status(500).send(msgErrorDefault);

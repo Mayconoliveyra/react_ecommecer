@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
 
-import { CardOne } from "../../components/card/CardOne"
+import { CardOne } from "../../components/card/cardOne"
 
 import StoreContext from "../../context/store";
 

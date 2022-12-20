@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
-import { CardOne } from "../../components/card/CardOne"
+import { CardOne } from "../../components/card/cardOne"
 
 import { cartLocalStorage } from "../../adapters/cart"
 

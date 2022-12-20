@@ -95,23 +95,5 @@ module.exports = (app) => {
         return arrayRetun
     }
 
-    async function procutsSimplify() {
-        const products = await app.db("products").select("id", "name")
-        const newArray = []
-
-        products.map((item) => {
-            newArray.push(...simplifyText(item.id, item.name))
-        })
-
-
-        await app.db("search_product")
-            .delete(newArray)
-
-        await app.db("search_product")
-            .insert(newArray)
-            .then(() => console.log("foi"))
-            .catch((error) => console.log(error));
-    }
-
     return { simplify, simplifyText }
 }

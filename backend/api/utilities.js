@@ -83,21 +83,17 @@ module.exports = (app) => {
 
     function utility_console({
         name = null,
-        type = null,
-        message = null,
         error = null,
         saveDB = true,
     }) {
         console.log("########################################")
-        console.log(`Function: ${name} // type: ${type} // message: ${message}`);
+        console.log(`Function: ${name}`);
         console.log(error);
         console.log("########################################")
         /* Salva no banco de dados */
         if (saveDB) {
             const moodelo = {
                 name: name,
-                type: type,
-                message: message,
                 error: String(error),
             };
 
