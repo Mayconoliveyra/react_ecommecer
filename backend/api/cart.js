@@ -10,7 +10,9 @@ module.exports = (app) => {
             const mycartArray = JSON.parse(mycart)
 
             for (let index = 0; index < mycartArray.length; index++) {
-                const item = mycartArray[index];
+                const id = mycartArray[index][0];
+                const quantity = mycartArray[index][1];
+
                 const data = await app.db.raw(`
                 SELECT 
                 id, 
@@ -19,10 +21,10 @@ module.exports = (app) => {
                 price, 
                 price_promotion, 
                 promotion,  
-                ${item.quantity} AS quantity, price*${item.quantity} AS amount, 
-                price_promotion*${item.quantity} AS amount_promotion
+                ${quantity} AS quantity, price*${quantity} AS amount, 
+                price_promotion*${quantity} AS amount_promotion
                 FROM products
-                WHERE id=${item.id} 
+                WHERE id=${id} 
                 AND deleted_at Is Null;
                 `).then((res) => res[0][0])
                 dataReturn.push(data)

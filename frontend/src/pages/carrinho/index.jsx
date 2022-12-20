@@ -3,15 +3,13 @@ import { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
-import { CardSearch } from "../../components/card/cardSearch"
+import { CardOne } from "../../components/card/CardOne"
 
 import { cartLocalStorage } from "../../adapters/cart"
 
 import MyCartContext from "../../context/myCart"
 
 const CartSC = styled.div`
-  /*   padding: 1.2rem 1.4rem; */
- /*    border: solid 1px red; */
     [data='subtotal']{
         padding: 1rem 1.4rem;
         display: flex;
@@ -52,12 +50,13 @@ const CartSC = styled.div`
     }
 `
 const SearchSC = styled.div`
+    padding:0.6rem;
     [data-div="cads"]{
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 0.6rem;
+        grid-template-columns: repeat(1fr);
+        gap: 0.4rem;
         @media (min-width: 720px){
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1fr);
         }
     }
 
@@ -104,16 +103,10 @@ export default function Cart() {
                     {myCart.length > 0 ?
                         <>
                             <div data-div="cads">
-                                {myCart && myCart.map((item) => {
+                                {myCart.map((item) => {
                                     return (
-                                        <>
-                                            <CardSearch key={item.id} {...item} />
-                                            <div>{item.quantity}</div>
-                                            <div>{item.amount}</div>
-                                            <div>{item.amount_promotion}</div>
-                                        </>
+                                        <CardOne btnsIncrementer={true} key={item.id} {...item} />
                                     )
-
                                 })}
                             </div>
                         </>

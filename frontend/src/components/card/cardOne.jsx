@@ -1,36 +1,26 @@
 import styled from "styled-components"
-import { moneyMask } from "../../../masks"
 import Link from "next/link"
 
-const CardSearchSC = styled(Link)`
+import { ImgCard } from "./img"
+import { BtnsIncrementer } from "./btnsIncrementer"
+
+import { moneyMask } from "../../../masks"
+
+const CardOneSC = styled.div`
         position: relative;
         display: flex;
         flex-direction: column;
         width: 100%;
         align-items: center;
         max-height: 15rem;
-        background-color:#FFFFFF;
-        > div {
+        background-color:#F7F9FA;
+        border: 1px solid #f5f5f5;
+        [data='a-card']{
             width: 100%;
             height: 100%;
             display: flex;
-            border: 1px solid #f5f5f5;
             border-radius: 4px;
-            [data-div="img"] {
-                position:relative;
-                width: 40%;
-                display: flex;
-                align-items: center;
-                justify-content:center;
-                background-color: #F8F8F8;
-                padding: 0.5rem;
-                img {
-                    max-width: 145px;
-                    max-height: 135px;
-                }
-            }
-
-            [data-div="name-price"] {
+            [data="name-price"] {
                 padding: 0.4rem 0.5rem;
                 flex: 1;
                 > span {
@@ -40,7 +30,7 @@ const CardSearchSC = styled(Link)`
                     border-radius: 1px;
                     padding: 2px 5px;
                 }
-                [data-div="name"] {
+                [data="name"] {
                     h2 {
                         margin: 3px 0px;
                         font-size: ${({ theme }) => theme.font.sizes.small};
@@ -58,7 +48,7 @@ const CardSearchSC = styled(Link)`
                     }
                     margin-bottom: 7px;
                 }
-                [data-div="price"] {
+                [data="price"] {
                     flex: 1;
                     display: flex;
                     margin-top: 2px;
@@ -84,19 +74,17 @@ const CardSearchSC = styled(Link)`
             }
         }
 `
-export const CardSearch = ({ id, url_img, name, price, price_promotion, promotion }) => {
+export const CardOne = ({ id, quantity, url_img, name, price, price_promotion, promotion, btnsIncrementer = false }) => {
     return (
-        <CardSearchSC href={`/produto/${id}`}>
-            <div>
-                <div data-div="img">
-                    <img src={url_img ? url_img : '/assets/images/default_product.png'} alt={name} />
-                </div>
-                <div data-div="name-price">
-                    <div data-div="name">
+        <CardOneSC >
+            <Link href={`/produto/${id}`} data='a-card'>
+                <ImgCard src={url_img} alt={name} />
+                <div data="name-price">
+                    <div data="name">
                         <h2>{name}</h2>
                     </div>
                     {!!promotion && (<><span>Economize {(Number(price - price_promotion) / Number(price) * 100).toFixed(0)}%</span> na promoção</>)}
-                    <div data-div="price">
+                    <div data="price">
                         {!!promotion ?
                             (
                                 <>
@@ -115,7 +103,12 @@ export const CardSearch = ({ id, url_img, name, price, price_promotion, promotio
                         }
                     </div>
                 </div>
-            </div>
-        </CardSearchSC>
+            </Link>
+
+            {/* Elemento que exibe os botões no carrinho. Alterar quantidade ou remover.*/}
+            {!!btnsIncrementer && (
+                <BtnsIncrementer id={id} quantity={quantity} />
+            )}
+        </CardOneSC>
     )
 }

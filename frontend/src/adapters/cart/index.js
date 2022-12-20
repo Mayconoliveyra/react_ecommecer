@@ -16,7 +16,8 @@ export const cartLocalStorage = async (id, quantity) => {
   /* Se tiver setado id e quantity significa que ta sendo adicionado uma nova mercadoria no carrinho */
   if (id && quantity) newMyCartStorage.push({ id, quantity })
 
-  const dataCart = await getCartProducts(JSON.stringify(newMyCartStorage)).then((res) => res.data)
+  const newMyCartStorage2 = newMyCartStorage.map((item) => [item.id, item.quantity])
+  const dataCart = await getCartProducts(JSON.stringify(newMyCartStorage2)).then((res) => res.data)
   localStorage.setItem('myCart', JSON.stringify(dataCart))
 
   return await dataCart

@@ -32,7 +32,7 @@ export const theme = {
     large: "70rem",
   },
   media: {
-    lteMedium: "(max-width: 768px)",
+    medium: "(max-width: 768px)",
   },
   spacings: {
     xsmall: "0.8rem",

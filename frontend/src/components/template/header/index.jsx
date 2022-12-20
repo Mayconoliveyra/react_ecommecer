@@ -51,7 +51,7 @@ export default function Header() {
         <HeaderSC>
             <div id="a-header">
                 <Link href="/">
-                    <h1>{store.nome}</h1>
+                    <h1>{`${store.nome}`}</h1>
                 </Link>
                 <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
             </div>

@@ -142,7 +142,7 @@ const FootCardSC = styled.footer`
 export default function Product({ data }) {
     const [product] = useState(data)
     const { setMyCart } = useContext(MyCartContext)
-    const refQuantily = useRef();
+    const refQuantity = useRef();
     const [quantity, setQuantity] = useState(1)
     const router = useRouter()
 
@@ -151,7 +151,7 @@ export default function Product({ data }) {
             setQuantity(Number(newValue))
             return
         }
-        setQuantity(refQuantily.current.value)
+        setQuantity(refQuantity.current.value)
     }
 
     const handleAddMyCart = async (id, quantity) => {
@@ -162,7 +162,7 @@ export default function Product({ data }) {
     return (
         <>
             <Head>
-                <title>{product.name}</title>
+                <title>{`${product.name}`}</title>
             </Head>
 
             <SectionSC>
@@ -184,7 +184,7 @@ export default function Product({ data }) {
                     <div>
                         <div data-div="input-div">
                             <button type="button" onClick={() => handleQuantity(Number(quantity - 1))}><Dash /></button>
-                            <input ref={refQuantily} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
+                            <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
                             <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
                         </div>
                         <button onClick={() => handleAddMyCart(product.id, quantity)} type="button" data-div="btn-div">

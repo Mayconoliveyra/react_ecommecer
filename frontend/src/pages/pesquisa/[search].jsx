@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
 
-import { CardSearch } from "../../components/card/cardSearch"
+import { CardOne } from "../../components/card/CardOne"
 
 import StoreContext from "../../context/store";
 
@@ -46,15 +46,15 @@ export default function Search({ data, search }) {
     return (
         <>
             <Head>
-                <title>{store.nome} : {search}</title>
+                <title>{`${store.nome} : ${search}`}</title>
             </Head>
             <SearchSC>
                 {data.length > 0 ?
                     <>
                         <div data-div="title"><h1>RESULTADOS</h1></div>
                         <div data-div="cads">
-                            {data && data.map((item) => {
-                                return <CardSearch key={item.id} {...item} />
+                            {data.map((item) => {
+                                return <CardOne key={item.id} {...item} />
                             })}
                         </div>
                     </>
