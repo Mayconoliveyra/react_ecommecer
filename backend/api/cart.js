@@ -14,9 +14,23 @@ module.exports = (app) => {
             return res.status(400).send(error)
         }
 
-        app.db("temp_cart")
-            .where({ id_storage: id })
-            .then((cart) => res.json(cart))
+        app.db.raw(`
+            SELECT 
+            p.id, 
+            p.name, 
+            p.url_img, 
+            p.price, 
+            p.price_promotion, 
+            p.promotion, 
+            tc.quantity, 
+            p.price * tc.quantity AS amount,  
+            p.price_promotion * tc.quantity  AS amount_promotion 
+            FROM temp_cart AS tc 
+            INNER JOIN products AS p 
+            ON tc.id_product 
+            = p.id
+            WHERE tc.id_storage = '${id}'`)
+            .then((cart) => res.json(cart[0]))
             .catch((error) => {
                 utility_console({
                     name: "cart.getCartTemp",
@@ -33,8 +47,6 @@ module.exports = (app) => {
             id_product: body.id_product,
             quantity: body.quantity,
         }
-        /* Quantidade nunca pode ser menor que 1 */
-        if (modelo.quantity < 1) modelo.quantity = 1
 
         try {
             existeOuErro(modelo.id_storage, "[id_storage] não pode ser nulo.")
@@ -56,30 +68,47 @@ module.exports = (app) => {
             .first()
 
         if (tempCartDB) {
-            app.db("temp_cart")
-                .update(modelo)
-                .where({ id: tempCartDB.id })
-                .then(() => res.status(204).send())
-                .catch((error) => {
-                    utility_console({
-                        name: "cart.saveIncrementer",
-                        error: error,
+            /* Se a mercadoria ja  ja existir no carrinho e a nova quantidade for 0, eu vou excluir a mercadoria do carrinho */
+            /* Se a quantidade for maior que 0, vou apenas atualizar a quantidade */
+            if (modelo.quantity == 0) {
+                app.db("temp_cart")
+                    .delete(modelo)
+                    .where({ id: tempCartDB.id })
+                    .then(() => res.status(204).send())
+                    .catch((error) => {
+                        utility_console({
+                            name: "cart.saveIncrementer.delete",
+                            error: error,
+                        });
+                        return res.status(500).send(msgErrorDefault);
                     });
-                    return res.status(500).send(msgErrorDefault);
-                });
+            } else {
+                app.db("temp_cart")
+                    .update(modelo)
+                    .where({ id: tempCartDB.id })
+                    .then(() => res.status(204).send())
+                    .catch((error) => {
+                        utility_console({
+                            name: "cart.saveIncrementer.update",
+                            error: error,
+                        });
+                        return res.status(500).send(msgErrorDefault);
+                    });
+            }
         } else {
+            /* Se a quantidade for menos que 1, atualizo para 1 */
+            if (modelo.quantity < 1) modelo.quantity = 1
             app.db("temp_cart")
                 .insert(modelo)
                 .then(() => res.status(204).send())
                 .catch((error) => {
                     utility_console({
-                        name: "cart.saveIncrementer",
+                        name: "cart.saveIncrementer.insert",
                         error: error,
                     });
                     return res.status(500).send(msgErrorDefault);
                 });
         }
-
     };
 
     return { getCartTemp, saveIncrementer };

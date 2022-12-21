@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
@@ -74,6 +74,7 @@ const SearchSC = styled.div`
 `
 export default function Cart() {
     const { myCart } = useContext(MyCartContext)
+
     return (
         <>
             <Head>
