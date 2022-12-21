@@ -10,7 +10,7 @@ import Nav from "../components/template/nav"
 import { theme } from "../styles/theme"
 
 import { get } from "../adapters/store";
-import { cartLocalStorage } from "../adapters/cart";
+import { getCartTemp } from "../adapters/cart";
 
 import StoreContext from "../context/store";
 import MyCartContext from "../context/myCart"
@@ -27,9 +27,10 @@ export default function MyApp({ Component, pageProps }) {
   const handleStore = async () => {
     await get().then((res) => setStore(res.data))
   }
-
   const handleMyCart = async () => {
-    setMyCart(await cartLocalStorage())
+    const now = `${Date.now()}-${(Math.random() * (9999999 - 1000000) + 1000000).toFixed()}`
+    if (!localStorage.getItem("myCartId")) localStorage.setItem('myCartId', JSON.stringify(now))
+    setMyCart(await getCartTemp())
   }
 
   return (

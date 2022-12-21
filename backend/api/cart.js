@@ -1,81 +1,86 @@
 module.exports = (app) => {
     const { existeOuErro, utility_console, msgErrorDefault } = app.api.utilities;
 
-    const getProducts = async (req, res) => {
-
-        const ipCliente = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-        console.log(ipCliente)
-        const ipCliente2 = req.ip
-        console.log(ipCliente2)
-        const mycart = req.query._mycart
-        const dataReturn = [];
+    const getCartTemp = async (req, res) => {
+        const id = req.params.id
 
         try {
-            existeOuErro(mycart, "A lista de produtos não pode ser vazia.")
-            const mycartArray = JSON.parse(mycart)
-
-            for (let index = 0; index < mycartArray.length; index++) {
-                const id = mycartArray[index][0];
-                const quantity = mycartArray[index][1];
-
-                const data = await app.db.raw(`
-                SELECT 
-                id, 
-                name, 
-                url_img, 
-                price, 
-                price_promotion, 
-                promotion,  
-                ${quantity} AS quantity, price*${quantity} AS amount, 
-                price_promotion*${quantity} AS amount_promotion
-                FROM products
-                WHERE id=${id} 
-                AND deleted_at Is Null;
-                `).then((res) => res[0][0])
-                dataReturn.push(data)
-            }
-            res.json(dataReturn);
-
+            existeOuErro(id, "[id] id_storage não pode ser nulo.")
         } catch (error) {
             utility_console({
-                name: "cart.getProducts",
-                error: error
+                name: "cart.getCartTemp",
+                error: error,
             });
-            res.status(500).send(msgErrorDefault)
+            return res.status(400).send(error)
         }
+
+        app.db("temp_cart")
+            .where({ id_storage: id })
+            .then((cart) => res.json(cart))
+            .catch((error) => {
+                utility_console({
+                    name: "cart.getCartTemp",
+                    error: error,
+                });
+                return res.status(500).send(msgErrorDefault);
+            });
     };
-    const incrementProduct = async (req, res) => {
+
+    const saveIncrementer = async (req, res) => {
         const body = req.body
         const modelo = {
-            ip_user: req.ip,
+            id_storage: body.id_storage,
             id_product: body.id_product,
             quantity: body.quantity,
         }
-
+        /* Quantidade nunca pode ser menor que 1 */
+        if (modelo.quantity < 1) modelo.quantity = 1
 
         try {
-            existeOuErro(modelo.ip_user, "ip_user não pode ser nulo.")
-            existeOuErro(modelo.id_product, "id_product não pode ser nulo.")
-            existeOuErro(modelo.quantity, "quantity não pode ser nulo.")
+            existeOuErro(modelo.id_storage, "[id_storage] não pode ser nulo.")
+            existeOuErro(modelo.id_product, "[id_product] não pode ser nulo.")
 
+            const productDB = await app.db("products").where({ id: modelo.id_product }).first()
+            existeOuErro(productDB, "[id_product] mercadoria não existe.")
+        } catch (error) {
+            utility_console({
+                name: "cart.saveIncrementer",
+                error: error,
+            });
+            return res.status(400).send(error)
+        }
+
+        const tempCartDB = await app.db("temp_cart")
+            .where({ id_storage: modelo.id_storage })
+            .andWhere({ id_product: modelo.id_product })
+            .first()
+
+        if (tempCartDB) {
+            app.db("temp_cart")
+                .update(modelo)
+                .where({ id: tempCartDB.id })
+                .then(() => res.status(204).send())
+                .catch((error) => {
+                    utility_console({
+                        name: "cart.saveIncrementer",
+                        error: error,
+                    });
+                    return res.status(500).send(msgErrorDefault);
+                });
+        } else {
             app.db("temp_cart")
                 .insert(modelo)
                 .then(() => res.status(204).send())
                 .catch((error) => {
                     utility_console({
-                        name: "cart.incrementProduct",
+                        name: "cart.saveIncrementer",
                         error: error,
                     });
                     return res.status(500).send(msgErrorDefault);
                 });
-        } catch (error) {
-            utility_console({
-                name: "cart.incrementProduct",
-                error: error,
-            });
-            res.status(500).send(msgErrorDefault)
         }
+
     };
 
-    return { getProducts, incrementProduct };
+    return { getCartTemp, saveIncrementer };
 };

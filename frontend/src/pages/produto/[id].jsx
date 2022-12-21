@@ -8,7 +8,7 @@ import { Dash, Plus } from "react-bootstrap-icons"
 import { moneyMask } from "../../../masks"
 
 import { getByID } from "../../adapters/products"
-import { cartLocalStorage } from "../../adapters/cart";
+import { getCartTemp, storeQuantity } from "../../adapters/cart";
 
 import MyCartContext from "../../context/myCart";
 
@@ -155,7 +155,8 @@ export default function Product({ data }) {
     }
 
     const handleAddMyCart = async (id, quantity) => {
-        setMyCart(await cartLocalStorage(id, quantity))
+        await storeQuantity(id, quantity)
+        await setMyCart(await getCartTemp())
         router.push("/")
     }
 
@@ -185,6 +186,7 @@ export default function Product({ data }) {
                         <div data-div="input-div">
                             <button type="button" onClick={() => handleQuantity(Number(quantity - 1))}><Dash /></button>
                             <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
+                            {/* <MaskedInput mask={[/[1-9]/, /[1-9]/, /[1-9]/, /[1-9]/]} showMask={true} guide={false} ref={refQuantity} type="text" id="quantity" value={quantity} onChange={handleQuantity} /> */}
                             <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
                         </div>
                         <button onClick={() => handleAddMyCart(product.id, quantity)} type="button" data-div="btn-div">

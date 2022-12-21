@@ -2,8 +2,21 @@ import api from "../API";
 
 const prefix = "/cart";
 
-export const getCartProducts = async (myCartStorage) => {
-  return await api.get(`${prefix}?_mycart=${myCartStorage}`);
+
+export const getCartTemp = async () => {
+  const id_storage = JSON.parse(localStorage.getItem("myCartId"))
+  return await api.get(`${prefix}/${id_storage}`).then(res => res.data);
+};
+
+export const storeQuantity = async (id, quantity) => {
+  const id_storage = JSON.parse(localStorage.getItem("myCartId"))
+  const data = {
+    id_storage: id_storage,
+    id_product: id,
+    quantity: quantity
+  }
+
+  return await api.post(`${prefix}`, data);
 };
 
 export const cartLocalStorage = async (id, quantity) => {
@@ -17,7 +30,7 @@ export const cartLocalStorage = async (id, quantity) => {
   if (id && quantity) newMyCartStorage.push({ id, quantity })
 
   const newMyCartStorage2 = newMyCartStorage.map((item) => [item.id, item.quantity])
-  const dataCart = await getCartProducts(JSON.stringify(newMyCartStorage2)).then((res) => res.data)
+  const dataCart = await getCartTemp(JSON.stringify(newMyCartStorage2)).then((res) => res.data)
   localStorage.setItem('myCart', JSON.stringify(dataCart))
 
   return await dataCart

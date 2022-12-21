@@ -9,5 +9,8 @@ module.exports = (app) => {
     .get(app.api.products.get)
 
   app.route("/cart")
-    .get(app.api.cart.getProducts)
+    .post(app.api.cart.saveIncrementer)
+
+  app.route("/cart/:id")
+    .get(app.api.cart.getCartTemp)
 };

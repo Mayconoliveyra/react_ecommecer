@@ -95,5 +95,5 @@ module.exports = (app) => {
         return arrayRetun
     }
 
-    return { simplify, simplifyText }
+    return { simplify }
 }

@@ -5,8 +5,6 @@ import styled from "styled-components"
 
 import { CardOne } from "../../components/card/cardOne"
 
-import { cartLocalStorage } from "../../adapters/cart"
-
 import MyCartContext from "../../context/myCart"
 
 const CartSC = styled.div`
@@ -75,16 +73,7 @@ const SearchSC = styled.div`
     }
 `
 export default function Cart() {
-    const { myCart, setMyCart } = useContext(MyCartContext)
-
-    useEffect(() => {
-        handleMyCart()
-    }, [])
-
-    const handleMyCart = async () => {
-        setMyCart(await cartLocalStorage())
-    }
-
+    const { myCart } = useContext(MyCartContext)
     return (
         <>
             <Head>
