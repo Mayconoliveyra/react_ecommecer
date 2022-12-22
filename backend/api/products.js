@@ -12,9 +12,9 @@ module.exports = (app) => {
 
         if (search) {
             await app.db(table)
-                .whereNull("deleted_at")
-                .limit(limit).offset(page * limit - limit)
                 .whereRaw(simplify(search))
+                .whereRaw('disabled = False AND deleted_at IS NULL')
+                .limit(limit).offset(page * limit - limit)
                 .orderBy('id', 'desc')
                 .then(products => res.json(products))
                 .catch((error) => {
@@ -29,7 +29,10 @@ module.exports = (app) => {
         }
 
         if (id) {
-            await app.db(table).where({ id: id }).whereNull("deleted_at").first()
+            await app.db(table)
+                .where({ id: id })
+                .whereRaw('disabled = False AND deleted_at IS NULL')
+                .first()
                 .then(products => res.json(products))
                 .catch((error) => {
                     utility_console({
@@ -44,33 +47,35 @@ module.exports = (app) => {
 
         try {
             const limitCat = 11
+            const whereRaw = 'p.disabled = False AND p.deleted_at IS NULL ORDER BY id DESC'
+
             const camas = await app.db({ p: table, c: 'categories' })
                 .select("p.*", "c.name as id_category")
                 .limit(limitCat).offset(0)
                 .whereRaw('?? = ??', ['p.id_category', 'c.id'])
                 .where({ 'c.name': 'Camas' })
-                .orderBy('p.id', 'desc')
+                .whereRaw(whereRaw)
 
             const brinquedos = await app.db({ p: table, c: 'categories' })
                 .select("p.*", "c.name as id_category")
                 .limit(limitCat).offset(0)
                 .whereRaw('?? = ??', ['p.id_category', 'c.id'])
                 .where({ 'c.name': 'Brinquedos' })
-                .orderBy('p.id', 'desc')
+                .whereRaw(whereRaw)
 
             const comedouros = await app.db({ p: table, c: 'categories' })
                 .select("p.*", "c.name as id_category")
                 .limit(limitCat).offset(0)
                 .whereRaw('?? = ??', ['p.id_category', 'c.id'])
                 .where({ 'c.name': 'Comedouros' })
-                .orderBy('p.id', 'desc')
+                .whereRaw(whereRaw)
 
             const cozinhas = await app.db({ p: table, c: 'categories' })
                 .select("p.*", "c.name as id_category")
                 .limit(limitCat).offset(0)
                 .whereRaw('?? = ??', ['p.id_category', 'c.id'])
                 .where({ 'c.name': 'Casinhas' })
-                .orderBy('p.id', 'desc')
+                .whereRaw(whereRaw)
 
             res.json({ camas, brinquedos, comedouros, cozinhas });
         } catch (error) {
