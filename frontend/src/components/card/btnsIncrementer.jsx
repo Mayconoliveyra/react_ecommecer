@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
-import { Dash, Plus } from "react-bootstrap-icons"
+import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
 
 import { getCartTemp, storeQuantity } from "../../adapters/cart"
 
@@ -35,6 +35,9 @@ const BtnIncrementerSC = styled.div`
             padding: 0.4rem 0.6rem;
             display: flex;
             align-items: center;
+            width:3.5rem;
+            display:flex;
+            justify-content:center;
 
             &:nth-child(1){
                 box-shadow: 0 0.2rem 0.5rem 0 rgb(213 217 217 / 50%);
@@ -45,6 +48,10 @@ const BtnIncrementerSC = styled.div`
                 box-shadow: 0 0.2rem 0.5rem 0 rgb(213 217 217 / 50%);
                 border-top-right-radius:7px;
                 border-bottom-right-radius:7px;
+            }
+
+            [data="icon-remover"]{
+                font-size:1.4rem;
             }
         }
     }
@@ -63,14 +70,17 @@ const BtnIncrementerSC = styled.div`
 export const BtnsIncrementer = ({ product }) => {
     const { setMyCart } = useContext(MyCartContext)
     const refQuantity = useRef();
-    const [quantityNew, setQuantity] = useState(product.quantity)
+    const [quantity, setQuantity] = useState(product.quantity)
 
     const handleQuantity = async (newValue) => {
-        if (Number(newValue) >= 0) {
-            setQuantity(Number(newValue))
-            return
+        /* newValue é utilizado nos botoes + e - */
+        const value = newValue >= 0 ? newValue : refQuantity.current.value.replace(/[^0-9]/g, '')
+
+        setQuantity(value)
+
+        if (value && value >= 0) {
+            await handleAddMyCart(product.id, value)
         }
-        setQuantity(refQuantity.current.value)
     }
 
     const handleRemoveProduct = async (id) => {
@@ -79,12 +89,21 @@ export const BtnsIncrementer = ({ product }) => {
         await setMyCart(await getCartTemp())
     }
 
+    const handleAddMyCart = async (id, quantity) => {
+        await storeQuantity(id, quantity)
+        await setMyCart(await getCartTemp())
+    }
+
     return (
         <BtnIncrementerSC>
             <div data="input-div">
-                <button type="button" onClick={() => handleQuantity(Number(quantityNew - 1))}><Dash /></button>
-                <input ref={refQuantity} type="number" id="quantityNew" value={quantityNew} onChange={handleQuantity} />
-                <button type="button" onClick={() => handleQuantity(Number(quantityNew + 1))}><Plus /></button>
+                {quantity > 1 ? (
+                    <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) - 1))}><Dash /></button>
+                ) : (
+                    <button type="button" onClick={() => handleRemoveProduct(product.id)}><Trash3 data="icon-remover" /></button>
+                )}
+                <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
+                <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) + 1))}><Plus /></button>
             </div>
             <button onClick={() => handleRemoveProduct(product.id)} type="button" data="btn-div">
                 Excluir

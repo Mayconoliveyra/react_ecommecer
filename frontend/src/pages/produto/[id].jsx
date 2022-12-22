@@ -147,11 +147,10 @@ export default function Product({ data }) {
     const router = useRouter()
 
     const handleQuantity = (newValue) => {
-        if (Number(newValue) >= 0) {
-            setQuantity(Number(newValue))
-            return
-        }
-        setQuantity(refQuantity.current.value)
+        /* newValue é utilizado nos botoes + e - */
+        const value = newValue >= 0 ? newValue : refQuantity.current.value.replace(/[^0-9]/g, '')
+
+        setQuantity(value)
     }
 
     const handleAddMyCart = async (id, quantity) => {
@@ -184,10 +183,10 @@ export default function Product({ data }) {
                 <FootCardSC>
                     <div>
                         <div data-div="input-div">
-                            <button type="button" onClick={() => handleQuantity(Number(quantity - 1))}><Dash /></button>
+                            <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) - 1))}><Dash /></button>
                             <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
                             {/* <MaskedInput mask={[/[1-9]/, /[1-9]/, /[1-9]/, /[1-9]/]} showMask={true} guide={false} ref={refQuantity} type="text" id="quantity" value={quantity} onChange={handleQuantity} /> */}
-                            <button type="button" onClick={() => handleQuantity(Number(quantity + 1))}><Plus /></button>
+                            <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) + 1))}><Plus /></button>
                         </div>
                         <button onClick={() => handleAddMyCart(product.id, quantity)} type="button" data-div="btn-div">
                             Adicionar  <span>{!!product.promotion ? moneyMask(product.price_promotion) : moneyMask(product.price)} </span>
