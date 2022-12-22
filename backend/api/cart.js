@@ -29,7 +29,9 @@ module.exports = (app) => {
             INNER JOIN products AS p 
             ON tc.id_product 
             = p.id
-            WHERE tc.id_storage = '${id}'`)
+            WHERE p.disabled = False 
+            AND p.deleted_at IS NULL
+            AND tc.id_storage = '${id}'`)
             .then((cart) => res.json(cart[0]))
             .catch((error) => {
                 utility_console({
