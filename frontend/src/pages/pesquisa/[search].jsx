@@ -46,15 +46,15 @@ export default function Search({ data, search }) {
     return (
         <>
             <Head>
-                <title>{`${store.nome} : ${search}`}</title>
+                <title>{store.nome ? `${store.nome} : ${search}` : 'Carregando...'}</title>
             </Head>
             <SearchSC>
                 {data.length > 0 ?
                     <>
                         <div data-div="title"><h1>RESULTADOS</h1></div>
                         <div data-div="cads">
-                            {data.map((item) => {
-                                return <CardOne key={item.id} {...item} />
+                            {data.map((product) => {
+                                return <CardOne key={product.id} product={product} />
                             })}
                         </div>
                     </>

@@ -5,6 +5,15 @@ exports.up = function (knex) {
             table.string("name").notNull();
             table.string("url_img").notNull();
 
+            table.integer("stock").notNull().defaultTo(0);
+
+            table.string("img_1")
+            table.string("img_2")
+            table.string("img_3")
+            table.string("img_4")
+            table.string("img_5")
+            table.string("img_6")
+
             table.double("price").notNull().defaultTo(0);
             table.double("price_promotion").notNull().defaultTo(0);
             table.boolean("promotion", 1).notNull().defaultTo(0);
@@ -12,6 +21,8 @@ exports.up = function (knex) {
             table.string("description")
 
             table.integer('id_category').unsigned().notNull().references('id').inTable('categories')
+
+            table.boolean("disabled", 1).notNull().defaultTo(0);
 
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));

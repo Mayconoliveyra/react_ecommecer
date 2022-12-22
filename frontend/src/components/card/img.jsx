@@ -11,10 +11,10 @@ const ImgCardSC = styled.div`
         max-height: 135px;
     }
 `
-export const ImgCard = ({ src = '/assets/images/default_product.png', alt = "imagem sem nome" }) => {
+export const ImgCard = ({ product }) => {
     return (
         <ImgCardSC>
-            <img src={src} alt={alt} />
+            <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />
         </ImgCardSC>
     )
 }

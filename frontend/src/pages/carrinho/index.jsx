@@ -93,9 +93,9 @@ export default function Cart() {
                     {myCart.length > 0 ?
                         <>
                             <div data-div="cads">
-                                {myCart.map((item) => {
+                                {myCart.map((product) => {
                                     return (
-                                        <CardOne btnsIncrementer={true} key={item.id} {...item} />
+                                        <CardOne btnsIncrementer={true} key={product.id} product={product} />
                                     )
                                 })}
                             </div>

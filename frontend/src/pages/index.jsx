@@ -14,7 +14,7 @@ export default function Home({ camas, brinquedos, cozinhas }) {
   return (
     <>
       <Head>
-        <title>{`${store.nome ?? 'Carregando...'}`}</title>
+        <title>{store.nome ? store.nome : 'Carregando...'}</title>
       </Head>
       <CategoriesNav />
       <CardsNav name={"Camas"}>

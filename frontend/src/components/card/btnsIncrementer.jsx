@@ -2,6 +2,8 @@ import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 import { Dash, Plus } from "react-bootstrap-icons"
 
+import { getCartTemp, storeQuantity } from "../../adapters/cart"
+
 import MyCartContext from "../../context/myCart"
 
 const BtnIncrementerSC = styled.div`
@@ -58,12 +60,12 @@ const BtnIncrementerSC = styled.div`
         margin-left: 1.6rem;
     }
 `
-export const BtnsIncrementer = ({ id, quantity }) => {
+export const BtnsIncrementer = ({ product }) => {
     const { setMyCart } = useContext(MyCartContext)
     const refQuantity = useRef();
-    const [quantityNew, setQuantity] = useState(quantity)
+    const [quantityNew, setQuantity] = useState(product.quantity)
 
-    const handleQuantity = (newValue) => {
+    const handleQuantity = async (newValue) => {
         if (Number(newValue) >= 0) {
             setQuantity(Number(newValue))
             return
@@ -71,8 +73,10 @@ export const BtnsIncrementer = ({ id, quantity }) => {
         setQuantity(refQuantity.current.value)
     }
 
-    const handleAddMyCart = async (id) => {
-        setMyCart(await cartLocalStorage(id))
+    const handleRemoveProduct = async (id) => {
+        /* Para remover o produto do carrinho basta enviar o id com a quantiade 0 */
+        await storeQuantity(id, 0)
+        await setMyCart(await getCartTemp())
     }
 
     return (
@@ -82,7 +86,7 @@ export const BtnsIncrementer = ({ id, quantity }) => {
                 <input ref={refQuantity} type="number" id="quantityNew" value={quantityNew} onChange={handleQuantity} />
                 <button type="button" onClick={() => handleQuantity(Number(quantityNew + 1))}><Plus /></button>
             </div>
-            <button onClick={() => handleAddMyCart(id)} type="button" data="btn-div">
+            <button onClick={() => handleRemoveProduct(product.id)} type="button" data="btn-div">
                 Excluir
             </button>
         </BtnIncrementerSC>

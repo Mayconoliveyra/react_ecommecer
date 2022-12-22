@@ -74,30 +74,30 @@ const CardOneSC = styled.div`
             }
         }
 `
-export const CardOne = ({ id, quantity, url_img, name, price, price_promotion, promotion, btnsIncrementer = false }) => {
+export const CardOne = ({ product, btnsIncrementer = false }) => {
     return (
         <CardOneSC >
-            <Link href={`/produto/${id}`} data='a-card'>
-                <ImgCard src={url_img} alt={name} />
+            <Link href={`/produto/${product.id}`} data='a-card'>
+                <ImgCard product={product} />
                 <div data="name-price">
                     <div data="name">
-                        <h2>{name}</h2>
+                        <h2>{product.name}</h2>
                     </div>
-                    {!!promotion && (<><span>Economize {(Number(price - price_promotion) / Number(price) * 100).toFixed(0)}%</span> na promoção</>)}
+                    {!!product.promotion && (<><span>Economize {(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}%</span> na promoção</>)}
                     <div data="price">
-                        {!!promotion ?
+                        {!!product.promotion ?
                             (
                                 <>
                                     <span>R$</span>
-                                    <span>{moneyMask(price_promotion, false)}</span>
-                                    <span>{moneyMask(price)}</span>
+                                    <span>{moneyMask(product.price_promotion, false)}</span>
+                                    <span>{moneyMask(product.price)}</span>
                                 </>
 
 
                             ) : (
                                 <>
                                     <span>R$</span>
-                                    <span>{moneyMask(price, false)}</span>
+                                    <span>{moneyMask(product.price, false)}</span>
                                 </>
                             )
                         }
@@ -107,7 +107,7 @@ export const CardOne = ({ id, quantity, url_img, name, price, price_promotion, p
 
             {/* Elemento que exibe os botões no carrinho. Alterar quantidade ou remover.*/}
             {!!btnsIncrementer && (
-                <BtnsIncrementer id={id} quantity={quantity} />
+                <BtnsIncrementer product={product} />
             )}
         </CardOneSC>
     )
