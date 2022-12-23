@@ -1,12 +1,13 @@
 import Head from "next/head";
 import styled from "styled-components";
+import { useContext } from "react";
 
 import { CardOne } from "../../components/card/cardOne"
 
 import StoreContext from "../../context/store";
 
 import { getSearch } from "../../adapters/products";
-import { useContext } from "react";
+
 
 const SearchSC = styled.div`
     [data-div="title"]{

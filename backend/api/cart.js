@@ -21,6 +21,7 @@ module.exports = (app) => {
             p.id, 
             p.name, 
             p.url_img, 
+            p.stock, 
             p.price, 
             p.price_promotion, 
             p.promotion, 

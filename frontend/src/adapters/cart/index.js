@@ -1,4 +1,4 @@
-import api from "../API";
+import api from "../api";
 
 const prefix = "/cart";
 

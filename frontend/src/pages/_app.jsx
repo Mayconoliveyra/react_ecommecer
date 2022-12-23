@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
 
-import Header from "../components/Template/Header"
+import Header from "../components/template/header"
 import Content from "../components/template/content"
 import Nav from "../components/template/nav"
 import { theme } from "../styles/theme"

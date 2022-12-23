@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useRouter } from "next/router";
 import { HouseDoor, Cart3, ThreeDots } from "react-bootstrap-icons";
 import styled from "styled-components";
+
 import MyCartContext from "../../../context/myCart";
 
 const NavSC = styled.footer`
