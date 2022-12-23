@@ -149,6 +149,7 @@ export default function Product({ data }) {
     const handleQuantity = (newValue) => {
         /* newValue é utilizado nos botoes + e - */
         const value = newValue >= 0 ? newValue : refQuantity.current.value.replace(/[^0-9]/g, '')
+        if (value.toString().length > 4) return
 
         setQuantity(value)
     }

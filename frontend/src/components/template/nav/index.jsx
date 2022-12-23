@@ -41,7 +41,7 @@ const NavSC = styled.footer`
 `
 
 export default function Nav() {
-    const { myCart } = useContext(MyCartContext);
+    const { myCart: { products } } = useContext(MyCartContext);
     const { pathname } = useRouter()
 
     return pathname != '/produto/[id]' && (
@@ -53,7 +53,7 @@ export default function Nav() {
                 </Link>
                 <Link href="/carrinho">
                     <Cart3 />
-                    <p>Carrinho({myCart && myCart.length ? myCart.length : 0})</p>
+                    <p>Carrinho({products && products.length ? products.length : 0})</p>
                 </Link>
                 <Link href="/">
                     <ThreeDots />

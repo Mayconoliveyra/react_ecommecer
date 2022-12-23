@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styled from "styled-components"
 
 import { CardOne } from "../../components/card/cardOne"
+import { moneyMask } from '../../../masks';
 
 import MyCartContext from "../../context/myCart"
 
@@ -58,7 +59,7 @@ const SearchSC = styled.div`
         }
     }
 
-    [data-div='no-result']{
+    [data-div='cart-vazio']{
         margin: 0.8rem 1rem;
         h1 {
             font-size: 1.1rem;
@@ -73,7 +74,7 @@ const SearchSC = styled.div`
     }
 `
 export default function Cart() {
-    const { myCart } = useContext(MyCartContext)
+    const { myCart: { products, totals } } = useContext(MyCartContext)
 
     return (
         <>
@@ -81,19 +82,24 @@ export default function Cart() {
                 <title>Carrinho de compras</title>
             </Head>
             <CartSC>
-                <div data='subtotal'>
-                    Subtotal <span>R$</span> <span>2.591,00</span>
-                </div>
-                <div data='close'>
-                    <Link href="/">
-                        Fechar pedido (9 itens)
-                    </Link>
-                </div>
+                {products && products.length > 0 && (
+                    <>
+                        <div data='subtotal'>
+                            Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
+                        </div>
+                        <div data='close'>
+                            <Link href="/">
+                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                            </Link>
+                        </div>
+                    </>
+                )}
+
                 <SearchSC>
-                    {myCart.length > 0 ?
+                    {products && products.length > 0 ?
                         <>
                             <div data-div="cads">
-                                {myCart.map((product) => {
+                                {products.map((product) => {
                                     return (
                                         <CardOne btnsIncrementer={true} key={product.id} product={product} />
                                     )
@@ -102,9 +108,9 @@ export default function Cart() {
                         </>
                         :
                         <>
-                            <div data-div='no-result'>
-                                <h1>Nenhum resultado</h1>
-                                <p> Tente verificar a ortografia ou usar termos mais genéricos</p>
+                            <div data-div='cart-vazio'>
+                                <h1>O seu carrinho está vazio :(</h1>
+                                <p>...</p>
                             </div>
                         </>
                     }
