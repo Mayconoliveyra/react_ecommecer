@@ -4,7 +4,6 @@ import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { Dash, Plus } from "react-bootstrap-icons"
 
-
 import { moneyMask } from "../../../masks"
 
 import { getByID } from "../../adapters/products"

@@ -3,6 +3,7 @@ import { ThemeProvider } from "styled-components"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
+import { SessionProvider } from "next-auth/react"
 
 import Header from "../components/template/header"
 import Content from "../components/template/content"
@@ -34,6 +35,7 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   return (
+
     <ThemeProvider theme={theme}>
       <ToastContainer
         position="bottom-right"
@@ -48,15 +50,18 @@ export default function MyApp({ Component, pageProps }) {
         theme="dark"
       />
       <GlobalStyles />
-      <StoreContext.Provider value={store}>
-        <MyCartContext.Provider value={{ myCart, setMyCart }}>
-          <Header />
-          <Content>
-            <Component {...pageProps} />
-          </Content>
-          <Nav />
-        </MyCartContext.Provider>
-      </StoreContext.Provider>
+      <SessionProvider session={pageProps.session}>
+        <StoreContext.Provider value={store}>
+          <MyCartContext.Provider value={{ myCart, setMyCart }}>
+            <Header />
+            <Content>
+              <Component {...pageProps} />
+            </Content>
+            <Nav />
+          </MyCartContext.Provider>
+        </StoreContext.Provider>
+      </SessionProvider>
     </ThemeProvider>
+
   )
 }
