@@ -6,8 +6,8 @@ import { Dash, Plus } from "react-bootstrap-icons"
 
 import { moneyMask } from "../../../masks"
 
-import { getByID } from "../../adapters/products"
-import { getCartTemp, storeQuantity } from "../../adapters/cart";
+import { getByID } from "../api/products"
+import { getCartTemp, storeQuantity } from "../api/cart";
 
 import MyCartContext from "../../context/myCart";
 
@@ -201,7 +201,6 @@ export default function Product({ data }) {
 export async function getServerSideProps(req) {
     const { id } = req.params
     const data = await getByID(id)
-        .then((res) => res.data)
 
     if (!data) {
         return {

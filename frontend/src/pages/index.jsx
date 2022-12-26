@@ -7,7 +7,7 @@ import { CardHome } from "../components/card/cardHome"
 
 import StoreContext from "../context/store";
 
-import { getAll } from "../adapters/products"
+import { getAll } from "./api/products"
 
 export default function Home({ camas, brinquedos, cozinhas }) {
   const store = useContext(StoreContext)
@@ -38,7 +38,6 @@ export default function Home({ camas, brinquedos, cozinhas }) {
 
 export async function getServerSideProps() {
   const data = await getAll()
-    .then((res) => res.data)
 
   if (!data) {
     return {

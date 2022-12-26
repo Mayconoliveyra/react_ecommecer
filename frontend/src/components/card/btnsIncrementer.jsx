@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
 
-import { getCartTemp, storeQuantity } from "../../adapters/cart"
+import { getCartTemp, storeQuantity } from "../../pages/api/cart"
 
 import MyCartContext from "../../context/myCart"
 

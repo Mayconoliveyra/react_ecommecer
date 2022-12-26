@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import { storeNextAut } from "../../../adapters/auth";
+import { storeNextAut } from "./index"
 
 export const authOptions = {
     providers: [
@@ -25,15 +25,19 @@ export const authOptions = {
                     secret: process.env.LOGIN_AUTH
                 }
                 const usuario = await storeNextAut(modelo)
-                console.log(usuario)
                 return {
                     ...usuario
                 }
-            } catch {
-                /* Se der erro retornar um objeto vazio */
-                /* a tela de login vai ser atualizada pra tentar fazer login novamente */
+            } catch (error) {
+                if (error && error.response && error.response.data) {
+                    return {
+                        error: error.response.data
+                    }
+                }
+
+                /* Se não vim nenhuma mensagem  de error, retornar mensagem padrão;*/
                 return {
-                    error: "Desculpe-nos!. Não foi possível realizar o seu cadastro. Por favor, tente novamente utilizando outra opção de cadastro."
+                    error: "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente."
                 }
             }
         },

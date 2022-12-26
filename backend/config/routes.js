@@ -1,5 +1,6 @@
 module.exports = (app) => {
-  app.post("/login-auth", app.api.auth.loginNextAuth) //publica
+  app.post("/signin-next-auth", app.api.auth.signinNextAuth) //publica
+  /* .all(app.config.passport.authenticate()) */
 
   app.route("/store")
     .get(app.api.store.get)

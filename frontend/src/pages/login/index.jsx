@@ -355,6 +355,7 @@ export default function Login({ session }) {
 
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req })
+  
   /* se session existir o usuario ja está autenticado. */
   if (session && session.id) {
     return {

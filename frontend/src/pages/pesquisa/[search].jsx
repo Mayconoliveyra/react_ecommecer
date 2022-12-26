@@ -6,7 +6,7 @@ import { CardOne } from "../../components/card/cardOne"
 
 import StoreContext from "../../context/store";
 
-import { getSearch } from "../../adapters/products";
+import { getSearch } from "../api/products";
 
 
 const SearchSC = styled.div`
@@ -76,8 +76,7 @@ export async function getServerSideProps(req) {
     const { search } = req.params
 
     const data = await getSearch(search)
-        .then((res) => res.data)
-
+        
     if (!data) {
         return {
             notFound: true,

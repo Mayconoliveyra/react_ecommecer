@@ -3,7 +3,7 @@ exports.up = function (knex) {
         .createTable("users", (table) => {
             table.increments("id").primary();
 
-            table.string("nome")
+            table.string("nome").defaultTo("Não informado")
             table.string("email").notNull().unique()
 
             table.string("cpf_cnpj", 14)
