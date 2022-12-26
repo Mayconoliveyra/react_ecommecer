@@ -33,12 +33,7 @@ const CardOneSC = styled.div`
                 [data="name"] {
                     h2 {
                         margin: 3px 0px;
-                        font-size: ${({ theme }) => theme.font.sizes.small};
-
-                        @media (max-width: 720px){
-                            font-size: 1.15rem;
-                        }
-
+                        font-size: 1.1rem;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: normal;

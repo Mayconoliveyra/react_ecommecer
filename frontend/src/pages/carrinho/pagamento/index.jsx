@@ -3,10 +3,10 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
-import { CardOne } from "../../components/card/cardOne"
-import { moneyMask } from '../../../masks';
+import { CardPayment } from "../../../components/card/cardPayment"
+import { moneyMask } from '../../../../masks';
 
-import MyCartContext from "../../context/myCart"
+import MyCartContext from "../../../context/myCart"
 
 const CartSC = styled.div`
     [data='subtotal']{
@@ -49,11 +49,10 @@ const CartSC = styled.div`
     }
 `
 const SearchSC = styled.div`
-    padding:0.6rem;
+    padding: 0 0.6rem;
     [data-div="cads"]{
         display: grid;
         grid-template-columns: repeat(1fr);
-        gap: 0.4rem;
     }
 
     [data-div='cart-vazio']{
@@ -70,7 +69,7 @@ const SearchSC = styled.div`
         }
     }
 `
-export default function Cart() {
+export default function Pagamento() {
     const { myCart: { products, totals } } = useContext(MyCartContext)
 
     return (
@@ -85,7 +84,7 @@ export default function Cart() {
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
                         </div>
                         <div data='close'>
-                            <Link href="/carrinho/pagamento">
+                            <Link href="/">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
@@ -98,7 +97,7 @@ export default function Cart() {
                             <div data-div="cads">
                                 {products.map((product) => {
                                     return (
-                                        <CardOne btnsIncrementer={true} key={product.id} product={product} />
+                                        <CardPayment key={product.id} product={product} />
                                     )
                                 })}
                             </div>
