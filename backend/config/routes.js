@@ -1,4 +1,6 @@
 module.exports = (app) => {
+  app.post("/login-auth", app.api.auth.loginNextAuth) //publica
+
   app.route("/store")
     .get(app.api.store.get)
 

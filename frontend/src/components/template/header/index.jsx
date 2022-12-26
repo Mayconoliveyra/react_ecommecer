@@ -2,6 +2,7 @@ import styled from "styled-components"
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
+import { signOut } from "next-auth/react";
 
 import StoreContext from "../../../context/store"
 
@@ -51,6 +52,7 @@ export default function Header() {
         <HeaderSC>
             <div id="a-header">
                 <Link href="/">
+                    <button onClick={() => signOut()}>sair</button>
                     <h1>{`${store.nome}`}</h1>
                 </Link>
                 <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
