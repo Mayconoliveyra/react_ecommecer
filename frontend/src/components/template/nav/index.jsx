@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { HouseDoor, Cart3, ThreeDots } from "react-bootstrap-icons";
 import styled from "styled-components";
 
+import TemplateContext from "../../../context/template";
 import MyCartContext from "../../../context/myCart";
 
 const NavSC = styled.footer`
@@ -21,7 +22,8 @@ const NavSC = styled.footer`
         width:100%;
         margin: 0px auto;
 
-        a {
+        a,button {
+            background-color:transparent;
             display: flex;
             flex-direction: column;
             align-items:center;
@@ -42,6 +44,7 @@ const NavSC = styled.footer`
 `
 
 export default function Nav() {
+    const { template, setTemplate } = useContext(TemplateContext);
     const { myCart: { products } } = useContext(MyCartContext);
     const { pathname } = useRouter()
 
@@ -56,10 +59,10 @@ export default function Nav() {
                     <Cart3 />
                     <p>Carrinho({products && products.length ? products.length : 0})</p>
                 </Link>
-                <Link href="/">
+                <button type="button" onClick={() => setTemplate({ ...template, showMenu: !template.showMenu })}>
                     <ThreeDots />
                     <p>Mais</p>
-                </Link>
+                </button>
             </div>
         </NavSC>
     )

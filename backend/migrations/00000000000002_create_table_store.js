@@ -25,6 +25,9 @@ exports.up = function (knex) {
 
             table.text("termo_uso")
 
+            table.double("percentual_frete").notNull().defaultTo(2)
+            table.double("valor_minimo").notNull().defaultTo(0)
+
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
             table.timestamp("deleted_at").nullable();
@@ -32,10 +35,9 @@ exports.up = function (knex) {
         .then(function () {
             return knex("store").insert([
                 {
-                    nome: "Cazimi Material de Casa & Construção",
+                    nome: "Cazimi",
                     cnpj: "39711584000149",
                     cpf: "77737865004",
-                    nome: "Cazimi Material de Casa & Construção",
                     cep: "58046520",
                     logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
                     bairro: "Portal do Sol",

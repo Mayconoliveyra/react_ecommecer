@@ -6,17 +6,22 @@ import { useEffect, useState } from "react";
 import { getSession, SessionProvider } from "next-auth/react"
 
 import Header from "../components/template/header"
+import Header2 from "../components/template/header2"
 import Content from "../components/template/content"
 import Nav from "../components/template/nav"
+import Menu from "../components/template/menu";
 import { theme } from "../styles/theme"
 
 import { get as getStore } from "./api/store";
 import { getCartTemp } from "./api/cart"
 
+import TemplateContext from "../context/template"
 import StoreContext from "../context/store";
 import MyCartContext from "../context/myCart"
 
+
 export default function MyApp({ Component, pageProps }) {
+  const [template, setTemplate] = useState({ showMenu: false, showHeader: true, showHeader2: false })
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
 
@@ -25,6 +30,12 @@ export default function MyApp({ Component, pageProps }) {
     handleStore();
     handleMyCart();
   }, [])
+
+  useEffect(() => {
+    /* Se o o menu tiver aberto, desativo scroll no tbody */
+    const tbody = document.getElementById("idBody");
+    tbody.style.overflow = template.showMenu ? "hidden" : 'auto'
+  }, [template])
 
   const handleToken = async () => {
     const session = await getSession()
@@ -59,15 +70,22 @@ export default function MyApp({ Component, pageProps }) {
       />
       <GlobalStyles />
       <SessionProvider session={pageProps.session}>
-        <StoreContext.Provider value={store}>
-          <MyCartContext.Provider value={{ myCart, setMyCart }}>
-            <Header />
-            <Content>
-              <Component {...pageProps} />
-            </Content>
-            <Nav />
-          </MyCartContext.Provider>
-        </StoreContext.Provider>
+        <TemplateContext.Provider value={{ template, setTemplate }}>
+          <StoreContext.Provider value={store}>
+            <MyCartContext.Provider value={{ myCart, setMyCart }}>
+
+              {template.showMenu && <Menu />}
+              {template.showHeader && <Header />}
+              {template.showHeader2 && <Header2 />}
+
+              <Content>
+                <Component {...pageProps} />
+              </Content>
+              <Nav />
+
+            </MyCartContext.Provider>
+          </StoreContext.Provider>
+        </TemplateContext.Provider>
       </SessionProvider>
     </ThemeProvider>
   )

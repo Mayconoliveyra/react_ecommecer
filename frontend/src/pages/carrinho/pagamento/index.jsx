@@ -1,39 +1,19 @@
 import Head from 'next/head';
-import { useContext } from 'react';
+import { getSession } from "next-auth/react"
+import { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
-import { CardPayment } from "../../../components/card/cardPayment"
 import { moneyMask } from '../../../../masks';
 
 import MyCartContext from "../../../context/myCart"
+import TemplateContext from '../../../context/template';
 
-const CartSC = styled.div`
-    [data='subtotal']{
-        padding: 1rem 1.4rem;
-        display: flex;
-        align-items: center;
-        font-size: 1.3rem;
-        font-family: ${({ theme }) => theme.font.family.medium};
-  
-        span:nth-child(1) {
-            margin-left: 10px;
-            margin-right: 1px;
-            position:relative;
-            top: -0.1rem;
-            font-size: 1rem;
-            font-family: ${({ theme }) => theme.font.family.bold};
-        }
-        span:nth-child(2) {
-            font-size: 1.6rem;
-            font-family: ${({ theme }) => theme.font.family.medium};
-        }          
-    }
+const BtnConfirmSC = styled.div`
     [data='close']{
         padding: 0.7rem 1rem;
         border-top: 0.1rem solid #e7e7e7;
         border-bottom: 0.1rem solid #e7e7e7;
-        /* border: solid 1px red; */
         display: flex;
         a{   
             display: flex;
@@ -48,71 +28,213 @@ const CartSC = styled.div`
         }
     }
 `
-const SearchSC = styled.div`
-    padding: 0 0.6rem;
-    [data-div="cads"]{
-        display: grid;
-        grid-template-columns: repeat(1fr);
-    }
-
-    [data-div='cart-vazio']{
-        margin: 0.8rem 1rem;
-        h1 {
-            font-size: 1.1rem;
-            margin-left: 10px;
-            display:flex;
-            margin: 0px;
+const PaymentValueSC = styled.div`
+    /* border:solid 1px red; */
+    margin: 1rem 0;
+    padding: 0 0.7rem;
+    >div{
+        color: #565959;
+        [data="resume"]{
+            border: 1px #D5D9D9 solid;
+            border-radius: 0.8rem 0.8rem 0 0;
+            padding: 0.8rem 1.5rem;
+            h4{
+                color: #0F1111;
+                font-size: 1.2rem;
+                margin: 0px;
+                padding: 0px;
+            }
         }
-        p {
-            font-size: 1rem;
-            margin: 0px;
+        [data="table-values"]{
+            border: 1px #D5D9D9 solid;
+            border-radius: 0 0 0.8rem 0.8rem;
+            padding: 1.1rem 1.5rem;
+            table{
+                width: 100%;
+                border-collapse: collapse;
+                tr{
+                    td{
+                        padding: 0.2rem 0.4rem;
+                        font-size:1.1rem;
+                        font-family: ${({ theme }) => theme.font.family.medium};
+                    }
+                    [data="td-value"]{
+                        font-family: ${({ theme }) => theme.font.family.regular};
+                        text-align:right;
+                    }
+                    [data="total-td"]{
+                        padding-top: 0.4rem;
+                        font-family: ${({ theme }) => theme.font.family.bold};
+                        color: #0F1111;
+                        font-size: 1.2rem;
+                    }
+                    [data="td-value-total"]{
+                        padding-top: 0.4rem;
+                        font-family: ${({ theme }) => theme.font.family.bold};
+                        color: #B12704;
+                        text-align:right;
+                        font-size: 1.2rem;
+                    }
+                }
+            }
         }
     }
 `
-export default function Pagamento() {
+const MetodoEntegraSC = styled.div`
+    /* border:solid 1px red; */
+    margin: 1rem 0;
+    padding: 0 0.7rem;
+    >div{
+        color: #0F1111;
+        [data="metodo-entrega"]{
+            border: 1px #D5D9D9 solid;
+            border-radius: 0.3rem 0.3rem 0 0;
+            padding: 0.8rem 1.5rem;
+            h4{
+                color: #0F1111;
+                font-size: 1.2rem;
+                margin: 0px;
+                padding: 0px;
+            }
+        }
+        [data="ul-li"]{
+            /* border: 1px #D5D9D9 solid; */
+            /* border-radius: 0 0 0.8rem 0.8rem;
+            padding: 1rem 1.2rem; */
+            ul{
+                /* border:solid 1px red; */
+                li{
+                    display: flex;
+                    align-items: center;
+                    padding:1.2rem;
+                    border: 1px #D5D9D9 solid;
+                    input{
+                        width:2rem;
+                        height:2rem;
+                        margin-right: 1rem;
+                    }
+                    label{
+                        font-size: 1.2rem;
+                        width: 100%;
+                    }
+                }
+            }
+           
+        }
+    }
+`
+
+export default function Payment() {
     const { myCart: { products, totals } } = useContext(MyCartContext)
+    const { template, setTemplate } = useContext(TemplateContext)
+    useEffect(() => {
+        setTemplate({ ...template, showHeader: false, showHeader2: true })
+        return () => setTemplate({ ...template, showHeader: true, showHeader2: false })
+    }, [])
 
     return (
         <>
             <Head>
-                <title>Carrinho de compras</title>
+                <title>Confirmar pedido</title>
             </Head>
-            <CartSC>
+            <div>
                 {products && products.length > 0 && (
-                    <>
-                        <div data='subtotal'>
-                            Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
-                        </div>
+                    <BtnConfirmSC>
                         <div data='close'>
                             <Link href="/">
-                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                                Fechar pedido ({totals && totals.qtd_products} {totals && totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
-                    </>
+                    </BtnConfirmSC>
                 )}
+                <PaymentValueSC>
+                    <div>
+                        <div data="resume">
+                            <h4>Resumo</h4>
+                        </div>
+                        <div data="table-values">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Quantidade:</td>
+                                        <td data="td-value">{totals && totals.qtd_products}</td>
+                                    </tr>
+                                    <tr>
+                                        <td data="total-td">Total dos produtos:</td>
+                                        <td data="td-value-total">{moneyMask(totals && totals.vlr_pagar_products)}</td>
+                                    </tr>
+                                </tbody>
 
-                <SearchSC>
-                    {products && products.length > 0 ?
-                        <>
-                            <div data-div="cads">
-                                {products.map((product) => {
-                                    return (
-                                        <CardPayment key={product.id} product={product} />
-                                    )
-                                })}
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div data-div='cart-vazio'>
-                                <h1>O seu carrinho está vazio :(</h1>
-                                <p>...</p>
-                            </div>
-                        </>
-                    }
-                </SearchSC>
-            </CartSC>
+                            </table>
+                        </div>
+                    </div>
+                </PaymentValueSC>
+
+                <MetodoEntegraSC>
+                    <div>
+                        <div data="metodo-entrega">
+                            <h4>Método de entrega</h4>
+                        </div>
+                        <div data="ul-li">
+                            <ul>
+                                <li>
+                                    <input type="radio" id="frete" name="method" value="frete" />
+                                    <label htmlFor="frete">Receber em casa(Frete)</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="retirada" name="method" value="retirada" />
+                                    <label htmlFor="retirada">Retirada na loja</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </MetodoEntegraSC>
+
+                <MetodoEntegraSC>
+                    <div>
+                        <div data="metodo-entrega">
+                            <h4>Forma de pagamento</h4>
+                        </div>
+                        <div data="ul-li">
+                            <ul>
+                                <li>
+                                    <input type="radio" id="entrega" name="payment" value="entrega" />
+                                    <label htmlFor="entrega">Pagar na entrega</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="pix" name="payment" value="pix" />
+                                    <label htmlFor="pix">PIX</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="cartao" name="payment" value="cartao" />
+                                    <label htmlFor="cartao">Cartão</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </MetodoEntegraSC>
+
+            </div>
         </>
 
     )
+}
+
+export async function getServerSideProps({ req }) {
+    const session = await getSession({ req })
+
+    /* se session existir o usuario ja está autenticado. */
+    if (false) {
+        /* if (!session || !session.id) { */
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: { session },
+    }
 }

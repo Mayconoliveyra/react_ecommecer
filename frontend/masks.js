@@ -1,4 +1,4 @@
-export const moneyMask = (vlr, showRS = true) => {
+const moneyMask = (vlr, showRS = true) => {
     if (!Number(vlr)) return 'R$ 0,00'
     const valor = Number(vlr)
         .toFixed(2)
@@ -8,4 +8,14 @@ export const moneyMask = (vlr, showRS = true) => {
         .replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
     if (showRS) return `R$ ${valor}`; /* Exibir com  o simbolo R$ */
     return `${valor}`; /* Exibir sem simbolo R$ */
+}
+
+const proneMask = ["(", /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/,];
+
+const cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/];
+
+export {
+    moneyMask,
+    proneMask,
+    cepMask
 }

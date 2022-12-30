@@ -8,14 +8,14 @@ import { moneyMask } from '../../../masks';
 
 import MyCartContext from "../../context/myCart"
 
-const CartSC = styled.div`
+const BtnConfirmSC = styled.div`
     [data='subtotal']{
         padding: 1rem 1.4rem;
         display: flex;
         align-items: center;
         font-size: 1.3rem;
         font-family: ${({ theme }) => theme.font.family.medium};
-  
+
         span:nth-child(1) {
             margin-left: 10px;
             margin-right: 1px;
@@ -33,7 +33,6 @@ const CartSC = styled.div`
         padding: 0.7rem 1rem;
         border-top: 0.1rem solid #e7e7e7;
         border-bottom: 0.1rem solid #e7e7e7;
-        /* border: solid 1px red; */
         display: flex;
         a{   
             display: flex;
@@ -48,7 +47,7 @@ const CartSC = styled.div`
         }
     }
 `
-const SearchSC = styled.div`
+const SectionProductSC = styled.div`
     padding:0.6rem;
     [data-div="cads"]{
         display: grid;
@@ -78,21 +77,21 @@ export default function Cart() {
             <Head>
                 <title>Carrinho de compras</title>
             </Head>
-            <CartSC>
+            <div>
                 {products && products.length > 0 && (
-                    <>
+                    <BtnConfirmSC>
                         <div data='subtotal'>
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
                         </div>
                         <div data='close'>
-                            <Link href="/carrinho/pagamento">
-                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                            <Link href="carrinho/pagamento">
+                                Ir para o pagamento ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
-                    </>
+                    </BtnConfirmSC>
                 )}
 
-                <SearchSC>
+                <SectionProductSC>
                     {products && products.length > 0 ?
                         <>
                             <div data-div="cads">
@@ -111,8 +110,8 @@ export default function Cart() {
                             </div>
                         </>
                     }
-                </SearchSC>
-            </CartSC>
+                </SectionProductSC>
+            </div>
         </>
 
     )

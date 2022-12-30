@@ -5,13 +5,11 @@ exports.up = function (knex) {
 
             table.string("nome").defaultTo("Não informado")
             table.string("email").notNull().unique()
-
-            table.string("cpf_cnpj", 14)
-
-            table.string("contato", 11)
             table.string("senha")
 
-            table.string("codigo_autenticacao", 191) /* codigo_autenticacao= codigo do cliente criptografado */
+            table.string("contato", 10)
+
+            table.string("codigo_autenticacao") /* codigo_autenticacao= codigo do cliente criptografado */
 
             table.string("cep", 8)
             table.string("logradouro")

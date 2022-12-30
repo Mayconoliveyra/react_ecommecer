@@ -1,6 +1,6 @@
 import { signIn, getSession } from "next-auth/react"
 import Head from "next/head"
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import styled from "styled-components"
 import { Facebook, Google, DoorOpen } from "react-bootstrap-icons"
 import { Formik, Form, Field, ErrorMessage } from "formik"
@@ -242,7 +242,6 @@ const GroupSC = styled.div`
 
 export default function Login({ session }) {
   const store = useContext(StoreContext)
-  const formRef = useRef();
   const initialValues = {
     email: '',
     senha: '',
@@ -261,7 +260,6 @@ export default function Login({ session }) {
       <LoginSC>
         <div data='exibir'>
           <Formik
-            innerRef={formRef}
             validateOnMount
             validationSchema={scheme}
             initialValues={initialValues}
@@ -355,7 +353,7 @@ export default function Login({ session }) {
 
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req })
-  
+
   /* se session existir o usuario ja está autenticado. */
   if (session && session.id) {
     return {
