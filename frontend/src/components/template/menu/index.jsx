@@ -2,8 +2,8 @@ import { useContext } from "react"
 import styled from "styled-components"
 import { X } from "react-bootstrap-icons"
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { PersonCircle, ChevronRight } from "react-bootstrap-icons";
+import { useSession } from "next-auth/react";
+import { PersonCircle, PersonFillGear, ChevronRight } from "react-bootstrap-icons";
 
 import TemplateContext from "../../../context/template"
 
@@ -50,6 +50,7 @@ const MenuSC = styled.div`
                     overflow:hidden;
                     white-space: nowrap;
                     max-width: 15rem;
+                    text-align:left;
                 }
                 svg{
                     font-size: 30px;
@@ -114,7 +115,7 @@ export default function Menu() {
                     {session && session.id ?
                         <button type="button" onClick={() => setTemplate({ ...template, showMenu: false, showMenuLogin: true })}>
                             {/* Se tiver logado exibe o primeiro nome do usuario */}
-                            <PersonCircle /><span>Olá, {session.nome.split(' ')[0]}</span> <ChevronRight />
+                            <PersonFillGear /><span>Olá, {session.nome.split(' ')[0]}</span> <ChevronRight />
                         </button>
                         :
                         <Link href="/login">
@@ -141,7 +142,6 @@ export default function Menu() {
                     <li><Link href="/">Piso</Link></li>
                     <li><Link href="/">TV</Link></li>
                     <li><Link href="/">Joias</Link></li>
-                    <li><button href="/" onClick={() => signOut()}>Sair</button></li>
                 </ul>
 
             </div>

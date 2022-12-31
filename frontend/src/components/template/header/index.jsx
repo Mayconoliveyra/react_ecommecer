@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { PersonHeart, PersonFillGear } from "react-bootstrap-icons";
+import { PersonCircle, PersonFillGear } from "react-bootstrap-icons";
 import TemplateContext from "../../../context/template";
 
 const HeaderSC = styled.header`
@@ -87,7 +87,7 @@ export default function Header() {
                         </button>
                         :
                         <Link href="/login" data="user-login">
-                            Faça seu login <PersonHeart />
+                            Faça seu login <PersonCircle />
                         </Link>
                     }
                 </div>
