@@ -2,12 +2,10 @@ import { useContext } from "react"
 import styled from "styled-components"
 import { X } from "react-bootstrap-icons"
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { PersonCircle, ChevronRight } from "react-bootstrap-icons";
-
+import { signOut } from "next-auth/react";
 import TemplateContext from "../../../context/template"
 
-const MenuSC = styled.div`
+const MenuLoginSC = styled.div`
     position: fixed;
     height:100vh;
     width: 100%;
@@ -15,6 +13,10 @@ const MenuSC = styled.div`
     z-index: 999;
     overflow: hidden;
     display: flex;
+
+    flex-wrap: wrap-reverse;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     [data="exibir"]{
         overflow-y:scroll;
         height: 100%;
@@ -25,7 +27,7 @@ const MenuSC = styled.div`
 
         [data="x-close"]{
             position: absolute;
-            left: 22rem;
+            right: 23rem;
             svg{
               color: #f1f3f9;
               font-size: 3.5rem;
@@ -37,28 +39,14 @@ const MenuSC = styled.div`
             height: 65px;
             overflow:hidden;
             white-space: nowrap;
-            a,button{
+            button{
                 background: transparent;
                 flex: 1;
+                padding: 0px 15px;
                 display: flex;
                 align-items:center;
-                font-family: ${({ theme }) => theme.font.family.bold};
                 color: #fff;
-                span{
-                    flex:1;
-                    font-size: 17px;
-                    overflow:hidden;
-                    white-space: nowrap;
-                    max-width: 15rem;
-                }
-                svg{
-                    font-size: 30px;
-                    margin-right: 10px;
-                    margin-left: 10px;
-                }
-                >:nth-child(3){
-                    font-size: 20px;
-                }
+                font-size: 20px;
             }
         }
         [data="ul-li"]{
@@ -68,7 +56,8 @@ const MenuSC = styled.div`
                 display: flex;
                 height: 3rem;
                 padding:0px;
-                a{ 
+                a,button{ 
+                    background: transparent;
                     display: flex;
                     align-items:center;
                     padding: 15px 20px;
@@ -100,54 +89,40 @@ const MenuSC = styled.div`
     }
     `
 
-export default function Menu() {
-    const { data: session } = useSession()
-    const { template, setTemplate } = useContext(TemplateContext)
+export default function MenuLogin() {
+    const { setTemplate } = useContext(TemplateContext)
 
     return (
-        <MenuSC>
+        <MenuLoginSC>
             <div data="exibir">
                 <div data='x-close'>
                     <X />
                 </div>
                 <div data='user'>
-                    {session && session.id ?
-                        <button type="button" onClick={() => setTemplate({ ...template, showMenu: false, showMenuLogin: true })}>
-                            {/* Se tiver logado exibe o primeiro nome do usuario */}
-                            <PersonCircle /><span>Olá, {session.nome.split(' ')[0]}</span> <ChevronRight />
-                        </button>
-                        :
-                        <Link href="/login">
-                            <PersonCircle /> <span>Olá, faça seu login</span>
-                        </Link>
-                    }
+                    <button type="button">
+                        Sua conta
+                    </button>
                 </div>
                 <ul data="ul-li">
-                    <li>
-                        <div>
-                            Destaques
-                        </div>
-                    </li>
-                    <li><Link href="/">Mais Vendidos</Link></li>
-                    <li><Link href="/">Novidades</Link></li>
-                    <li><Link href="/">Em alta</Link></li>
+                    <li><Link href="/">Login</Link></li>
+                    <li><Link href="/">Trocar senha</Link></li>
+                    <li><Link href="/">Endereço de entrega</Link></li>
+                    <li><Link href="/">Atendimento</Link></li>
                     <li data="barra"></li>
                     <li>
                         <div>
-                            Categorias
+                            Seus Pedidos
                         </div>
                     </li>
-                    <li><Link href="/">Cama</Link></li>
-                    <li><Link href="/">Piso</Link></li>
-                    <li><Link href="/">TV</Link></li>
-                    <li><Link href="/">Joias</Link></li>
-                    <li><button href="/" onClick={() => signOut()}>Sair</button></li>
-                </ul>
+                    <li><Link href="/">Meus pedidos</Link></li>
+                    <li data="barra"></li>
 
+                    <li><button onClick={() => signOut()}>Sair</button></li>
+                </ul>
             </div>
 
-            <button data="btn-close" onClick={() => setTemplate({ ...template, showMenu: false })}>
+            <button data="btn-close" onClick={() => setTemplate({ showMenu: false, showMenuLogin: false })}>
             </button>
-        </MenuSC >
+        </MenuLoginSC>
     )
 }

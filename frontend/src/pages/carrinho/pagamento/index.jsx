@@ -1,13 +1,12 @@
 import Head from 'next/head';
 import { getSession } from "next-auth/react"
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
 import { moneyMask } from '../../../../masks';
 
 import MyCartContext from "../../../context/myCart"
-import TemplateContext from '../../../context/template';
 
 const BtnConfirmSC = styled.div`
     [data='close']{
@@ -126,12 +125,6 @@ const MetodoEntegraSC = styled.div`
 
 export default function Payment() {
     const { myCart: { products, totals } } = useContext(MyCartContext)
-    const { template, setTemplate } = useContext(TemplateContext)
-    useEffect(() => {
-        setTemplate({ ...template, showHeader: false, showHeader2: true })
-        return () => setTemplate({ ...template, showHeader: true, showHeader2: false })
-    }, [])
-
     return (
         <>
             <Head>

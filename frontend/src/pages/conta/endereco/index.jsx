@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useContext, useEffect } from 'react';
 import styled from "styled-components"
 import MaskedInput from "react-text-mask";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -8,9 +7,6 @@ import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
 import { proneMask, cepMask } from '../../../../masks';
-
-import TemplateContext from '../../../context/template';
-
 
 const AddressSC = styled.div`
     max-width: 35rem;
@@ -81,12 +77,6 @@ const GroupSC = styled.div`
 `
 
 export default function Address() {
-    const { template, setTemplate } = useContext(TemplateContext)
-    useEffect(() => {
-        setTemplate({ ...template, showHeader: false, showHeader2: true })
-        return () => setTemplate({ ...template, showHeader: true, showHeader2: false })
-    }, [])
-
     const initialValues = {
         contato: '',
         cep: '',

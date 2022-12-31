@@ -3,6 +3,7 @@ import { CaretUpFill, Instagram, Facebook, Twitter, Youtube, Whatsapp, Messenger
 import Link from "next/link";
 import { useContext } from "react";
 
+import TemplateContext from "../../../context/template";
 import StoreContext from "../../../context/store"
 
 const NavSC = styled.footer`
@@ -117,57 +118,63 @@ const NavSC = styled.footer`
     }
 `
 export default function Footer() {
+    const { template } = useContext(TemplateContext)
     const store = useContext(StoreContext)
 
     return (
         <NavSC>
-            <div data-div='return-top'>
-                <Link href="#a-header">
-                    <CaretUpFill />
-                    Voltar ao Topo da página
-                </Link>
-            </div>
-            <div data-div='attendance'>
-                <div>
-                    <h5>Atendimento</h5>
-                    <div>
-                        <Link href="https://api.whatsapp.com/send?phone=558399675920" target={'_blank'}>
-                            <Whatsapp />
-                        </Link>
-                        <Link href="http://m.me/maycon.deyved" target={'_blank'}>
-                            <Messenger />
-                        </Link>
-                        <Link href={`https://ig.me/m/${store.a_instagram}`} target={'_blank'}>
-                            <Instagram />
-                        </Link>
-                        <Link href={`mailto:${store.a_email}?subject=Atendimento`} target={'_blank'}>
-                            <EnvelopeAtFill />
+            {!template.footerReduce && (
+                <>
+                    <div data-div='return-top'>
+                        <Link href="#exibir-header">
+                            <CaretUpFill />
+                            Voltar ao Topo da página
                         </Link>
                     </div>
-                    <p>
-                        {store.logradouro}, {store.numero} - {store.bairro}, {store.localidade} - {store.uf}{store.cep && ", " + store.cep.substring(0, 5) + "-" + store.cep.substring(5)}
-                    </p>
-                </div>
-            </div>
-            <div data-div='dev'>
-                <div>
-                    <div>
-                        <Link href="/">
-                            <img src={'/assets/images/selo-google-site-seguro.png'} alt={'Selo Google Site Seguro'} />
-                        </Link>
+                    <div data-div='attendance'>
+                        <div>
+                            <h5>Atendimento</h5>
+                            <div>
+                                <Link href="https://api.whatsapp.com/send?phone=558399675920" target={'_blank'}>
+                                    <Whatsapp />
+                                </Link>
+                                <Link href="http://m.me/maycon.deyved" target={'_blank'}>
+                                    <Messenger />
+                                </Link>
+                                <Link href={`https://ig.me/m/${store.a_instagram}`} target={'_blank'}>
+                                    <Instagram />
+                                </Link>
+                                <Link href={`mailto:${store.a_email}?subject=Atendimento`} target={'_blank'}>
+                                    <EnvelopeAtFill />
+                                </Link>
+                            </div>
+                            <p>
+                                {store.logradouro}, {store.numero} - {store.bairro}, {store.localidade} - {store.uf}{store.cep && ", " + store.cep.substring(0, 5) + "-" + store.cep.substring(5)}
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <Link href="/">
-                            <img src={'/assets/images/selo_empresabuscape_horizontal.png'} alt={'selo Empresa Buscapé'} />
-                        </Link>
+                    <div data-div='dev'>
+                        <div>
+                            <div>
+                                <Link href="/">
+                                    <img src={'/assets/images/selo-google-site-seguro.png'} alt={'Selo Google Site Seguro'} />
+                                </Link>
+                            </div>
+                            <div>
+                                <Link href="/">
+                                    <img src={'/assets/images/selo_empresabuscape_horizontal.png'} alt={'selo Empresa Buscapé'} />
+                                </Link>
+                            </div>
+                            <div>
+                                <Link href="/">
+                                    <img src={'/assets/images/softconnect.png'} alt={'Softconnect'} />
+                                </Link>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <Link href="/">
-                            <img src={'/assets/images/softconnect.png'} alt={'Softconnect'} />
-                        </Link>
-                    </div>
-                </div>
-            </div>
+                </>
+            )}
+
             <div data-div='media'>
                 <div>
                     <h5>Mídias sociais</h5>

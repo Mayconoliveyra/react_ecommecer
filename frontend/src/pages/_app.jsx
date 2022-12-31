@@ -4,12 +4,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
 import { getSession, SessionProvider } from "next-auth/react"
+import { useRouter } from "next/router";
 
 import Header from "../components/template/header"
-import Header2 from "../components/template/header2"
 import Content from "../components/template/content"
 import Nav from "../components/template/nav"
 import Menu from "../components/template/menu";
+import MenuLogin from "../components/template/menulogin";
 import { theme } from "../styles/theme"
 
 import { get as getStore } from "./api/store";
@@ -19,9 +20,10 @@ import TemplateContext from "../context/template"
 import StoreContext from "../context/store";
 import MyCartContext from "../context/myCart"
 
-
 export default function MyApp({ Component, pageProps }) {
-  const [template, setTemplate] = useState({ showMenu: false, showHeader: true, showHeader2: false })
+  const { pathname } = useRouter()
+  const defaultTemplate = { showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false }
+  const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
 
@@ -31,10 +33,23 @@ export default function MyApp({ Component, pageProps }) {
     handleMyCart();
   }, [])
 
+  /* Ajusta o template de acordo com a rota que está sendo acessada (TemplateContext) */
   useEffect(() => {
-    /* Se o o menu tiver aberto, desativo scroll no tbody */
+    console.log(pathname)
+    switch (pathname) {
+      case '/login':
+        setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
+        break;
+      default:
+        setTemplate(defaultTemplate)
+        break;
+    }
+  }, [pathname])
+
+  /* Se showMenu ou showMenuLogin for verdadeiro, remove scroll do tbody */
+  useEffect(() => {
     const tbody = document.getElementById("idBody");
-    tbody.style.overflow = template.showMenu ? "hidden" : 'auto'
+    tbody.style.overflow = template.showMenu || template.showMenuLogin ? "hidden" : 'auto'
   }, [template])
 
   const handleToken = async () => {
@@ -75,9 +90,8 @@ export default function MyApp({ Component, pageProps }) {
             <MyCartContext.Provider value={{ myCart, setMyCart }}>
 
               {template.showMenu && <Menu />}
-              {template.showHeader && <Header />}
-              {template.showHeader2 && <Header2 />}
-
+              {template.showMenuLogin && <MenuLogin />}
+              <Header />
               <Content>
                 <Component {...pageProps} />
               </Content>
