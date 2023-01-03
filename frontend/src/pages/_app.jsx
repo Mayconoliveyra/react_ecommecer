@@ -38,7 +38,8 @@ export default function MyApp({ Component, pageProps }) {
     console.log(pathname)
     switch (pathname) {
       case '/login':
-      case '/carrinho/pagamento':
+      case '/carrinho/fechar':
+      case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
       default:

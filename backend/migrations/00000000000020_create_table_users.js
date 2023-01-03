@@ -3,23 +3,21 @@ exports.up = function (knex) {
         .createTable("users", (table) => {
             table.increments("id").primary();
 
-            table.string("nome").defaultTo("Não informado")
+            table.string("nome").defaultTo("Não informado").notNull()
             table.string("email").notNull().unique()
             table.string("senha")
 
-            table.string("contato", 10)
+            table.string("contato", 14)
 
             table.string("codigo_autenticacao") /* codigo_autenticacao= codigo do cliente criptografado */
 
-            table.string("cep", 8)
+            table.string("cep", 9)
             table.string("logradouro")
             table.string("complemento")
             table.string("bairro")
             table.string("localidade")
             table.string("uf")
             table.string("numero")
-
-            table.boolean("api_endereco", 1).notNull().defaultTo(0) /* Valida se o endereço foi preenchido manual ou pela API */
 
             table.boolean("bloqueado", 1).notNull().defaultTo(0)
             table.string("motivo_bloqueio")

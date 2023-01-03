@@ -13,14 +13,14 @@ const AddressSC = styled.div`
     margin: 0 auto;
 `
 const EnderecoSC = styled.div`
-    /* margin: 1rem 0;
-    padding: 0 0.7rem; */
+    margin: 0.5rem 0;
+    padding: 0 0.3rem;
     >div{
         color: #0F1111;
         [data="h4-title"]{
+            border-radius: 0.3rem 0.3rem 0 0;
             border: 1px #D5D9D9 solid;
-            /* border-radius: 0.3rem 0.3rem 0 0; */
-            padding: 0.8rem 1.5rem;
+            padding: 0.6rem 1.5rem;
             h4{
                 color: #0F1111;
                 font-size: 2rem;
@@ -30,9 +30,9 @@ const EnderecoSC = styled.div`
             }
         }
         [data="form"]{
-            /* border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem; */
-            padding: 0.6rem 1rem;
+            border: 1px #D5D9D9 solid;
+            border-radius: 0 0 0.8rem 0.8rem;
+            padding: 0.3rem 0.7rem;
         }
     }
 `
@@ -122,156 +122,6 @@ export default function Address() {
                                     <GroupSC>
                                         <div data="label">
                                             <label htmlFor="contato">Contato</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="contato">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="contato"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={proneMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="contato" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="cep">CEP</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="cep">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="cep"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={cepMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="cep" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="logradouro">Endereço</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="logradouro" type="text" maxLength="100" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="logradouro" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="numero">Número da residência</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="numero" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="numero" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="complemento">Complemento(opcional)</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="complemento" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="complemento" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="bairro">Bairro</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="bairro" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="bairro" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="localidade">Cidade</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="localidade" type="localidade" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="localidade" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="uf">Estado</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="uf" type="uf" maxLength="2" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="uf" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                </Form>
-                            )}
-                        </Formik>
-                    </div>
-                </EnderecoSC>
-                <EnderecoSC>
-                    <div>
-                        <div data="h4-title">
-                            <h4>Seu endereço</h4>
-                        </div>
-                        <Formik
-                            validateOnMount
-                            validationSchema={scheme}
-                            initialValues={initialValues}
-                            onSubmit={async (values) => {
-                                console.log(values)
-                            }}
-                        >
-                            {props => (
-                                <Form data="form" action="">
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="contato">WhatsApp</label>
                                         </div>
                                         <div data="input">
                                             <Field name="contato">

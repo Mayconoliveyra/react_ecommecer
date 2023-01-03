@@ -84,8 +84,8 @@ export default function Cart() {
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
                         </div>
                         <div data='close'>
-                            <Link href="carrinho/pagamento">
-                                Ir para o pagamento ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                            <Link href="carrinho/fechar">
+                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
                     </BtnConfirmSC>

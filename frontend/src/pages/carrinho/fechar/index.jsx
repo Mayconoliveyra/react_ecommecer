@@ -27,8 +27,7 @@ const BtnConfirmSC = styled.div`
         }
     }
 `
-const PaymentValueSC = styled.div`
-    /* border:solid 1px red; */
+const CloseOrderSC = styled.div`
     margin: 1rem 0;
     padding: 0 0.7rem;
     >div{
@@ -80,7 +79,6 @@ const PaymentValueSC = styled.div`
     }
 `
 const MetodoEntegraSC = styled.div`
-    /* border:solid 1px red; */
     margin: 1rem 0;
     padding: 0 0.7rem;
     >div{
@@ -97,11 +95,7 @@ const MetodoEntegraSC = styled.div`
             }
         }
         [data="ul-li"]{
-            /* border: 1px #D5D9D9 solid; */
-            /* border-radius: 0 0 0.8rem 0.8rem;
-            padding: 1rem 1.2rem; */
             ul{
-                /* border:solid 1px red; */
                 li{
                     display: flex;
                     align-items: center;
@@ -123,7 +117,7 @@ const MetodoEntegraSC = styled.div`
     }
 `
 
-export default function Payment() {
+export default function CloseOrder() {
     const { myCart: { products, totals } } = useContext(MyCartContext)
     return (
         <>
@@ -140,7 +134,7 @@ export default function Payment() {
                         </div>
                     </BtnConfirmSC>
                 )}
-                <PaymentValueSC>
+                <CloseOrderSC>
                     <div>
                         <div data="resume">
                             <h4>Resumo</h4>
@@ -161,7 +155,7 @@ export default function Payment() {
                             </table>
                         </div>
                     </div>
-                </PaymentValueSC>
+                </CloseOrderSC>
 
                 <MetodoEntegraSC>
                     <div>
@@ -215,7 +209,7 @@ export default function Payment() {
 
 export async function getServerSideProps({ req }) {
     const session = await getSession({ req })
-
+    console.log(session)
     /* se session existir o usuario ja está autenticado. */
     if (false) {
         /* if (!session || !session.id) { */

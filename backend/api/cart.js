@@ -1,11 +1,11 @@
 module.exports = (app) => {
-    const { existeOuErro, utility_console, msgErrorDefault } = app.api.utilities;
+    const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
 
     const getCartTemp = async (req, res) => {
         const id = req.params.id
 
         try {
-            existeOuErro(id, "[id] id_storage não pode ser nulo.")
+            existOrError(id, "[id] id_storage não pode ser nulo.")
         } catch (error) {
             utility_console({
                 name: "cart.getCartTemp",
@@ -69,11 +69,11 @@ module.exports = (app) => {
         }
 
         try {
-            existeOuErro(modelo.id_storage, "[id_storage] não pode ser nulo.")
-            existeOuErro(modelo.id_product, "[id_product] não pode ser nulo.")
+            existOrError(modelo.id_storage, "[id_storage] não pode ser nulo.")
+            existOrError(modelo.id_product, "[id_product] não pode ser nulo.")
 
             const productDB = await app.db("products").where({ id: modelo.id_product }).first()
-            existeOuErro(productDB, "[id_product] mercadoria não existe.")
+            existOrError(productDB, "[id_product] mercadoria não existe.")
         } catch (error) {
             utility_console({
                 name: "cart.saveIncrementer",
