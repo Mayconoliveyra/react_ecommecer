@@ -120,7 +120,7 @@ export default function MenuLogin() {
                 </ul>
             </div>
 
-            <button data="btn-close" onClick={() => setTemplate({ showMenu: false, showMenuLogin: false })}>
+            <button data="btn-close" onClick={() => setTemplate({ showMenu: false, showMenuLogin: false, showNav: true })}>
             </button>
         </MenuLoginSC>
     )

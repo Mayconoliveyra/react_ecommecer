@@ -27,7 +27,7 @@ const NavSC = styled.footer`
     }
     [data-div='attendance']{
         backdrop-filter: brightness(65%);
-        padding: 0.5rem;
+        padding: 1.5rem 0.5rem;
         >div{
             max-width: ${({ theme }) => theme.width.large};
             margin: 0px auto;
@@ -38,13 +38,13 @@ const NavSC = styled.footer`
             h5{
                 white-space: nowrap;
                 margin: 0px;
-                margin-bottom: 1.3rem;
-                font-size: 1.15rem;
+                font-size: 1.2rem;
                 font-family:${({ theme }) => theme.font.family.bold};
             }
             div {
                 display: flex;
                 align-items: center;
+                margin-top: 2rem;
                 svg{
                     font-size: 2rem;
                     margin: 0 1.5rem;
@@ -77,7 +77,7 @@ const NavSC = styled.footer`
     }
     [data-div='media']{
         backdrop-filter: brightness(65%);
-        padding: 0.5rem;
+        padding: 1.5rem 0.5rem;
         >div{
             max-width: ${({ theme }) => theme.width.large};
             margin: 0px auto;
@@ -87,12 +87,11 @@ const NavSC = styled.footer`
             h5{
                 white-space: nowrap;
                 margin: 0px;
-                margin-bottom: 1.3rem;
-                font-size: 1.15rem;
+                font-size: 1.2rem;
                 font-family:${({ theme }) => theme.font.family.bold};
             }
             div {
-                margin-bottom: 1rem;
+                margin-top: 2rem;
                 display: flex;
                 align-items: center;
                 svg{
@@ -125,12 +124,12 @@ export default function Footer() {
         <NavSC>
             {!template.footerReduce && (
                 <>
-                    <div data-div='return-top'>
+                    {/* <div data-div='return-top'>
                         <Link href="#exibir-header">
                             <CaretUpFill />
                             Voltar ao Topo da página
                         </Link>
-                    </div>
+                    </div> */}
                     <div data-div='attendance'>
                         <div>
                             <h5>Atendimento</h5>

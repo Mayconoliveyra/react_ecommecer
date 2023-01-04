@@ -22,7 +22,7 @@ import MyCartContext from "../context/myCart"
 
 export default function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter()
-  const defaultTemplate = { showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false }
+  const defaultTemplate = { showHeaderSearch: true, showMenu: false, showNav: true, showMenuLogin: false, footerReduce: false }
   const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
@@ -38,7 +38,9 @@ export default function MyApp({ Component, pageProps }) {
     console.log(pathname)
     switch (pathname) {
       case '/login':
+      case '/carrinho':
       case '/carrinho/fechar':
+      case '/conta/meusdados':
       case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
@@ -96,8 +98,8 @@ export default function MyApp({ Component, pageProps }) {
               <Content>
                 <Component {...pageProps} />
               </Content>
-              <Nav />
 
+              {template.showNav && <Nav />}
             </MyCartContext.Provider>
           </StoreContext.Provider>
         </TemplateContext.Provider>

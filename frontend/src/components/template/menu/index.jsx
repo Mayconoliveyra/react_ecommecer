@@ -146,7 +146,7 @@ export default function Menu() {
 
             </div>
 
-            <button data="btn-close" onClick={() => setTemplate({ ...template, showMenu: false })}>
+            <button data="btn-close" onClick={() => setTemplate({ ...template, showMenu: false, showNav: true })}>
             </button>
         </MenuSC >
     )

@@ -59,7 +59,7 @@ export default function Nav() {
                     <Cart3 />
                     <p>Carrinho({products && products.length ? products.length : 0})</p>
                 </Link>
-                <button type="button" onClick={() => setTemplate({ ...template, showMenu: !template.showMenu })}>
+                <button type="button" onClick={() => setTemplate({ ...template, showMenu: !template.showMenu, showNav: false })}>
                     <ThreeDots />
                     <p>Mais</p>
                 </button>
