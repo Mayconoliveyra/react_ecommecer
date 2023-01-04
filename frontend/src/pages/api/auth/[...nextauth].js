@@ -1,3 +1,4 @@
+const { FACEBOOK_CLIENT_ID, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, LOGIN_AUTH } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,12 +7,12 @@ import { storeNextAut } from "./index"
 export const authOptions = {
     providers: [
         FacebookProvider({
-            clientId: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+            clientId: FACEBOOK_CLIENT_ID,
+            clientSecret: FACEBOOK_CLIENT_SECRET
         }),
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientId: GOOGLE_CLIENT_ID,
+            clientSecret: GOOGLE_CLIENT_SECRET
         })
     ],
     callbacks: {
@@ -22,7 +23,7 @@ export const authOptions = {
                     nome: session.user.name,
                     email: session.user.email,
                     sub: token.sub,
-                    secret: process.env.LOGIN_AUTH
+                    secret: LOGIN_AUTH
                 }
                 const usuario = await storeNextAut(modelo)
                 return {

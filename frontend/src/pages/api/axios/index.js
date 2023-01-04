@@ -1,9 +1,10 @@
+const { REACT_APP_API_URL } = require("../../../../.env");
 import axios from "axios";
 
 const token = typeof window !== 'undefined' && localStorage && localStorage.getItem("access_token") ? localStorage.getItem("access_token") : '';
 
 const api = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL ?? "http://10.0.0.200:3030"}`,
+  baseURL: `${REACT_APP_API_URL}`,
   headers: {
     "Authorization": `Bearer ${token}`,
     "Content-Type": "application/json",
