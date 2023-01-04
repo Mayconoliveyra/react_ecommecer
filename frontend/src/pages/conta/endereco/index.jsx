@@ -1,12 +1,16 @@
 import Head from 'next/head';
 import styled from "styled-components"
-import MaskedInput from "react-text-mask";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { getSession } from "next-auth/react";
+import { Formik, Form } from 'formik';
+import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { Group } from '../../../components/input';
+
 import { proneMask, cepMask } from '../../../../masks';
+import { store as saveUser } from '../../api/auth';
 
 const AddressSC = styled.div`
     max-width: 35rem;
@@ -36,66 +40,36 @@ const EnderecoSC = styled.div`
         }
     }
 `
-const GroupSC = styled.div`
-  display:flex;
-  flex-direction: column;
-  margin-bottom: 0.5rem;
-  [data="label"]{
-    padding: 0.4rem;
-    label{
-      font-family:${({ theme }) => theme.font.family.bold};
-      font-size: 1.4em;
+const BtnConfirmSC = styled.div`
+    [data='button-submit']{
+        padding: 0.7rem 1rem;
+        border-top: 0.1rem solid #e7e7e7;
+        display: flex;
+        button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.2rem;
+            flex: 1;
+            background: #FFD814;
+            border-color: #FCD200;
+            border-radius: 0.45rem;
+            color: #0F1111;
+
+            &:disabled{
+                cursor: default;
+            }
+        }
     }
-    
-  }
-  [data="input"]{
-    border-top-color: #949494;
-    border: 0.1rem solid #a6a6a6;
-    box-shadow: 0 0.1rem 0 rgb(0 0 0 / 7%) inset;
-    border-radius: 0.2rem;
-    border-right-color: #949494;
-    border-bottom-color: #949494;
-    border-left-color: #949494;
-    input{
-      width: 100%;
-      background-color: transparent;
-      padding: 0.8rem;
-      padding-top: 0.9rem;
-      box-shadow: none;
-      border: 0;
-      font-size: 1.1rem;
-    }
-    [data="show-password"]{
-      width: 100%;
-      padding: 0 10px 6px 10px;
-      span{
-        color: #555!important;
-        font-size: 0.9rem !important;
-      }
-    }
-  }
 `
 
-export default function Address() {
-    const initialValues = {
-        contato: '',
-        cep: '',
-        logradouro: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        localidade: '',
-        uf: '',
-    }
+export default function Address({ session }) {
     const scheme = Yup.object().shape({
-        contato: Yup.string().label("Contato").required().length(14, "É necessário informar um número completo."),
-        cep: Yup.string().label("CEP").required().length(9, "É necessário informar um CEP completo."),
-        logradouro: Yup.string().label("Endereço").required(),
-        numero: Yup.string().label("Número da residência").required(),
-        complemento: Yup.string().label("Complemento(opcional)").required(),
-        bairro: Yup.string().label("Bairro").required(),
-        localidade: Yup.string().label("Cidade").required(),
-        uf: Yup.string().label("Estado").required()
+        contato: Yup.string().nullable().label("Contato").required().length(14, "É necessário informar um número completo."),
+        cep: Yup.string().nullable().label("CEP").required().length(9, "É necessário informar um CEP completo."),
+        numero: Yup.string().nullable().label("Número da residência"),
+        complemento: Yup.string().nullable().label("Complemento(opcional)"),
     });
 
     return (
@@ -112,143 +86,79 @@ export default function Address() {
                         <Formik
                             validateOnMount
                             validationSchema={scheme}
-                            initialValues={initialValues}
-                            onSubmit={async (values) => {
-                                console.log(values)
+                            initialValues={session}
+                            onSubmit={async (values, setValues) => {
+                                await saveUser({ ...values, id: session.id })
+                                    .then((data) => {
+                                        /* Seta o enderço atualizado no input */
+                                        setValues.resetForm({ values: data })
+                                        toast.success("Seu endereço foi altualizado!.")
+                                    })
+                                    .catch((res) => {
+                                        /* Se for erro 400, significa que a exibição foi tratada */
+                                        if (res && res.response && res.response.status == 400) {
+                                            if (res.response.data[400]) {
+                                                toast.error(res.response.data[400])
+                                            }
+                                            setValues.setErrors(res.response.data)
+                                            return
+                                        }
+                                        toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                                    })
                             }}
                         >
-                            {props => (
+                            {({ errors, dirty, initialValues, values }) => (
                                 <Form data="form" action="">
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="contato">Contato</label>
+                                    <Group
+                                        error={!!errors.contato}
+                                        label="Contato"
+                                        name="contato"
+                                        mask={proneMask}
+                                    />
+                                    <Group
+                                        error={!!errors.cep}
+                                        label="CEP"
+                                        name="cep"
+                                        mask={cepMask}
+                                    />
+                                    {(initialValues.cep == values.cep) && <Group
+                                        label="Endereço"
+                                        name="logradouro"
+                                        disabled
+                                    />}
+                                    <Group
+                                        label="Número da residência(opcional)"
+                                        name="numero"
+                                        maxLength={55}
+                                    />
+                                    <Group
+                                        label="Complemento(opcional)"
+                                        name="complemento"
+                                        maxLength={55}
+                                    />
+                                    {(initialValues.cep == values.cep) && <Group
+                                        label="Bairro"
+                                        name="bairro"
+                                        disabled
+                                    />}
+                                    {(initialValues.cep == values.cep) && <Group
+                                        label="Cidade"
+                                        name="localidade"
+                                        disabled
+                                    />}
+                                    {(initialValues.cep == values.cep) && < Group
+                                        label="Estado"
+                                        name="uf"
+                                        disabled
+                                    />}
+
+                                    <BtnConfirmSC>
+                                        <div data='button-submit'>
+                                            <button disabled={!dirty} type="submit">
+                                                Atualizar
+                                            </button>
                                         </div>
-                                        <div data="input">
-                                            <Field name="contato">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="contato"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={proneMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="contato" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="cep">CEP</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="cep">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="cep"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={cepMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="cep" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="logradouro">Endereço</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="logradouro" type="text" maxLength="100" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="logradouro" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="numero">Número da residência</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="numero" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="numero" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="complemento">Complemento(opcional)</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="complemento" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="complemento" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="bairro">Bairro</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="bairro" type="text" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="bairro" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="localidade">Cidade</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="localidade" type="localidade" maxLength="55" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="localidade" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC>
-                                        <div data="label">
-                                            <label htmlFor="uf">Estado</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="uf" type="uf" maxLength="2" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="uf" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
+                                    </BtnConfirmSC>
                                 </Form>
                             )}
                         </Formik>
@@ -257,4 +167,22 @@ export default function Address() {
             </AddressSC>
         </>
     )
+}
+
+export async function getServerSideProps({ req }) {
+    const session = await getSession({ req })
+
+    /* se session ou session.id não existir, redirecionada para tela de login */
+    if (!session || !session.id) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: { session },
+    }
 }

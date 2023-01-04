@@ -77,7 +77,7 @@ export default function Header() {
             <div id="exibir-header">
                 <div data="cont-1">
                     <Link href="/">
-                        <Image src={'/assets/images/logo.png'} width={130} height={30} alt="logo" quality={100} />
+                        <Image src={'/assets/images/logo.png'} width={130} height={30} alt="logo" quality={100} priority={true} />
                     </Link>
 
                     {session && session.id ?

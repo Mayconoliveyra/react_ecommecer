@@ -79,12 +79,6 @@ module.exports = app => {
                 }
 
                 try {
-
-                } catch (error) {
-
-                }
-
-                try {
                         const store = await app.db("store").select("cep").first()
                         if (!store) return res.status(400).send({ 400: "Não foi encontrado o cadastro da empresa." })
 
@@ -96,7 +90,7 @@ module.exports = app => {
                         app.db("users")
                                 .update({ ...modelo, ...endereco })
                                 .where({ id: id })
-                                .then(() => res.status(204).send())
+                                .then(() => res.json({ ...modelo, ...endereco }))
                                 .catch((error) => {
                                         utility_console("auth.save", error)
                                         return res.status(500).send(msgErrorDefault);

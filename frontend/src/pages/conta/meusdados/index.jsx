@@ -1,16 +1,16 @@
 import Head from 'next/head';
 import styled from "styled-components"
-import MaskedInput from "react-text-mask";
-import { getSession } from "next-auth/react"
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { getSession } from "next-auth/react";
+import { Formik, Form } from 'formik';
 import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
-import { proneMask, cepMask } from '../../../../masks';
-import { store } from '../../api/auth';
+import { Group } from '../../../components/input';
 
+import { proneMask, cepMask } from '../../../../masks';
+import { store as saveUser } from '../../api/auth';
 
 const MyDataSC = styled.div`
     max-width: 35rem;
@@ -40,60 +40,6 @@ const SeusDadosSC = styled.div`
         }
     }
 `
-const GroupSC = styled.div`
-  display:flex;
-  flex-direction: column;
-  margin-bottom: 0.5rem;
-  [data="label"]{
-    padding: 0.4rem;
-    label{
-      font-family:${({ theme }) => theme.font.family.bold};
-      font-size: 1.4em;
-    }
-    
-  }
-  [data="input"]{
-    border-top-color: #949494;
-    border: 0.1rem solid #a6a6a6;
-    box-shadow: 0 0.1rem 0 rgb(0 0 0 / 7%) inset;
-    border-radius: 0.2rem;
-    border-right-color: #949494;
-    border-bottom-color: #949494;
-    border-left-color: #949494;
-    border-color:${({ error }) => error && "#d00"};
-    box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
-    input{
-      width: 100%;
-      background-color: transparent;
-      padding: 0.8rem;
-      padding-top: 0.9rem;
-      box-shadow: none;
-      border: 0;
-      font-size: 1.1rem;
-      &:disabled{
-        cursor: default;
-        background: #d3d3d3;
-      }
-    }
-    [data="show-password"]{
-      width: 100%;
-      padding: 0 10px 6px 10px;
-      span{
-        color: #555!important;
-        font-size: 0.9rem !important;
-      }
-    }
-  }
-  [data="error"]{
-        font-size: 1rem;
-        color: #e72626;
-        margin-top: 0.0rem;
-        small{
-            padding: 0px;
-            margin: 0px;
-        }
-    }
-`
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
@@ -110,6 +56,10 @@ const BtnConfirmSC = styled.div`
             border-color: #FCD200;
             border-radius: 0.45rem;
             color: #0F1111;
+
+            &:disabled{
+                cursor: default;
+            }
         }
     }
 `
@@ -137,11 +87,11 @@ export default function MyData({ session }) {
                             validationSchema={scheme}
                             initialValues={session}
                             onSubmit={async (values, setValues) => {
-                                await store(values)
-                                    .then((res) => {
-
-                                        console.log(res)
-
+                                await saveUser(values)
+                                    .then((data) => {
+                                        /* Seta o enderço atualizado no input */
+                                        setValues.resetForm({ values: data })
+                                        toast.success("Seu dados foi altualizado!.")
                                     })
                                     .catch((res) => {
                                         /* Se for erro 400, significa que a exibição foi tratada */
@@ -156,94 +106,39 @@ export default function MyData({ session }) {
                                             "Ops... Não possível realizar a operação. Por favor, tente novamente."
                                         )
                                     })
-                                /* .catch(err => setValues.setErrors({ cep: "testeee" })) */
                             }}
                         >
-                            {({ errors }) => (
+                            {({ errors, dirty }) => (
                                 <Form data="form" action="">
-                                    <GroupSC error={!!errors.nome}>
-                                        <div data="label">
-                                            <label htmlFor="nome">Nome completo</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="nome" maxLength="55" type="text" autoComplete="on" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="nome" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC error={!!errors.email}>
-                                        <div data="label">
-                                            <label htmlFor="email">E-mail</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="email" disabled type="text" autoComplete="on" />
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="email" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC error={!!errors.contato}>
-                                        <div data="label">
-                                            <label htmlFor="contato">Contato</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="contato">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="contato"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={proneMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="contato" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
-                                    <GroupSC error={!!errors.cep}>
-                                        <div data="label">
-                                            <label htmlFor="cep">CEP</label>
-                                        </div>
-                                        <div data="input">
-                                            <Field name="cep">
-                                                {({ field }) => (
-                                                    <MaskedInput
-                                                        {...field}
-                                                        id="cep"
-                                                        type="text"
-                                                        autoComplete="on"
-                                                        mask={cepMask}
-                                                        guide={false}
-                                                        showMask={false}
-                                                        value={field.value}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div data="error">
-                                            <small>
-                                                <ErrorMessage name="cep" />
-                                            </small>
-                                        </div>
-                                    </GroupSC>
+                                    <Group
+                                        error={!!errors.nome}
+                                        label="Nome completo"
+                                        name="nome"
+                                        maxLength={55}
+                                    />
+                                    <Group
+                                        error={!!errors.email}
+                                        label="E-mail"
+                                        name="email"
+                                        disabled
+                                    />
+                                    <Group
+                                        error={!!errors.contato}
+                                        label="Contato"
+                                        name="contato"
+                                        mask={proneMask}
+                                    />
+                                    <Group
+                                        error={!!errors.cep}
+                                        label="CEP"
+                                        name="cep"
+                                        mask={cepMask}
+                                    />
 
                                     <BtnConfirmSC>
                                         <div data='button-submit'>
-                                            <button type="submit">
-                                                Salvar
+                                            <button disabled={!dirty} type="submit">
+                                                Atualizar
                                             </button>
                                         </div>
                                     </BtnConfirmSC>
