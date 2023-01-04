@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import { Formik, Form } from 'formik';
 import { toast } from 'react-toastify';
+import router from "next/router"
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -89,10 +90,8 @@ export default function Address({ session }) {
                             initialValues={session}
                             onSubmit={async (values, setValues) => {
                                 await saveUser({ ...values, id: session.id })
-                                    .then((data) => {
-                                        /* Seta o enderço atualizado no input */
-                                        setValues.resetForm({ values: data })
-                                        toast.success("Seu endereço foi altualizado!.")
+                                    .then(() => {
+                                        router.reload()
                                     })
                                     .catch((res) => {
                                         /* Se for erro 400, significa que a exibição foi tratada */

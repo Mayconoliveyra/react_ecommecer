@@ -25,7 +25,6 @@ export const authOptions = {
                     secret: process.env.LOGIN_AUTH
                 }
                 const usuario = await storeNextAut(modelo)
-                console.log("chamou")
                 return {
                     ...usuario
                 }

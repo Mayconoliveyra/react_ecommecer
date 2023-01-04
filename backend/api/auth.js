@@ -90,7 +90,7 @@ module.exports = app => {
                         app.db("users")
                                 .update({ ...modelo, ...endereco })
                                 .where({ id: id })
-                                .then(() => res.json({ ...modelo, ...endereco }))
+                                .then(() => res.status(204).send())
                                 .catch((error) => {
                                         utility_console("auth.save", error)
                                         return res.status(500).send(msgErrorDefault);
