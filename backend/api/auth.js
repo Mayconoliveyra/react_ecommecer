@@ -15,10 +15,7 @@ module.exports = app => {
                         existOrError(modelo.email, "[email], não poder ser nulo")
                         if (body.secret != LOGIN_AUTH) throw "Token [LOGIN_AUTH] inválido."
                 } catch (error) {
-                        utility_console({
-                                name: "auth.signinNextAuth",
-                                error: error,
-                        });
+                        utility_console("auth.signinNextAuth", error);
                         return res.status(400).send("Desculpe-nos!. Não foi possível realizar o seu cadastro. Por favor, tente novamente utilizando outra opção de cadastro.")
                 }
 
@@ -74,20 +71,41 @@ module.exports = app => {
                 }
 
                 try {
-                        existOrError(modelo.nome, "[nome], não poder ser nulo")
-                        existOrError(modelo.contato, "[contato], não poder ser nulo")
-                        existOrError(modelo.cep, "[cep], não poder ser nulo")
-
+                        existOrError(modelo.nome, { nome: "Nome completo deve ser informado." })
+                        existOrError(modelo.contato, { contato: "Contato deve ser informado." })
+                        existOrError(modelo.cep, { cep: "CEP deve ser informado" })
                 } catch (error) {
-                        utility_console({
-                                name: "auth.save",
-                                error: error,
-                        });
-                        return res.status(400).send(msgErrorDefault)
+                        return res.status(400).send(error)
                 }
 
-                const endereco = await consultCEP(modelo.cep)
-                res.status(200).send()
+                try {
+
+                } catch (error) {
+
+                }
+
+                try {
+                        const store = await app.db("store").select("cep").first()
+                        if (!store) return res.status(400).send({ 400: "Não foi encontrado o cadastro da empresa." })
+
+                        const endereco = await consultCEP(store.cep, modelo.cep)
+                        if (endereco && endereco.error) {
+                                return res.status(400).send(endereco.error)
+                        }
+
+                        app.db("users")
+                                .update({ ...modelo, ...endereco })
+                                .where({ id: id })
+                                .then(() => res.status(204).send())
+                                .catch((error) => {
+                                        utility_console("auth.save", error)
+                                        return res.status(500).send(msgErrorDefault);
+                                });
+
+                } catch (error) {
+                        utility_console("auth.save", error)
+                        return res.status(500).send()
+                }
         }
 
         return { save, signinNextAuth }

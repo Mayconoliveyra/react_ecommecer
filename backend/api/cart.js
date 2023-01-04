@@ -7,10 +7,7 @@ module.exports = (app) => {
         try {
             existOrError(id, "[id] id_storage não pode ser nulo.")
         } catch (error) {
-            utility_console({
-                name: "cart.getCartTemp",
-                error: error,
-            });
+            utility_console("cart.getCartTemp", error)
             return res.status(400).send(error)
         }
 
@@ -52,10 +49,7 @@ module.exports = (app) => {
 
             res.json({ products: products[0], totals: totals[0][0] })
         } catch (error) {
-            utility_console({
-                name: "cart.getCartTemp",
-                error: error,
-            });
+            utility_console("cart.getCartTemp", error)
             return res.status(500).send(msgErrorDefault);
         }
     };
@@ -75,10 +69,7 @@ module.exports = (app) => {
             const productDB = await app.db("products").where({ id: modelo.id_product }).first()
             existOrError(productDB, "[id_product] mercadoria não existe.")
         } catch (error) {
-            utility_console({
-                name: "cart.saveIncrementer",
-                error: error,
-            });
+            utility_console("cart.saveIncrementer", error)
             return res.status(400).send(error)
         }
 
@@ -96,10 +87,7 @@ module.exports = (app) => {
                     .where({ id: tempCartDB.id })
                     .then(() => res.status(204).send())
                     .catch((error) => {
-                        utility_console({
-                            name: "cart.saveIncrementer.delete",
-                            error: error,
-                        });
+                        utility_console("cart.saveIncrementer.delete", error)
                         return res.status(500).send(msgErrorDefault);
                     });
             } else {
@@ -108,10 +96,7 @@ module.exports = (app) => {
                     .where({ id: tempCartDB.id })
                     .then(() => res.status(204).send())
                     .catch((error) => {
-                        utility_console({
-                            name: "cart.saveIncrementer.update",
-                            error: error,
-                        });
+                        utility_console("cart.saveIncrementer.update", error)
                         return res.status(500).send(msgErrorDefault);
                     });
             }
@@ -122,10 +107,7 @@ module.exports = (app) => {
                 .insert(modelo)
                 .then(() => res.status(204).send())
                 .catch((error) => {
-                    utility_console({
-                        name: "cart.saveIncrementer.insert",
-                        error: error,
-                    });
+                    utility_console("cart.saveIncrementer.insert", error)
                     return res.status(500).send(msgErrorDefault);
                 });
         }

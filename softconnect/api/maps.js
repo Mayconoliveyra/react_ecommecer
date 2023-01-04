@@ -7,15 +7,12 @@ module.exports = (app) => {
         const { origins, destinations } = req.query
 
         try {
-            existOrError(origins, "origins não pode ser nulo")
-            existOrError(destinations, "destinations não pode ser nulo")
-            if (origins.length != 9) throw "origins tem que 9 digitios. recebido: " + origins;
-            if (destinations.length != 9) throw "destinations tem que 9 digitios. recebido: " + destinations;
+            existOrError(origins, { 400: "CEP de origem deve ser informado." })
+            existOrError(destinations, { cep: "CEP deve ser informado." })
+            if (origins.length != 9) throw { 400: "CEP de origem deve ter 9 digitos. recebido: " + origins };
+            if (destinations.length != 9) throw { cep: "CEP deve ter 9 digitos. recebido: " + destinations };
         } catch (error) {
-            utility_console({
-                name: "maps.consultCEP",
-                error: error,
-            });
+            utility_console("maps.consultCEP", error);
             return res.json({ error: error });
         }
 
@@ -45,20 +42,17 @@ module.exports = (app) => {
                 /*cepOrigem e cepDestino: Se retornar = FALSE, signigica que o endereço não foi encontrado em nenhum lugar(base e api)*/
                 const cepOrigem = await insertNewCEP(origins)
                 const cepDestino = await insertNewCEP(destinations)
-                if (!cepOrigem) throw "O CEP de origem não foi encontrado. Por favor, procure o atendimento."
-                if (!cepDestino) throw "CEP não encontrado."
+                if (!cepOrigem) throw { 400: "O CEP de origem não foi encontrado. Por favor, procure o atendimento." }
+                if (!cepDestino) throw { cep: "CEP não encontrado." }
 
                 /* resultDistance, já consulta a distancia e retornar o objeto com os dados para ser retornado para o cliente.  */
                 const resultEndereco = await resultDistance(origins, destinations)
 
-                if (!resultEndereco) throw "CEP não encontrado."
+                if (!resultEndereco) throw { cep: "CEP não encontrado." }
                 return res.json(resultEndereco);
             }
         } catch (error) {
-            utility_console({
-                name: "maps.consultCEP",
-                error: `${error} (CEP: ${destinations})`,
-            });
+            utility_console("maps.consultCEP", JSON.stringify(error) + " CEP:" + destinations);
             return res.json({ error: error });
         }
     }
@@ -97,10 +91,7 @@ module.exports = (app) => {
                     .insert(enderecoViaCep)
                     .then()
                     .catch((error) => {
-                        utility_console({
-                            name: "maps.insertNewCEP",
-                            error: error
-                        });
+                        utility_console("maps.insertNewCEP", error);
                         return
                     });
 
@@ -108,10 +99,7 @@ module.exports = (app) => {
             return enderecoViaCep
 
         } catch (error) {
-            utility_console({
-                name: "maps.insertNewCEP",
-                error: error
-            });
+            utility_console("maps.insertNewCEP", error);
             return false
         }
     }
@@ -122,10 +110,7 @@ module.exports = (app) => {
             if (origins.length != 9) throw "origins tem que 9 digitios. recebido: " + origins;
             if (destinations.length != 9) throw "destinations tem que 9 digitios. recebido: " + destinations;
         } catch (error) {
-            utility_console({
-                name: "maps.resultDistance",
-                error: error,
-            });
+            utility_console("maps.resultDistance", error);
             return false;
         }
 
@@ -161,10 +146,7 @@ module.exports = (app) => {
                     }
                 })
                 .catch((error) => {
-                    utility_console({
-                        name: "maps.resultDistance",
-                        error: error,
-                    });
+                    utility_console("maps.resultDistance", error);
                     return {
                         distancia: 0,
                         tempo: 0,
@@ -177,20 +159,14 @@ module.exports = (app) => {
                     .insert({ ...newEndereco, id_cep_origem: origins, id_cep_destino: destinations })
                     .then()
                     .catch((error) => {
-                        utility_console({
-                            name: "maps.insertDistance",
-                            error: error
-                        });
+                        utility_console("maps.insertDistance", error);
                         return
                     });
 
             delete newEndereco.api_maps
             return { ...newEndereco, ...destino };
         } catch (error) {
-            utility_console({
-                name: "maps.resultDistance",
-                error: error,
-            });
+            utility_console("maps.resultDistance", error);
             return false;
         }
 

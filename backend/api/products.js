@@ -18,10 +18,7 @@ module.exports = (app) => {
                 .orderBy('id', 'desc')
                 .then(products => res.json(products))
                 .catch((error) => {
-                    utility_console({
-                        name: "products.get.search",
-                        error: error
-                    });
+                    utility_console("products.get.search", error)
                     return res.status(500).send(msgErrorDefault);
                 });
 
@@ -35,10 +32,7 @@ module.exports = (app) => {
                 .first()
                 .then(products => res.json(products))
                 .catch((error) => {
-                    utility_console({
-                        name: "products.get.id",
-                        error: error
-                    });
+                    utility_console("products.get.id", error)
                     return res.status(500).send(msgErrorDefault);
                 });
 
@@ -79,10 +73,7 @@ module.exports = (app) => {
 
             res.json({ camas, brinquedos, comedouros, cozinhas });
         } catch (error) {
-            utility_console({
-                name: "products.get",
-                error: error
-            });
+            utility_console("products.get", error)
             res.status(500).send(msgErrorDefault)
         }
     };

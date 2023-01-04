@@ -45,20 +45,16 @@ module.exports = (app) => {
         return decryptText;
     }
 
-    function utility_console({
-        name = null,
-        error = null,
-        saveDB = true,
-    }) {
+    function utility_console(name = null, error = null, saveDB = true) {
         console.log("########################################")
         console.log(`Function: ${name}`);
-        console.log(error);
+        console.log(JSON.stringify(error));
         console.log("########################################")
         /* Salva no banco de dados */
         if (saveDB) {
             const moodelo = {
                 name: name,
-                error: String(error),
+                error: JSON.stringify(error),
             };
 
             app.db

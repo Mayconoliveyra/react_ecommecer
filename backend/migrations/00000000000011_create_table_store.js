@@ -6,7 +6,7 @@ exports.up = function (knex) {
             table.string("cnpj", 14)
             table.string("cpf", 11)
 
-            table.string("cep", 8).notNull()
+            table.string("cep", 9).notNull()
             table.string("logradouro")
             table.string("bairro")
             table.string("localidade")
@@ -38,7 +38,7 @@ exports.up = function (knex) {
                     nome: "Cazimi",
                     cnpj: "39711584000149",
                     cpf: "77737865004",
-                    cep: "58046520",
+                    cep: "58046-520",
                     logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
                     bairro: "Portal do Sol",
                     localidade: "João Pessoa",

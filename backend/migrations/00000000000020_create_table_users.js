@@ -19,11 +19,14 @@ exports.up = function (knex) {
             table.string("uf")
             table.string("numero")
 
+            
+
             table.boolean("bloqueado", 1).notNull().defaultTo(0)
             table.string("motivo_bloqueio")
 
-            table.double("distancia_km").notNull().defaultTo(0)
-
+            table.double("distancia").notNull().defaultTo(0)
+            table.double("tempo").notNull().defaultTo(0)
+    
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
         })

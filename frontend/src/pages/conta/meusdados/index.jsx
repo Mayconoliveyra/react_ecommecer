@@ -3,12 +3,14 @@ import styled from "styled-components"
 import MaskedInput from "react-text-mask";
 import { getSession } from "next-auth/react"
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
 import { proneMask, cepMask } from '../../../../masks';
 import { store } from '../../api/auth';
+
 
 const MyDataSC = styled.div`
     max-width: 35rem;
@@ -134,9 +136,27 @@ export default function MyData({ session }) {
                         <Formik
                             validationSchema={scheme}
                             initialValues={session}
-                            onSubmit={async (values) => {
-                                console.log(values)
+                            onSubmit={async (values, setValues) => {
                                 await store(values)
+                                    .then((res) => {
+
+                                        console.log(res)
+
+                                    })
+                                    .catch((res) => {
+                                        /* Se for erro 400, significa que a exibição foi tratada */
+                                        if (res && res.response && res.response.status == 400) {
+                                            if (res.response.data[400]) {
+                                                toast.error(res.response.data[400])
+                                            }
+                                            setValues.setErrors(res.response.data)
+                                            return
+                                        }
+                                        toast.error(
+                                            "Ops... Não possível realizar a operação. Por favor, tente novamente."
+                                        )
+                                    })
+                                /* .catch(err => setValues.setErrors({ cep: "testeee" })) */
                             }}
                         >
                             {({ errors }) => (

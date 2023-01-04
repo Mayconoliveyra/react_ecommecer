@@ -3,8 +3,8 @@ exports.up = function (knex) {
         table.increments("id").primary()
         table.string('id_cep_origem', 9).notNull().references('cep').inTable('address')
         table.string('id_cep_destino', 9).notNull().references('cep').inTable('address')
-        table.double("distancia").notNull()
-        table.double("tempo").notNull()
+        table.double("distancia").notNull().defaultTo(0)
+        table.double("tempo").notNull().defaultTo(0)
 
         table.boolean("api_maps", 1).notNull().defaultTo(0)
 

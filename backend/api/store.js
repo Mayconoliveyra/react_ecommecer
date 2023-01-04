@@ -7,10 +7,7 @@ module.exports = (app) => {
         app.db(table).first()
             .then(store => res.json(store))
             .catch((error) => {
-                utility_console({
-                    name: "store.get",
-                    error: error
-                });
+                utility_console("store.get", error)
                 return res.status(500).send(msgErrorDefault);
             });
     };

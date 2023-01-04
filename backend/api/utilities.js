@@ -12,21 +12,24 @@ module.exports = (app) => {
     const softconnect = axios.create({
         baseURL: `${BASE_API_SOFTCONNECT}`,
         headers: {
-            "Authorization": `rXWUw76jG4v8cdbQNKsfzZiFV`,
+            "Authorization": `Bearer `,
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "softconnect": KEY_SOFTCONNECT
         },
     });
 
+    const consultCEP = async (origins, destinations) => {
+        const url = `/api/maps?origins=${origins}&destinations=${destinations}`
 
-    const consultCEP = async (cep) => {
-        const url = `/api/maps?origins=58046-521&destinations=${cep}`
-        await softconnect.get(url)
-            .then((res) => console.log(res.data))
-            .catch((error) => console.log("error: " + error));
+        const endereco = await softconnect.get(url)
+            .then((res) => res.data)
+            .catch(() => false);
 
-        return
+        if (!endereco) {
+            return { error: 'Houve um erro, por favor tente novamente.' }
+        }
+        return endereco
     }
 
     function existOrError(value, msg) {
@@ -69,20 +72,16 @@ module.exports = (app) => {
         return decryptText;
     }
 
-    function utility_console({
-        name = null,
-        error = null,
-        saveDB = true,
-    }) {
+    function utility_console(name = null, error = null, saveDB = true) {
         console.log("########################################")
         console.log(`Function: ${name}`);
-        console.log(error);
+        console.log(JSON.stringify(error));
         console.log("########################################")
         /* Salva no banco de dados */
         if (saveDB) {
             const moodelo = {
                 name: name,
-                error: String(error),
+                error: JSON.stringify(error),
             };
 
             app.db
