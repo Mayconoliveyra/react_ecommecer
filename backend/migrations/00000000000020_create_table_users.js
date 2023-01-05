@@ -7,7 +7,7 @@ exports.up = function (knex) {
             table.string("email").notNull().unique()
             table.string("senha")
 
-            table.string("contato", 14)
+            table.string("contato", 15)
 
             table.string("codigo_autenticacao") /* codigo_autenticacao= codigo do cliente criptografado */
 

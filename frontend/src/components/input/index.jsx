@@ -37,7 +37,11 @@ const GroupSC = styled.div`
             cursor: default;
             background: #d3d3d3;
             }
-        }
+            &::placeholder{
+                font-size: 0.9rem;
+                color: #d3d3d3;
+            }
+            }
         [data="show-password"]{
             width: 100%;
             padding: 0 10px 6px 10px;
@@ -59,7 +63,7 @@ const GroupSC = styled.div`
     }
 `;
 
-export const Group = ({ name, label, type = "text", autocomplete = "off", maxLength = 255, mask = false, error = false, size = "md", disabled }) => {
+export const Group = ({ name, label, type = "text", autocomplete = "off", maxLength = 255, mask = false, error = false, size = "md", placeholder, disabled }) => {
     return (
         <GroupSC error={error} size={size}>
             <div data="label">
@@ -75,8 +79,9 @@ export const Group = ({ name, label, type = "text", autocomplete = "off", maxLen
                                 type={type}
                                 maxLength={maxLength}
                                 autoComplete={autocomplete}
+                                placeholder={placeholder}
                                 disabled={disabled}
-                                value={field.value}
+                                value={field.value || ''}
                             />
                         )}
                     </Field>
@@ -93,8 +98,9 @@ export const Group = ({ name, label, type = "text", autocomplete = "off", maxLen
                                 mask={mask}
                                 guide={false}
                                 showMask={false}
+                                placeholder={placeholder}
                                 disabled={disabled}
-                                value={field.value}
+                                value={field.value || ''}
                             />
                         )}
                     </Field>

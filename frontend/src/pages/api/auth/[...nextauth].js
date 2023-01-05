@@ -1,4 +1,4 @@
-const { FACEBOOK_CLIENT_ID, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, LOGIN_AUTH } = require("../../../../.env");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, LOGIN_AUTH } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,7 +8,7 @@ export const authOptions = {
     providers: [
         FacebookProvider({
             clientId: FACEBOOK_CLIENT_ID,
-            clientSecret: FACEBOOK_CLIENT_SECRET
+            clientSecret: FACEBOOK_CLIENT_SECRET,
         }),
         GoogleProvider({
             clientId: GOOGLE_CLIENT_ID,
@@ -51,6 +51,7 @@ export const authOptions = {
                 return false
             }
         }
-    }
+    },
+    secret: NEXTAUTH_SECRET,
 }
 export default (req, res) => NextAuth(req, res, authOptions)

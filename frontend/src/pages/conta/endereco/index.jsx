@@ -67,7 +67,7 @@ const BtnConfirmSC = styled.div`
 
 export default function Address({ session }) {
     const scheme = Yup.object().shape({
-        contato: Yup.string().nullable().label("Contato").required().length(14, "É necessário informar um número completo."),
+        contato: Yup.string().nullable().label("Contato").required().length(15, "É necessário informar o número completo no formato (99) 99999-9999"),
         cep: Yup.string().nullable().label("CEP").required().length(9, "É necessário informar um CEP completo."),
         numero: Yup.string().nullable().label("Número da residência"),
         complemento: Yup.string().nullable().label("Complemento(opcional)"),
@@ -85,11 +85,10 @@ export default function Address({ session }) {
                             <h4>Seu endereço</h4>
                         </div>
                         <Formik
-                            validateOnMount
                             validationSchema={scheme}
                             initialValues={session}
                             onSubmit={async (values, setValues) => {
-                                await saveUser({ ...values, id: session.id })
+                                await saveUser(values)
                                     .then(() => {
                                         router.reload()
                                     })
@@ -106,21 +105,25 @@ export default function Address({ session }) {
                                     })
                             }}
                         >
-                            {({ errors, dirty, initialValues, values }) => (
+                            {({ errors, touched, dirty, initialValues, values }) => (
                                 <Form data="form" action="">
                                     <Group
-                                        error={!!errors.contato}
+                                        error={!!errors.contato && touched.contato}
                                         label="Contato"
                                         name="contato"
+                                        placeholder="Exemplo: (99) 99999-9999"
+                                        autocomplete="on"
                                         mask={proneMask}
                                     />
                                     <Group
-                                        error={!!errors.cep}
+                                        error={!!errors.cep && touched.cep}
                                         label="CEP"
                                         name="cep"
+                                        placeholder="Exemplo: 99999-999"
+                                        autocomplete="on"
                                         mask={cepMask}
                                     />
-                                    {(initialValues.cep == values.cep) && <Group
+                                    {(values.cep && initialValues.cep == values.cep) && <Group
                                         label="Endereço"
                                         name="logradouro"
                                         disabled
@@ -128,24 +131,26 @@ export default function Address({ session }) {
                                     <Group
                                         label="Número da residência(opcional)"
                                         name="numero"
+                                        placeholder="Exemplo: 999"
                                         maxLength={55}
                                     />
                                     <Group
                                         label="Complemento(opcional)"
                                         name="complemento"
+                                        placeholder="Exemplo: Apto 999 - Bloco 9"
                                         maxLength={55}
                                     />
-                                    {(initialValues.cep == values.cep) && <Group
+                                    {(values.cep && initialValues.cep == values.cep) && <Group
                                         label="Bairro"
                                         name="bairro"
                                         disabled
                                     />}
-                                    {(initialValues.cep == values.cep) && <Group
+                                    {(values.cep && initialValues.cep == values.cep) && <Group
                                         label="Cidade"
                                         name="localidade"
                                         disabled
                                     />}
-                                    {(initialValues.cep == values.cep) && < Group
+                                    {(values.cep && initialValues.cep == values.cep) && < Group
                                         label="Estado"
                                         name="uf"
                                         disabled

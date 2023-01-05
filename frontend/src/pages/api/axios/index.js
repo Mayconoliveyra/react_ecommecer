@@ -4,7 +4,7 @@ import axios from "axios";
 const token = typeof window !== 'undefined' && localStorage && localStorage.getItem("access_token") ? localStorage.getItem("access_token") : '';
 
 const api = axios.create({
-  baseURL: `${REACT_APP_API_URL}`,
+  baseURL: REACT_APP_API_URL,
   headers: {
     "Authorization": `Bearer ${token}`,
     "Content-Type": "application/json",

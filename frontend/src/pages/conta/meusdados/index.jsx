@@ -69,7 +69,7 @@ export default function MyData({ session }) {
     const scheme = Yup.object().shape({
         nome: Yup.string().nullable().label("Nome").required(),
         email: Yup.string().nullable().label("E-mail").required(),
-        contato: Yup.string().nullable().label("Contato").required().length(14, "É necessário informar um número completo."),
+        contato: Yup.string().nullable().label("Contato").required().length(15, "É necessário informar o número completo no formato (99) 99999-9999"),
         cep: Yup.string().nullable().label("CEP").required().length(9, "É necessário informar um CEP completo."),
     });
 
@@ -107,30 +107,34 @@ export default function MyData({ session }) {
                                     })
                             }}
                         >
-                            {({ errors, dirty }) => (
+                            {({ errors, touched, dirty }) => (
                                 <Form data="form" action="">
                                     <Group
-                                        error={!!errors.nome}
+                                        error={!!errors.nome && touched.nome}
                                         label="Nome completo"
                                         name="nome"
+                                        placeholder="Exemplo: Jhon Doe"
                                         maxLength={55}
                                     />
                                     <Group
-                                        error={!!errors.email}
                                         label="E-mail"
                                         name="email"
                                         disabled
                                     />
                                     <Group
-                                        error={!!errors.contato}
+                                        error={!!errors.contato && touched.contato}
                                         label="Contato"
                                         name="contato"
+                                        placeholder="Exemplo: (99) 99999-9999"
+                                        autocomplete="on"
                                         mask={proneMask}
                                     />
                                     <Group
-                                        error={!!errors.cep}
+                                        error={!!errors.cep && touched.cep}
                                         label="CEP"
                                         name="cep"
+                                        placeholder="Exemplo: 99999-999"
+                                        autocomplete="on"
                                         mask={cepMask}
                                     />
 
