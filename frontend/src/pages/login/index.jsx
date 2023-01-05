@@ -342,7 +342,7 @@ export default function Login({ session }) {
               <h5>Acessando pela primeira vez?</h5>
             </div>
             <div data="new-cadastro">
-              <Link href="/login/cadastro">Criar seu cadastro</Link>
+              <Link href="/conta/cadastro">Criar seu cadastro</Link>
             </div>
           </div>
         </div>

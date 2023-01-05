@@ -30,9 +30,10 @@ export const authOptions = {
                     ...usuario
                 }
             } catch (error) {
-                if (error && error.response && error.response.data) {
+
+                if (error && error.response && error.response.data && error.response.data[400]) {
                     return {
-                        error: error.response.data
+                        error: error.response.data[400]
                     }
                 }
 

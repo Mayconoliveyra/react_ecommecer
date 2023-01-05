@@ -2,7 +2,7 @@ module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
 
     const getCartTemp = async (req, res) => {
-        const id = req.params.id
+        const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
 
         try {
             existOrError(id, "[id] id_storage não pode ser nulo.")
