@@ -76,13 +76,13 @@ export default function NewAccount({ session }) {
     return (
         <>
             <Head>
-                <title>Seus dados</title>
+                <title>Criar conta</title>
             </Head>
             <MyDataSC>
                 <SeusDadosSC>
                     <div>
                         <div data="h4-title">
-                            <h4>Seus dados</h4>
+                            <h4>Criar conta</h4>
                         </div>
                         <Formik
                             validationSchema={scheme}
@@ -142,7 +142,7 @@ export default function NewAccount({ session }) {
                                     <BtnConfirmSC>
                                         <div data='button-submit'>
                                             <button disabled={!dirty} type="submit">
-                                                Atualizar
+                                                Cadastrar
                                             </button>
                                         </div>
                                     </BtnConfirmSC>

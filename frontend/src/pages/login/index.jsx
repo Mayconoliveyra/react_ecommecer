@@ -10,6 +10,7 @@ Yup.setLocale(pt);
 
 import StoreContext from "../../context/store";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const LoginSC = styled.div`
   padding: 1rem 1.3rem;
@@ -25,6 +26,25 @@ const LoginSC = styled.div`
         margin-bottom: 1.5rem;
         font-family:${({ theme }) => theme.font.family.bold};
         color: #111;
+      }
+      [data="msg-sucess"]{
+        h4{
+          color: #3cac6c;
+          margin:0px;
+          font-size: 1rem;
+          font-family:${({ theme }) => theme.font.family.medium};
+          margin-bottom:0.3rem;
+        }
+        span{
+          color: #111;
+          margin:0px;
+          padding:0px;
+        }
+        border: solid 1px #3cac6c;
+        border-radius: 4px;
+        background-color: #fff;
+        box-shadow: 0 0 0 4px #f5fcf3  inset;
+        padding: 1.1rem 1.2rem;
       }
       [data="msg-error"]{
         h4{
@@ -276,15 +296,23 @@ export default function Login({ session }) {
             {props => (
               <Form data="form" action="">
                 <h1>FAZER LOGIN</h1>
-                {session && session.error && (
+                {session && session[200] && (
+                  <div data="msg-sucess">
+                    <h4>Aviso!</h4>
+                    <span>
+                      {session[200]}
+                    </span>
+                  </div>
+                )}
+                {session && session[400] && (
                   <div data="msg-error">
                     <h4>Houve um problema</h4>
                     <span>
-                      {session.error}
+                      {session[400]}
                     </span>
                   </div>
-                )
-                }
+                )}
+
                 <GroupSC>
                   <div data="label">
                     <label htmlFor="email">Email</label>

@@ -1,8 +1,8 @@
-const { KEY_SECRET, LOGIN_AUTH } = require("../.env")
-const jwt = require("jwt-simple")
+const { LOGIN_AUTH } = require("../.env")
 
 module.exports = app => {
-        const { existOrError, utility_console, msgErrorDefault, consultCEP, notExistOrErrorDB } = app.api.utilities;
+        const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB } = app.api.utilities;
+        const { consultCEP, sendEmail } = app.api.softconnect;
         const table = "users";
 
         const signinNextAuth = async (req, res) => {
@@ -33,7 +33,6 @@ module.exports = app => {
                                 return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
                         }
 
-                        const data = Math.floor(Date.now() / 1000)
                         const payload = {
                                 id: userFromDb.id,
                                 nome: userFromDb.nome,
@@ -48,20 +47,13 @@ module.exports = app => {
                                 localidade: userFromDb.localidade,
                                 uf: userFromDb.uf,
                                 bloqueado: userFromDb.bloqueado,
-                                iat: data, // emitido em
                         }
 
-                        return res.json({
-                                ...payload,
-                                token: jwt.encode(payload, KEY_SECRET)
-                        })
-
+                        return res.json(payload)
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
-                        return res.status(500).send()
+                        return res.status(400).send({ 400: msgErrorDefault })
                 }
-
-
         }
 
         const save = async (req, res) => {
@@ -90,8 +82,8 @@ module.exports = app => {
                         const store = await app.db("store").select("cep").first()
                         if (!store) return res.status(400).send({ 400: "Não foi encontrado o cadastro da empresa." })
 
-                        const endereco = await consultCEP(store.cep, modelo.cep)
                         /* endereco vem da api softconnect = cep, logradouro, localidade, bairro, uf */
+                        const endereco = await consultCEP(store.cep, modelo.cep)
                         if (endereco && endereco.error) {
                                 return res.status(400).send(endereco.error)
                         }
@@ -107,6 +99,10 @@ module.exports = app => {
                                                 return res.status(500).send(msgErrorDefault);
                                         });
                         } else {
+
+                                const resSendEmail = await sendEmail(modelo.email, "Teste Titulo", "body teste")
+                                console.log(resSendEmail)
+
                                 app.db(table)
                                         .insert({ ...modelo, ...endereco })
                                         .then(() => res.status(204).send())

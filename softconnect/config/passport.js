@@ -10,9 +10,10 @@ module.exports = app => {
         }
 
         const strategy = new Strategy(params, (payload, done) => {
-                app.db("users")
-                        .where({ id: payload.id })
-                        .andWhere({ email: payload.email })
+                console.log(payload)
+                app.db("stores")
+                        .where({ id_key: payload.id })
+                        .andWhere({ secret_key: payload.secret })
                         .first()
                         .then(user => done(null, user ? { ...payload } : false))
                         .catch(err => done(err, false))

@@ -1,36 +1,10 @@
-const { BASE_API_SOFTCONNECT, KEY_SOFTCONNECT } = require("../.env")
 const CryptoJS = require("crypto-js");
-const axios = require("axios")
 
-const SECRET_ENCRYPT =
-    "qQaZSaCVZoEkLBiF5zBhg6G5KWfhD9s-ZooQjzQko94"; /* Não pode ser alterada se já foi utilizada, poís, vai dar erro para descriptografar*/
+/* Não pode ser alterada se já foi utilizada, poís, vai dar erro para descriptografar */
+const SECRET_ENCRYPT = "qQaZSaCVZoEkLBiF5zBhg6G5KWfhD9s-ZooQjzQko94";
 
 module.exports = (app) => {
-    const msgErrorDefault =
-        "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente.";
-
-    const softconnect = axios.create({
-        baseURL: `${BASE_API_SOFTCONNECT}`,
-        headers: {
-            "Authorization": `Bearer `,
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "softconnect": KEY_SOFTCONNECT
-        },
-    });
-
-    const consultCEP = async (origins, destinations) => {
-        const url = `/api/maps?origins=${origins}&destinations=${destinations}`
-
-        const endereco = await softconnect.get(url)
-            .then((res) => res.data)
-            .catch(() => false);
-
-        if (!endereco) {
-            return { error: 'Houve um erro, por favor tente novamente.' }
-        }
-        return endereco
-    }
+    const msgErrorDefault = "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente.";
 
     function existOrError(value, msg) {
         if (!value) throw msg;
@@ -94,7 +68,6 @@ module.exports = (app) => {
         }
     }
     return {
-        consultCEP,
         existOrError,
         notExistOrError,
         notExistOrErrorDB,

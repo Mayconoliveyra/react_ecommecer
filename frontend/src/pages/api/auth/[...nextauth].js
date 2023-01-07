@@ -30,16 +30,15 @@ export const authOptions = {
                     ...usuario
                 }
             } catch (error) {
-
-                if (error && error.response && error.response.data && error.response.data[400]) {
+                if (error && error.response && error.response.data) {
                     return {
-                        error: error.response.data[400]
+                        ...error.response.data
                     }
                 }
 
                 /* Se não vim nenhuma mensagem  de error, retornar mensagem padrão;*/
                 return {
-                    error: "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente."
+                    400: "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente."
                 }
             }
         },

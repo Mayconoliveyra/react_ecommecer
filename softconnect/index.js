@@ -4,6 +4,7 @@ const db = require("./config/db") /* configuração do meu banco*/
 
 app.db = db // ligação do banco com meu sevidor
 consign()
+    .include("./config/passport.js")
     .then("./config/middlewares.js")
     .then("./api/utilities.js")
     .then("./api")

@@ -19,8 +19,6 @@ exports.up = function (knex) {
             table.string("uf")
             table.string("numero")
 
-            
-
             table.boolean("bloqueado", 1).notNull().defaultTo(0)
             table.string("motivo_bloqueio")
 
