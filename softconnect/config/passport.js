@@ -8,7 +8,6 @@ module.exports = app => {
                 secretOrKey: SOFTCONNECT_KEY,
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         }
-
         const strategy = new Strategy(params, (payload, done) => {
                 app.db("stores")
                         .where({ id_key: payload.id_key })
@@ -24,7 +23,8 @@ module.exports = app => {
                                                         console.log("passport.strategy: " + error)
                                                 );
                                 }
-
+                                /* Seta os dados da empresa que está autenticada */
+                                app.store = store ? { ...store } : false
                                 return done(null, store ? { ...store } : false)
                         })
                         .catch(err => {
@@ -35,15 +35,11 @@ module.exports = app => {
                                         .catch((error) =>
                                                 console.log("passport.strategy: " + error)
                                         );
-
-                                /* Seta os dados da empresa que está autenticada */
-                                app.store = store ? { ...store } : false
                                 return done(err, false)
                         })
         })
 
         passport.use(strategy)
-
         return {
                 authenticate: () => passport.authenticate('jwt', { session: false })
         }

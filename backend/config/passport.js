@@ -1,11 +1,11 @@
-const { CLIENT_KEY } = require("../.env")
+const { TOKEN_KEY } = require("../.env")
 const passport = require("passport")
 const passportJwt = require("passport-jwt")
 const { Strategy, ExtractJwt } = passportJwt
 
 module.exports = app => {
         const params = {
-                secretOrKey: CLIENT_KEY,
+                secretOrKey: TOKEN_KEY,
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         }
 
@@ -24,7 +24,6 @@ module.exports = app => {
                                                         console.log("passport.strategy: " + error)
                                                 );
                                 }
-
                                 /* Seta os dados da empresa que está autenticada */
                                 app.store = store ? { ...store } : false
                                 return done(null, store ? { ...store } : false)
@@ -37,7 +36,6 @@ module.exports = app => {
                                         .catch((error) =>
                                                 console.log("passport.strategy: " + error)
                                         );
-
                                 return done(err, false)
                         })
         })

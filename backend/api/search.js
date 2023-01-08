@@ -37,7 +37,6 @@ module.exports = (app) => {
             /* Se tiver algum caracteres do removeFilter remover */
             if (removeFilter.includes(elemento)) return
 
-            /*    console.log(elemento.slice(0, elemento.length - 3)) */
             if (elemento.slice(-1) == 's') {
                 /* Remove o 's' do final da palavra. ex: lampadas, tintas...*/
                 textAndReturn = `${textAndReturn} name LIKE '%${elemento.slice(0, elemento.length - 1)}%' AND`;
