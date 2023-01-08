@@ -1,4 +1,4 @@
-const { SOFTCONNECT_API, SOFTCONNECT_SECRET } = require("../.env")
+const { SOFTCONNECT_ID, SOFTCONNECT_SECRET } = require("../.env")
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB } = app.api.utilities;
@@ -14,7 +14,7 @@ module.exports = app => {
 
                 try {
                         existOrError(modelo.email, "[email], não poder ser nulo")
-                        if (body.secret != `${SOFTCONNECT_API}${SOFTCONNECT_SECRET}`) throw "Token [LOGIN_AUTH] inválido."
+                        if (body.secret != `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`) throw "Token de autenticação(AUTH) inválido."
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: "Desculpe-nos!. Não foi possível realizar o seu cadastro. Por favor, tente novamente utilizando outra opção de cadastro." })

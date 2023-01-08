@@ -10,7 +10,6 @@ module.exports = app => {
         }
 
         const strategy = new Strategy(params, (payload, done) => {
-                console.log(payload)
                 app.db("store")
                         .where({ id_key: payload.id })
                         .andWhere({ secret_key: payload.secret })

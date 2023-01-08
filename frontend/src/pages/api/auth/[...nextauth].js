@@ -1,4 +1,4 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SOFTCONNECT_API, SOFTCONNECT_SECRET } = require("../../../../.env");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SOFTCONNECT_ID, SOFTCONNECT_SECRET } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -23,7 +23,7 @@ export const authOptions = {
                     nome: session.user.name,
                     email: session.user.email,
                     sub: token.sub,
-                    secret: `${SOFTCONNECT_API}${SOFTCONNECT_SECRET}`
+                    secret: `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`
                 }
                 const usuario = await storeNextAut(modelo)
                 return {
