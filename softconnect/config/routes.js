@@ -5,6 +5,6 @@ module.exports = (app) => {
 
   app.route("/api/sandemail")
     .all(app.config.passport.authenticate())
-    .get(app.api.email.sendEmail)
+    .post(app.api.email.sendEmail)
 };
 

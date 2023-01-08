@@ -14,8 +14,8 @@ exports.up = function (knex) {
             table.string("uf").notNull();
             table.string("numero").notNull();
 
-            table.string("id_key").notNull();
-            table.string("secret_key").notNull();
+            table.string("id_key").notNull().unique();
+            table.string("secret_key").notNull().unique();
 
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));

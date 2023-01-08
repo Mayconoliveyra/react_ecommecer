@@ -6,13 +6,16 @@ module.exports = (app) => {
 
     /*  Se houver erro será retornado dentro do { error: ... } */
     const consultCEP = async (req, res) => {
-        const { origins, destinations } = req.query
+        /* CEP DE ORIGEM */
+        const origin = app.store.cep
+        /* CEP DESTINO */
+        const destination = req.query.destination
 
         try {
-            existOrError(origins, { 400: "CEP de origem deve ser informado." })
-            existOrError(destinations, { cep: "CEP deve ser informado." })
-            if (origins.length != 9) throw { 400: "CEP de origem deve ter 9 digitos. recebido: " + origins };
-            if (destinations.length != 9) throw { cep: "CEP deve ter 9 digitos. recebido: " + destinations };
+            existOrError(origin, { 400: "CEP de origem deve ser informado." })
+            existOrError(destination, { cep: "CEP deve ser informado." })
+            if (origin.length != 9) throw { 400: "CEP de origem deve ter 9 digitos. recebido: " + origin };
+            if (destination.length != 9) throw { cep: "CEP deve ter 9 digitos. recebido: " + destination };
         } catch (error) {
             utility_console("maps.consultCEP", error);
             return res.json({ error: error });
@@ -24,17 +27,17 @@ module.exports = (app) => {
                 .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia", "ad.tempo")
                 .table("address")
                 .join('address_distance AS ad', 'address.cep', '=', 'ad.id_cep_destino')
-                .where({ 'ad.id_cep_origem': origins, 'ad.id_cep_destino': destinations })
+                .where({ 'ad.id_cep_origem': origin, 'ad.id_cep_destino': destination })
                 .first()
 
-            /* Se a consulta anterior não retornar nada eu inverto os paramentros(origins,destinations) */
+            /* Se a consulta anterior não retornar nada eu inverto os paramentros */
             /* O resulta final será o mesmo, pois a distancia do ponto e a mesma. */
             if (!enderecoFromDb)
                 enderecoFromDb = await app.db
                     .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia", "ad.tempo")
                     .table("address")
                     .join('address_distance AS ad', 'address.cep', '=', 'ad.id_cep_destino')
-                    .where({ 'ad.id_cep_origem': destinations, 'ad.id_cep_destino': origins })
+                    .where({ 'ad.id_cep_origem': destination, 'ad.id_cep_destino': origin })
                     .first()
 
             /* Se já tiver cadastrado retornar o endereço com as informaçõs completas */
@@ -42,19 +45,19 @@ module.exports = (app) => {
                 return res.json(enderecoFromDb);
             } else {
                 /*cepOrigem e cepDestino: Se retornar = FALSE, signigica que o endereço não foi encontrado em nenhum lugar(base e api)*/
-                const cepOrigem = await insertNewCEP(origins)
-                const cepDestino = await insertNewCEP(destinations)
+                const cepOrigem = await insertNewCEP(origin)
+                const cepDestino = await insertNewCEP(destination)
                 if (!cepOrigem) throw { 400: "O CEP de origem não foi encontrado. Por favor, procure o atendimento." }
                 if (!cepDestino) throw { cep: "CEP não encontrado." }
 
                 /* resultDistance, já consulta a distancia e retornar o objeto com os dados para ser retornado para o cliente.  */
-                const resultEndereco = await resultDistance(origins, destinations)
+                const resultEndereco = await resultDistance(origin, destination)
 
                 if (!resultEndereco) throw { cep: "CEP não encontrado." }
                 return res.json(resultEndereco);
             }
         } catch (error) {
-            utility_console("maps.consultCEP", JSON.stringify(error) + " CEP:" + destinations);
+            utility_console("maps.consultCEP", JSON.stringify(error) + " CEP:" + destination);
             return res.json({ error: error });
         }
     }
@@ -105,20 +108,20 @@ module.exports = (app) => {
             return false
         }
     }
-    async function resultDistance(origins, destinations) {
+    async function resultDistance(origin, destination) {
         try {
-            existOrError(origins, "origins não pode ser nulo")
-            existOrError(destinations, "destinations não pode ser nulo")
-            if (origins.length != 9) throw "origins tem que 9 digitios. recebido: " + origins;
-            if (destinations.length != 9) throw "destinations tem que 9 digitios. recebido: " + destinations;
+            existOrError(origin, "origin não pode ser nulo")
+            existOrError(destination, "destination não pode ser nulo")
+            if (origin.length != 9) throw "CEP tem que 9 digitios. recebido: " + origin;
+            if (destination.length != 9) throw "destination tem que 9 digitios. recebido: " + destination;
         } catch (error) {
             utility_console("maps.resultDistance", error);
             return false;
         }
 
         try {
-            const origem = await insertNewCEP(origins)
-            const destino = await insertNewCEP(destinations)
+            const origem = await insertNewCEP(origin)
+            const destino = await insertNewCEP(destination)
             existOrError(origem, "origem não pode ser nulo")
             existOrError(destino, "destino não pode ser nulo")
 
@@ -158,7 +161,7 @@ module.exports = (app) => {
 
             if (newEndereco)
                 await app.db("address_distance")
-                    .insert({ ...newEndereco, id_cep_origem: origins, id_cep_destino: destinations })
+                    .insert({ ...newEndereco, id_cep_origem: origin, id_cep_destino: destination })
                     .then()
                     .catch((error) => {
                         utility_console("maps.insertDistance", error);

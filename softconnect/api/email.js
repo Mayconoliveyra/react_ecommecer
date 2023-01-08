@@ -1,66 +1,50 @@
-const { EMAIL_MAILE } = require("../.env")
+
+const nodemailer = require('nodemailer');
 
 module.exports = (app) => {
-    const { existOrError, utility_console } = app.api.utilities;
+    const { utility_console, existOrError } = app.api.utilities;
 
     /*  Se houver erro será retornado dentro do { error: ... } */
     const sendEmail = async (req, res) => {
-        console.log(req.user)
+        res.status(200).send()
+        const store = app.store
+        const modelo = {
+            email: req.body.email,
+            title: req.body.title,
+            body: req.body.body,
+            template: req.body.template,
+        }
         try {
-            const store = app.db("store").select().first()
-            existOrError(store, { 400: "A empresa não cadastradas." })
-            existOrError(store.email, { 400: "O email da empresa não foi encontrado" })
-
-            /* Valida se a empresa tem um email especifico configurado. */
-            /* Se algum dos campos tiver vazio utiliza o email padrão(id: 1) */
-            const emailConfig = true
-            if (!req.user.config_email_name) emailConfig = false
-            if (!req.user.config_email_user) emailConfig = false
-            if (!req.user.config_email_pass) emailConfig = false
-            if (!req.user.config_email_host) emailConfig = false
-            if (!req.user.config_email_port) emailConfig = false
-            if (!req.user.config_email_secure) emailConfig = false
-
+            existOrError(modelo.email, "email precisa ser informado.")
+            if (!modelo.template) {
+                existOrError(modelo.title, "title precisa ser informado.")
+                existOrError(modelo.body, "body precisa ser informado.")
+            }
             /* Configuração padrão de email */
-            let transporter = nodemailer.createTransport({
-                host: EMAIL_MAILE.config.host,
-                port: EMAIL_MAILE.config.port,
-                secure: EMAIL_MAILE.config.secure,
+            const transporter = nodemailer.createTransport({
+                host: store.config_email_host,
+                port: store.config_email_port,
+                secure: store.config_email_secure,
                 auth: {
-                    user: EMAIL_MAILE.auth.user,
-                    pass: EMAIL_MAILE.auth.pass
+                    user: store.config_email_user,
+                    pass: store.config_email_pass
                 }
             })
-
-            if (emailConfig) {
-                transporter = nodemailer.createTransport({
-                    host: EMAIL_MAILE.config.host,
-                    port: EMAIL_MAILE.config.port,
-                    secure: EMAIL_MAILE.config.secure,
-                    auth: {
-                        user: EMAIL_MAILE.auth.user,
-                        pass: EMAIL_MAILE.auth.pass
-                    }
-                })
-            }
-
-            await transporter.sendMail({
-                from: EMAIL_MAILE.from,
-                to: destination,
-                subject: title,
-                html: body
+            transporter.sendMail({
+                from: `"${store.nome} " <${store.config_email_user}>`,
+                to: modelo.email,
+                subject: modelo.title,
+                html: modelo.body
             })
-                .then((res) => console.log(res))
+                .then((res) => console.log(res.response))
                 .catch(error => {
-                    utility_console("utilities.sendEmail", error)
-                    return false
+                    utility_console("email.sendEmail", error)
+                    return
                 })
 
         } catch (error) {
-            utility_console("utilities.sendEmail", error)
-            return { error: error }
+            utility_console("email.sendEmail", error)
         }
-
     }
 
     return { sendEmail };

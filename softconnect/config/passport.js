@@ -24,8 +24,8 @@ module.exports = app => {
                                                 );
                                 }
                                 /* Seta os dados da empresa que está autenticada */
-                                app.store = store ? { ...store } : false
-                                return done(null, store ? { ...store } : false)
+                                app.store = store ? { ...payload } : false
+                                return done(null, store ? { ...payload } : false)
                         })
                         .catch(err => {
                                 console.log(`Não foi encontrado empresa(stores) com o id_key e secret_key recebido no token: id_key:${payload.id_key}  secret_key: ${payload.secret_key}`)

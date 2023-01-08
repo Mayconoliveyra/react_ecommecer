@@ -97,12 +97,13 @@ module.exports = app => {
                                                 return res.status(500).send(msgErrorDefault);
                                         });
                         } else {
-
-                                const resSendEmail = await sendEmail(modelo.email, "Teste Titulo", "body teste")
-
                                 app.db(table)
                                         .insert({ ...modelo, ...endereco })
-                                        .then(() => res.status(204).send())
+                                        .then(() => {
+                                                /* Envio de email não é de forma assincrono */
+                                                sendEmail({ email: modelo.email, template: 'AUTHENTICATION' });
+                                                return res.status(204).send()
+                                        })
                                         .catch((error) => {
                                                 utility_console("auth.save.insert", error)
                                                 return res.status(500).send(msgErrorDefault);
@@ -110,7 +111,7 @@ module.exports = app => {
                         }
                 } catch (error) {
                         utility_console("auth.save", error)
-                        return res.status(500).send()
+                        return res.status(400).send({ 500: msgErrorDefault })
                 }
         }
 

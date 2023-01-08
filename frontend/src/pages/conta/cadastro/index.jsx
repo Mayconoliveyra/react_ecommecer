@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
 import { proneMask, cepMask } from '../../../../masks';
@@ -95,20 +96,21 @@ export default function NewAccount({ session }) {
                                     .catch((res) => {
                                         /* Se for erro 400, significa que a exibição foi tratada */
                                         if (res && res.response && res.response.status == 400) {
-                                            if (res.response.data[400]) {
-                                                toast.error(res.response.data[400])
+                                            /* se o data for 500, mostra no toast */
+                                            if (res.response.data && res.response.data[500]) {
+                                                toast.error(res.response.data[500])
+                                            } else {
+                                                setValues.setErrors(res.response.data)
                                             }
-                                            setValues.setErrors(res.response.data)
-                                            return
+                                        } else {
+                                            toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
                                         }
-                                        toast.error(
-                                            "Ops... Não possível realizar a operação. Por favor, tente novamente."
-                                        )
                                     })
                             }}
                         >
                             {({ errors, touched, dirty }) => (
                                 <Form data="form" action="">
+                                    <ShowMessage error={errors} />
                                     <Group
                                         error={!!errors.nome && touched.nome}
                                         label="Nome completo"

@@ -10,7 +10,6 @@ Yup.setLocale(pt);
 
 import StoreContext from "../../context/store";
 import Link from "next/link";
-import { toast } from "react-toastify";
 
 const LoginSC = styled.div`
   padding: 1rem 1.3rem;
