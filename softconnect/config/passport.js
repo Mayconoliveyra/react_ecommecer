@@ -11,13 +11,13 @@ module.exports = app => {
 
         const strategy = new Strategy(params, (payload, done) => {
                 app.db("stores")
-                        .where({ id_key: payload.id })
-                        .andWhere({ secret_key: payload.secret })
+                        .where({ id_key: payload.id_key })
+                        .andWhere({ secret_key: payload.secret_key })
                         .first()
                         .then(store => {
                                 if (!store) {
-                                        console.log(`Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}`)
-                                        app.db.insert({ name: "passport.strategy", error: `Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}` })
+                                        console.log(`Não foi encontrado empresa(stores) com o id_key e secret_key recebido no token: id_key:${payload.id_key}  secret_key: ${payload.secret_key}`)
+                                        app.db.insert({ name: "passport.strategy", error: `Não foi encontrado empresa(stores) com o id_key e secret_key recebido no token: id_key:${payload.id_key}  secret_key: ${payload.secret_key}` })
                                                 .table("_error_backend")
                                                 .then()
                                                 .catch((error) =>
@@ -28,7 +28,7 @@ module.exports = app => {
                                 return done(null, store ? { ...store } : false)
                         })
                         .catch(err => {
-                                console.log(`Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}`)
+                                console.log(`Não foi encontrado empresa(stores) com o id_key e secret_key recebido no token: id_key:${payload.id_key}  secret_key: ${payload.secret_key}`)
                                 app.db.insert({ name: "passport.strategy", error: err })
                                         .table("_error_backend")
                                         .then()
@@ -36,6 +36,8 @@ module.exports = app => {
                                                 console.log("passport.strategy: " + error)
                                         );
 
+                                /* Seta os dados da empresa que está autenticada */
+                                app.store = store ? { ...store } : false
                                 return done(err, false)
                         })
         })

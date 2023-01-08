@@ -1,25 +1,20 @@
-const { SOFTCONNECT_API, SOFTCONNECT_KEY, SOFTCONNECT_ID, SOFTCONNECT_SECRET } = require("../.env")
+const { SOFTCONNECT_API, SOFTCONNECT_KEY } = require("../.env")
 const axios = require("axios")
 const jwt = require("jwt-simple")
 
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
 
-    const payload = {
-        id: SOFTCONNECT_ID,
-        secret: SOFTCONNECT_SECRET
-    }
-
-    const softconnect = axios.create({
-        baseURL: `${SOFTCONNECT_API}`,
-        headers: {
-            "Authorization": `Bearer ${jwt.encode(payload, SOFTCONNECT_KEY)}`,
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-        },
-    });
-
     const consultCEP = async (origins, destinations) => {
+        const softconnect = axios.create({
+            baseURL: `${SOFTCONNECT_API}`,
+            headers: {
+                "Authorization": `Bearer ${jwt.encode(app.store, SOFTCONNECT_KEY)}`,
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+        });
+
         const url = `/api/maps?origins=${origins}&destinations=${destinations}`
 
         const endereco = await softconnect.get(url)
