@@ -10,13 +10,34 @@ module.exports = app => {
         }
 
         const strategy = new Strategy(params, (payload, done) => {
-                console.log(payload)
                 app.db("stores")
                         .where({ id_key: payload.id })
                         .andWhere({ secret_key: payload.secret })
                         .first()
-                        .then(user => done(null, user ? { ...payload } : false))
-                        .catch(err => done(err, false))
+                        .then(store => {
+                                if (!store) {
+                                        console.log(`Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}`)
+                                        app.db.insert({ name: "passport.strategy", error: `Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}` })
+                                                .table("_error_backend")
+                                                .then()
+                                                .catch((error) =>
+                                                        console.log("passport.strategy: " + error)
+                                                );
+                                }
+
+                                return done(null, store ? { ...store } : false)
+                        })
+                        .catch(err => {
+                                console.log(`Não foi encontrado empresa(stores) com o id e secret recebido no token: id:${payload.id}  secret: ${payload.secret}`)
+                                app.db.insert({ name: "passport.strategy", error: err })
+                                        .table("_error_backend")
+                                        .then()
+                                        .catch((error) =>
+                                                console.log("passport.strategy: " + error)
+                                        );
+
+                                return done(err, false)
+                        })
         })
 
         passport.use(strategy)

@@ -20,7 +20,8 @@
     "react-toastify": "^9.1.1",
     "formik": "2.2.9",
     "yup": "^0.32.11",
-    "yup-locale-pt": "0.0.9"
+    "yup-locale-pt": "0.0.9",
+    "jwt-simple": "0.5.1"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^2.0.7"

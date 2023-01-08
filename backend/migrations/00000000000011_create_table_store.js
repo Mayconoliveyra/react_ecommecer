@@ -3,15 +3,14 @@ exports.up = function (knex) {
         .createTable("store", (table) => {
             table.increments("id").primary();
             table.string("nome").notNull();
-            table.string("cnpj", 14)
-            table.string("cpf", 11)
+            table.string("documento", 14).notNull();
 
             table.string("cep", 9).notNull()
-            table.string("logradouro")
-            table.string("bairro")
-            table.string("localidade")
-            table.string("uf", 2)
-            table.string("numero")
+            table.string("logradouro").notNull()
+            table.string("bairro").notNull()
+            table.string("localidade").notNull()
+            table.string("uf", 2).notNull()
+            table.string("numero").notNull()
 
             table.string("atendimento_whatsapp")
             table.string("atendimento_messenger")
@@ -28,6 +27,16 @@ exports.up = function (knex) {
             table.double("percentual_frete").notNull().defaultTo(2)
             table.double("valor_minimo").notNull().defaultTo(0)
 
+            table.string("config_email_user").notNull();
+            table.string("config_email_pass").notNull();
+            table.string("config_email_host").notNull();
+            table.string("config_email_port").notNull();
+            table.boolean("config_email_secure", 1).notNull().defaultTo(0)
+
+
+            table.string("id_key").notNull();
+            table.string("secret_key").notNull();
+
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
             table.timestamp("deleted_at").nullable();
@@ -36,8 +45,7 @@ exports.up = function (knex) {
             return knex("store").insert([
                 {
                     nome: "Cazimi",
-                    cnpj: "39711584000149",
-                    cpf: "77737865004",
+                    documento: "39711584000149",
                     cep: "58046-520",
                     logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
                     bairro: "Portal do Sol",
@@ -54,6 +62,15 @@ exports.up = function (knex) {
                     midia_twitter: "maycon1998dev",
                     midia_yutube: "UCFCcs3Z5qcn9K4Dap1eF35A",
                     termo_uso: "Todos os direitos reservados. Os preços anunciados podem ser alterados sem prévio aviso. A loja não é responsável por erros descritivos. As fotos contidas nesta página são meramente ilustrativas do produto e podem variar de acordo com o fornecedor/lote do fabricante.",
+
+                    config_email_user: "softconnectecnologia",
+                    config_email_pass: "rtrbfimmlovhoapd",
+                    config_email_host: "smtp.gmail.com",
+                    config_email_port: "587",
+                    config_email_secure: false,
+
+                    id_key: "H7eH2CuTNjdKUaHsc2aE93tXsNcT94",
+                    secret_key: "JLT8LqVeKHHXxrJXiutm6pVxR3eyJS"
                 }
             ]);
         });

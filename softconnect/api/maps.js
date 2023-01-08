@@ -7,7 +7,6 @@ module.exports = (app) => {
     /*  Se houver erro será retornado dentro do { error: ... } */
     const consultCEP = async (req, res) => {
         const { origins, destinations } = req.query
-        console.log(req.user)
 
         try {
             existOrError(origins, { 400: "CEP de origem deve ser informado." })

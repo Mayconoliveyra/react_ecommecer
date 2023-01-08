@@ -3,7 +3,7 @@ import { ThemeProvider } from "styled-components"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
-import { getSession, SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react"
 import { useRouter } from "next/router";
 
 import Header from "../components/template/header"
@@ -28,7 +28,6 @@ export default function MyApp({ Component, pageProps }) {
   const [store, setStore] = useState([])
 
   useEffect(() => {
-    handleToken();
     handleStore();
     handleMyCart();
   }, [])
@@ -56,14 +55,6 @@ export default function MyApp({ Component, pageProps }) {
     tbody.style.overflow = template.showMenu || template.showMenuLogin ? "hidden" : 'auto'
   }, [template])
 
-  const handleToken = async () => {
-    const session = await getSession()
-    if (session && session.id) {
-      localStorage.setItem("access_token", session.token)
-    } else {
-      localStorage.removeItem("access_token")
-    }
-  }
   const handleStore = async () => {
     setStore(await getStore())
   }

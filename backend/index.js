@@ -1,8 +1,9 @@
-const app = require("express")() /*servidor O Express é uma estrutura de aplicativo Web, usada como uma estrutura de servidor do Node.js para criação de aplicativos Web. */
-const consign = require("consign"); /* facilita a importação dos elemetos vc salva suas requisição nele como se fosse uma variavel, é na hora de importa basta referenciala */
-const db = require("./config/db") /* configuração do meu banco*/
+const { API_PORT } = require("./.env")
+const app = require("express")()
+const consign = require("consign");
+const db = require("./config/db")
 
-app.db = db // ligação do banco com meu sevidor
+app.db = db
 consign()
     .include('./config/passport.js')
     .then("./config/middlewares.js")
@@ -13,6 +14,7 @@ consign()
     .then("./config/routes.js")
     .into(app) /* into = dentro */
 
-app.listen(process.env.PORT || 3030, () => {
-    console.log("Backend executando....")
+app.listen(API_PORT, () => {
+    console.log(`[${API_PORT}]Backend executando...`)
 })
+
