@@ -66,14 +66,7 @@ const BtnConfirmSC = styled.div`
     }
 `
 
-export default function NewAccount() {
-    const scheme = Yup.object().shape({
-        nome: Yup.string().nullable().label("Nome").required(),
-        email: Yup.string().nullable().label("E-mail").required().email(),
-        contato: Yup.string().nullable().label("Contato").required().length(15, "É necessário informar o número completo no formato (99) 99999-9999"),
-        cep: Yup.string().nullable().label("CEP").required().length(9, "É necessário informar um CEP completo."),
-    });
-
+export default function NewPassword({ session }) {
     return (
         <>
             <Head>
@@ -86,8 +79,8 @@ export default function NewAccount() {
                             <h4>Criar conta</h4>
                         </div>
                         <Formik
-                            validationSchema={scheme}
-                            initialValues={{ nome: '', email: '', contato: "", cep: '' }}
+                            /*   initialValues={{ nome: '', senha: '', confirsenha: '' }} */
+                            initialValues={session}
                             onSubmit={async (values, setValues) => {
                                 await saveUser(values)
                                     .then((data) => {
@@ -119,31 +112,21 @@ export default function NewAccount() {
                                 <Form data="form" action="">
                                     <ShowMessage error={errors} />
                                     <Group
-                                        error={!!errors.nome && touched.nome}
-                                        label="Nome completo"
-                                        name="nome"
-                                        placeholder="Exemplo: Jhon Doe"
-                                        maxLength={55}
-                                    />
-                                    <Group
-                                        error={!!errors.email && touched.email}
                                         label="E-mail"
                                         name="email"
-                                        autocomplete="on"
+                                        disabled
                                     />
                                     <Group
-                                        error={!!errors.contato && touched.contato}
-                                        label="Contato"
-                                        name="contato"
-                                        placeholder="Exemplo: (99) 99999-9999"
+                                        error={!!errors.senha && touched.senha}
+                                        label="Senha"
+                                        name="senha"
                                         autocomplete="on"
                                         mask={proneMask}
                                     />
                                     <Group
-                                        error={!!errors.cep && touched.cep}
-                                        label="CEP"
-                                        name="cep"
-                                        placeholder="Exemplo: 99999-999"
+                                        error={!!errors.confirsenha && touched.confirsenha}
+                                        label="Confirmar senha"
+                                        name="confirsenha"
                                         autocomplete="on"
                                         mask={cepMask}
                                     />
@@ -165,8 +148,39 @@ export default function NewAccount() {
     )
 }
 
-export async function getServerSideProps({ req }) {
-    const session = await getSession({ req })
+export async function getServerSideProps({ req, query }) {
+    let session = await getSession({ req })
+    const { TOKEN_KEY } = require("../../../../.env");
+    const jwt = require('jsonwebtoken')
+
+    try {
+        const decoded = jwt.decode(query.authlogin, TOKEN_KEY);
+        const decodM = {
+            key_auth: decoded.key_auth,
+            email: decoded.email
+        }
+
+        /* divide por 1000 para transformar em segundos */
+        /* O token fica expirado dps de 15m */
+        if (decoded.exp > (Date.now() / 1000)) {
+            console.log("ATIVO")
+            session = { ...session, ...decodM }
+        } else {
+            console.log("EXPIRADO")
+            /* const msg = { 400: "Sua sessão expirou. Efetue login novamente e refaça o procedimento." } */
+            session = { ...session, ...decodM }
+        }
+    } catch (error) {
+        /* Se tiver algum erro/alterar token será redirecionado para tela home. */
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+
+
 
     /* Se tiver logado, redireciona para tela home*/
     if (session && session.id) {
@@ -179,6 +193,6 @@ export async function getServerSideProps({ req }) {
     }
 
     return {
-        props: {},
+        props: { session },
     }
 }

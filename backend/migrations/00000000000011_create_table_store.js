@@ -3,6 +3,7 @@ exports.up = function (knex) {
         .createTable("store", (table) => {
             table.increments("id").primary();
             table.string("nome").notNull();
+            table.text("url_logo").notNull();
             table.string("documento", 14).notNull();
 
             table.string("cep", 9).notNull()
@@ -45,6 +46,7 @@ exports.up = function (knex) {
             return knex("store").insert([
                 {
                     nome: "Cazimi",
+                    url_logo: "https://d2r9epyceweg5n.cloudfront.net/stores/001/448/935/themes/common/logo-678818323-1642765237-494caf53526e230fd98593b4ae0e6a121642765237-320-0.png?0",
                     documento: "39711584000149",
                     cep: "58046-520",
                     logradouro: "Rua Empresário Paulo Miranda d' Oliveira",

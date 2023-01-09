@@ -6,10 +6,7 @@ exports.up = function (knex) {
             table.string("nome").defaultTo("Não informado").notNull()
             table.string("email").notNull().unique()
             table.string("senha")
-
             table.string("contato", 15)
-
-            table.string("codigo_autenticacao") /* codigo_autenticacao= codigo do cliente criptografado */
 
             table.string("cep", 9)
             table.string("logradouro")
@@ -24,7 +21,10 @@ exports.up = function (knex) {
 
             table.double("distancia").notNull().defaultTo(0)
             table.double("tempo").notNull().defaultTo(0)
-    
+
+            table.string("key_auth", 6) /* chave de autenticação/ recuperar senha */
+            table.boolean("email_auth", 1).notNull().defaultTo(0) /* Quando ta true, significa que o email foi autenticado, quando utiliza facebook e google seta como true tambem. */
+
             table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
         })

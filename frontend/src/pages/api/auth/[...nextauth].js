@@ -22,7 +22,6 @@ export const authOptions = {
                 const modelo = {
                     nome: session.user.name,
                     email: session.user.email,
-                    sub: token.sub,
                     secret: `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`
                 }
                 const usuario = await storeNextAut(modelo)

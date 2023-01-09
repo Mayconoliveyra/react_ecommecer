@@ -14,6 +14,8 @@ exports.up = function (knex) {
             table.string("uf").notNull();
             table.string("numero").notNull();
 
+            table.string("url_frontend").notNull().unique();
+            table.string("url_backend").notNull().unique();
             table.string("id_key").notNull().unique();
             table.string("secret_key").notNull().unique();
 
@@ -32,6 +34,8 @@ exports.up = function (knex) {
                     localidade: "João Pessoa",
                     uf: "PB",
                     numero: "S/N",
+                    url_frontend: "http://10.0.0.200:3000",
+                    url_backend: "http://10.0.0.200:3030",
                     id_key: "H7eH2CuTNjdKUaHsc2aE93tXsNcT94",
                     secret_key: "JLT8LqVeKHHXxrJXiutm6pVxR3eyJS",
                 }

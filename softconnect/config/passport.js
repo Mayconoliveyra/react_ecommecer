@@ -23,8 +23,14 @@ module.exports = app => {
                                                         console.log("passport.strategy: " + error)
                                                 );
                                 }
+                                /* Dados cadastrados na base softconnect */
+                                const storeST = {
+                                        id_store_st: store.id,
+                                        url_frontend: store.url_frontend,
+                                        url_backend: store.url_backend
+                                }
                                 /* Seta os dados da empresa que está autenticada */
-                                app.store = store ? { ...payload } : false
+                                app.store = store ? { ...payload, ...storeST } : false
                                 return done(null, store ? { ...payload } : false)
                         })
                         .catch(err => {

@@ -8,6 +8,8 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { ShowMessage } from "../../components/showMessage";
+
 import StoreContext from "../../context/store";
 import Link from "next/link";
 
@@ -25,44 +27,6 @@ const LoginSC = styled.div`
         margin-bottom: 1.5rem;
         font-family:${({ theme }) => theme.font.family.bold};
         color: #111;
-      }
-      [data="msg-sucess"]{
-        h4{
-          color: #3cac6c;
-          margin:0px;
-          font-size: 1rem;
-          font-family:${({ theme }) => theme.font.family.medium};
-          margin-bottom:0.3rem;
-        }
-        span{
-          color: #111;
-          margin:0px;
-          padding:0px;
-        }
-        border: solid 1px #3cac6c;
-        border-radius: 4px;
-        background-color: #fff;
-        box-shadow: 0 0 0 4px #f5fcf3  inset;
-        padding: 1.1rem 1.2rem;
-      }
-      [data="msg-error"]{
-        h4{
-          color: #c40000;
-          margin:0px;
-          font-size: 1rem;
-          font-family:${({ theme }) => theme.font.family.medium};
-          margin-bottom:0.3rem;
-        }
-        span{
-          color: #111;
-          margin:0px;
-          padding:0px;
-        }
-        border: solid 1px #c40000;
-        border-radius: 4px;
-        background-color: #fff;
-        box-shadow: 0 0 0 4px #fcf4f4 inset;
-        padding: 1.1rem 1.2rem;
       }
       [data="recover"]{
         display: flex;
@@ -295,23 +259,7 @@ export default function Login({ session }) {
             {props => (
               <Form data="form" action="">
                 <h1>FAZER LOGIN</h1>
-                {session && session[200] && (
-                  <div data="msg-sucess">
-                    <h4>Aviso!</h4>
-                    <span>
-                      {session[200]}
-                    </span>
-                  </div>
-                )}
-                {session && session[400] && (
-                  <div data="msg-error">
-                    <h4>Houve um problema</h4>
-                    <span>
-                      {session[400]}
-                    </span>
-                  </div>
-                )}
-
+                <ShowMessage error={session} />
                 <GroupSC>
                   <div data="label">
                     <label htmlFor="email">Email</label>
@@ -378,8 +326,20 @@ export default function Login({ session }) {
   )
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req })
+export async function getServerSideProps({ req, query }) {
+  let session = await getSession({ req })
+
+  /* se tiver msg dentro da query, exibe a mensagem. Isso é utilizado para exibir mensagem de notificações */
+  /* Ex: mensagem de verificar o email para pode verificar o cadastro */
+  if (query && query.msg) {
+    try {
+      const msg = JSON.parse(query.msg)
+      session = { ...session, ...msg }
+    } catch (error) {
+      /* Se tiver algum erro, retornar session padrão */
+      session = session
+    }
+  }
 
   /* se session existir o usuario ja está autenticado. */
   if (session && session.id) {
