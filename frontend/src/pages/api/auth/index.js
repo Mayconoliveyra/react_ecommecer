@@ -10,8 +10,11 @@ const store = async (data) => {
   return await api.post(`${prefix}`, data).then(res => res.data);
 };
 
-const storeNextAut = async (data) => {
+const storeNextAuth = async (data) => {
   return await api.post(`signin-next-auth`, data).then(res => res.data);
+};
+const storeAuth = async (data) => {
+  return await api.post(`signin`, data).then(res => res.data);
 };
 
 /* Enviar email de recuperação e criar nova senha */
@@ -22,4 +25,4 @@ const storePassword = async (data) => {
   return await api.post(`${prefix}/password`, data).then(res => res.data);
 };
 
-export { store, storeNextAut, storePassword }
+export { store, storeNextAuth, storeAuth, storePassword }

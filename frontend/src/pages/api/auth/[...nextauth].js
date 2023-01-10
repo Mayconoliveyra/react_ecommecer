@@ -2,7 +2,7 @@ const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLI
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import { storeNextAut } from "./index"
+import { storeNextAuth } from "./index"
 
 export const authOptions = {
     providers: [
@@ -24,7 +24,7 @@ export const authOptions = {
                     email: session.user.email,
                     secret: `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`
                 }
-                const usuario = await storeNextAut(modelo)
+                const usuario = await storeNextAuth(modelo)
                 return {
                     ...usuario
                 }

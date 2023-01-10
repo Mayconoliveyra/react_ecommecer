@@ -2,6 +2,9 @@ module.exports = (app) => {
   app.route("/signin-next-auth")
     .all(app.config.passport.authenticate())
     .post(app.api.auth.signinNextAuth)
+  app.route("/signin")
+    .all(app.config.passport.authenticate())
+    .post(app.api.auth.signin)
 
   app.route("/user")
     .all(app.config.passport.authenticate())

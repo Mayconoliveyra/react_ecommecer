@@ -1,5 +1,6 @@
 import { signIn, getSession } from "next-auth/react"
 import Head from "next/head"
+import router from "next/router"
 import { useContext } from "react";
 import styled from "styled-components"
 import { Facebook, Google, DoorOpen } from "react-bootstrap-icons"
@@ -10,8 +11,11 @@ Yup.setLocale(pt);
 
 import { ShowMessage } from "../../components/showMessage";
 
+import { storeAuth } from "../api/auth/index"
+
 import StoreContext from "../../context/store";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const LoginSC = styled.div`
   padding: 1rem 1.3rem;
@@ -76,15 +80,6 @@ const LoginSC = styled.div`
             margin-right: 0.6rem;
             font-size: 1.7rem;
           }
-        }
-      }
-      [data="error"]{
-        font-size: 1rem;
-        color: #e72626;
-        margin-top: 0.0rem;
-        small{
-          padding: 0px;
-          margin: 0px;
         }
       }
     }
@@ -203,6 +198,8 @@ const GroupSC = styled.div`
     border-right-color: #949494;
     border-bottom-color: #949494;
     border-left-color: #949494;
+    border-color:${({ error }) => error && "#d00"};
+    box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
     input{
       width: 100%;
       background-color: transparent;
@@ -220,6 +217,15 @@ const GroupSC = styled.div`
         font-size: 0.9rem !important;
       }
     }
+  }
+  [data="error"]{
+        font-size: 1rem;
+        color: #e72626;
+        margin-top: 0.0rem;
+        small{
+            padding: 0px;
+            margin: 0px;
+        }
   }
 `
 
@@ -243,24 +249,34 @@ export default function Login({ error }) {
       <LoginSC>
         <div data='exibir'>
           <Formik
-            validateOnMount
             validationSchema={scheme}
             initialValues={initialValues}
-            onSubmit={async (values) => {
-              await save(values, values.id)
+            onSubmit={async (values, setValues) => {
+              await storeAuth(values)
                 .then(() => {
-                  const msgShow = !values.id ? 'realizado' : "alterado";
-                  showSucesso(`Cadastro ${msgShow} com sucesso!.`)
-                  navigate(prefixUrl);
+                  router.push("/")
                 })
-                .catch(showError);
+                .catch((res) => {
+                  /* Se status 400, significa que o erro foi tratado. */
+                  if (res && res.response && res.response.status == 400) {
+                    /* Se data.erro=500, será exibido no toast */
+                    if (res.response.data && res.response.data[500]) {
+                      toast.error(res.response.data[500])
+                    } else {
+                      setValues.setErrors(res.response.data)
+                    }
+                  } else {
+                    /* Mensagem padrão */
+                    toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                  }
+                })
             }}
           >
-            {props => (
+            {({ setFieldValue, values, errors, touched, dirty }) => (
               <Form data="form" action="">
                 <h1>FAZER LOGIN</h1>
-                <ShowMessage error={error} />
-                <GroupSC>
+                <ShowMessage error={dirty ? errors : error} />
+                <GroupSC error={!!errors.email && touched.email}>
                   <div data="label">
                     <label htmlFor="email">Email</label>
                   </div>
@@ -273,15 +289,15 @@ export default function Login({ error }) {
                     </small>
                   </div>
                 </GroupSC>
-                <GroupSC>
+                <GroupSC error={!!errors.senha && touched.senha}>
                   <div data="label">
                     <label htmlFor="senha">Senha</label>
                   </div>
                   <div data="input">
                     <Field name="senha" type="password" maxLength="255" />
-                    {props.values.show_password && props.values.senha && (
+                    {values.show_password && values.senha && (
                       <div data="show-password">
-                        <span name="senha" value>{props.values.senha}</span>
+                        <span name="senha" value>{values.senha}</span>
                       </div>
                     )}
                   </div>
@@ -293,14 +309,14 @@ export default function Login({ error }) {
                 </GroupSC>
 
                 <div data="recover">
-                  <label htmlFor="show_password" onClick={() => props.setFieldValue("show_password", !props.values.show_password)}>
+                  <label htmlFor="show_password" onClick={() => setFieldValue("show_password", !values.show_password)}>
                     <Field name="show_password" type="checkbox" /><span>Mostrar senha</span>
                   </label>
                   <Link href="/login/recuperar">Esqueceu a senha?</Link>
                 </div>
 
                 <div data="btn-entrar">
-                  <button ><DoorOpen /><b>ENTRAR</b></button>
+                  <button type="submit"><DoorOpen /><b>ENTRAR</b></button>
                 </div>
               </Form>
             )}

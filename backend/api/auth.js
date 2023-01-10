@@ -86,6 +86,54 @@ module.exports = app => {
                         return res.status(400).send({ 400: msgErrorDefault })
                 }
         }
+        const signin = async (req, res) => {
+                const body = req.body;
+                const modelo = {
+                        email: body.email,
+                        senha: body.senha
+                }
+
+                try {
+                        existOrError(modelo.email, { email: "Email deve ser informando." })
+                        existOrError(modelo.senha, { senha: "Senha deve ser informando." })
+                        if (!modelo.senha.length >= 6) throw { senha: "A senha precisa ter no minimo 6 caracteres." }
+
+                        const user = await app.db(table).where({ email: modelo.email }).first()
+                        if (!user) throw { email: "Email não encontrado" }
+
+                        if (user.bloqueado) return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
+                } catch (error) {
+                        utility_console("signin", error);
+                        return res.status(400).send(error)
+                }
+
+                try {
+                        const user = await app.db(table).where({ email: modelo.email }).first()
+                        const isMatch = bcrypt.compareSync(modelo.senha, user.senha)
+                        if (!isMatch) return res.status(400).send({ senha: "Senha incorreta" })
+
+                        const payload = {
+                                id: user.id,
+                                nome: user.nome,
+                                email: user.email,
+                                contato: user.contato,
+                                cep: user.cep,
+
+                                logradouro: user.logradouro,
+                                numero: user.numero,
+                                complemento: user.complemento,
+                                bairro: user.bairro,
+                                localidade: user.localidade,
+                                uf: user.uf,
+                                bloqueado: user.bloqueado,
+                        }
+
+                        return res.json(payload)
+                } catch (error) {
+                        utility_console("auth.signin", error);
+                        return res.status(400).send({ 400: msgErrorDefault })
+                }
+        }
 
         /* Faz o cadastro inicial */
         const save = async (req, res) => {
@@ -213,5 +261,5 @@ module.exports = app => {
                 }
         }
 
-        return { save, signinNextAuth, newPassword }
+        return { save, signinNextAuth, signin, newPassword }
 }
