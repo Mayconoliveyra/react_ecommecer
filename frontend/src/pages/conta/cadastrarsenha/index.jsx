@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
 import { Formik, Form } from 'formik';
-import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -11,8 +10,7 @@ Yup.setLocale(pt);
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
-import { proneMask, cepMask } from '../../../../masks';
-import { store as saveUser } from '../../api/auth';
+import { storePassword } from '../../api/auth';
 
 const MyDataSC = styled.div`
     max-width: 35rem;
@@ -66,23 +64,41 @@ const BtnConfirmSC = styled.div`
     }
 `
 
-export default function NewPassword({ session }) {
+export default function NewPassword({ data }) {
+    const scheme = Yup.object().shape({
+        senha: Yup.string().nullable().label("Senha").required("É necessário informar uma senha.")
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                "Deve ter no mínimo 6 dígitos, 1 letra maiúscula, 1 minúscula e um número"
+            ),
+        confirsenha: Yup.string().oneOf([Yup.ref("senha"), null], "A confirmação de senha não confere.")
+            .required("É necessário confirmar sua senha.").label("Confirmar senha")
+    });
+
     return (
         <>
             <Head>
-                <title>Criar conta</title>
+                {data.email_auth ?
+                    <title>Recuperar senha</title>
+                    :
+                    <title>Criar senha</title>
+                }
             </Head>
             <MyDataSC>
                 <SeusDadosSC>
                     <div>
                         <div data="h4-title">
-                            <h4>Criar conta</h4>
+                            {data.email_auth ?
+                                <h4>Recuperar senha</h4>
+                                :
+                                <h4>Criar senha</h4>
+                            }
                         </div>
                         <Formik
-                            /*   initialValues={{ nome: '', senha: '', confirsenha: '' }} */
-                            initialValues={session}
+                            validationSchema={scheme}
+                            initialValues={{ senha: '', confirsenha: '', ...data }}
                             onSubmit={async (values, setValues) => {
-                                await saveUser(values)
+                                await storePassword(values)
                                     .then((data) => {
                                         /* Redireciona para tela inicial passando a mensagem(msg) */
                                         router.push({
@@ -93,17 +109,15 @@ export default function NewPassword({ session }) {
                                         })
                                     })
                                     .catch((res) => {
-                                        /* Se status 400, significa que o erro foi tratado. */
                                         if (res && res.response && res.response.status == 400) {
-                                            /* Se data.erro=500, será exibido no toast */
-                                            if (res.response.data && res.response.data[500]) {
-                                                toast.error(res.response.data[500])
-                                            } else {
-                                                setValues.setErrors(res.response.data)
-                                            }
+                                            router.push({
+                                                pathname: "/login",
+                                                query: {
+                                                    msg: JSON.stringify(res.response.data)
+                                                }
+                                            })
                                         } else {
-                                            /* Mensagem padrão */
-                                            toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                                            router.push("/login")
                                         }
                                     })
                             }}
@@ -116,19 +130,29 @@ export default function NewPassword({ session }) {
                                         name="email"
                                         disabled
                                     />
-                                    <Group
-                                        error={!!errors.senha && touched.senha}
-                                        label="Senha"
-                                        name="senha"
-                                        autocomplete="on"
-                                        mask={proneMask}
-                                    />
+                                    {data.email_auth ?
+                                        <Group
+                                            error={!!errors.senha && touched.senha}
+                                            label="Crie sua nova senha"
+                                            name="senha"
+                                            type="password"
+                                            maxLength={55}
+                                        />
+                                        :
+                                        <Group
+                                            error={!!errors.senha && touched.senha}
+                                            label="Crie sua senha"
+                                            name="senha"
+                                            type="password"
+                                            maxLength={55}
+                                        />
+                                    }
                                     <Group
                                         error={!!errors.confirsenha && touched.confirsenha}
-                                        label="Confirmar senha"
+                                        label="Confirme sua senha"
                                         name="confirsenha"
-                                        autocomplete="on"
-                                        mask={cepMask}
+                                        type="password"
+                                        maxLength={55}
                                     />
 
                                     <BtnConfirmSC>
@@ -149,40 +173,8 @@ export default function NewPassword({ session }) {
 }
 
 export async function getServerSideProps({ req, query }) {
-    let session = await getSession({ req })
-    const { TOKEN_KEY } = require("../../../../.env");
-    const jwt = require('jsonwebtoken')
-
-    try {
-        const decoded = jwt.decode(query.authlogin, TOKEN_KEY);
-        const decodM = {
-            key_auth: decoded.key_auth,
-            email: decoded.email
-        }
-
-        /* divide por 1000 para transformar em segundos */
-        /* O token fica expirado dps de 15m */
-        if (decoded.exp > (Date.now() / 1000)) {
-            console.log("ATIVO")
-            session = { ...session, ...decodM }
-        } else {
-            console.log("EXPIRADO")
-            /* const msg = { 400: "Sua sessão expirou. Efetue login novamente e refaça o procedimento." } */
-            session = { ...session, ...decodM }
-        }
-    } catch (error) {
-        /* Se tiver algum erro/alterar token será redirecionado para tela home. */
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false
-            }
-        }
-    }
-
-
-
-    /* Se tiver logado, redireciona para tela home*/
+    const session = await getSession({ req })
+    /* Se já tiver logado redireciona para o home */
     if (session && session.id) {
         return {
             redirect: {
@@ -192,7 +184,29 @@ export async function getServerSideProps({ req, query }) {
         }
     }
 
+    if (query && query.authlogin)
+        try {
+            const { TOKEN_KEY } = require("../../../../.env");
+            const jwt = require('jsonwebtoken')
+
+            const decoded = jwt.decode(query.authlogin, TOKEN_KEY);
+            const userBody = {
+                id: decoded.id,
+                email: decoded.email,
+                key_auth: decoded.key_auth,
+                email_auth: decoded.email_auth,
+                exp: decoded.exp
+            }
+            return {
+                props: { data: { ...userBody } },
+            }
+        } catch (error) {
+        }
+
     return {
-        props: { session },
+        redirect: {
+            destination: "/login",
+            permanent: false,
+        }
     }
 }

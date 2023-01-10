@@ -3,12 +3,23 @@ import api from "../axios";
 const prefix = "/user";
 
 /* Alterar o cadastro */
-const store = async (session) => {
-  return await api.put(`${prefix}/${session.id}`, session).then(res => res.data);
+const store = async (data) => {
+  if (data && data.id) {
+    return await api.put(`${prefix}/${data.id}`, data).then(res => res.data);
+  }
+  return await api.post(`${prefix}`, data).then(res => res.data);
 };
 
-const storeNextAut = async (session) => {
-  return await api.post(`signin-next-auth`, session).then(res => res.data);
+const storeNextAut = async (data) => {
+  return await api.post(`signin-next-auth`, data).then(res => res.data);
 };
 
-export { store, storeNextAut }
+/* Enviar email de recuperação e criar nova senha */
+const storePassword = async (data) => {
+  if (data && data.id) {
+    return await api.put(`${prefix}/password/${data.id}`, data).then(res => res.data);
+  }
+  return await api.post(`${prefix}/password`, data).then(res => res.data);
+};
+
+export { store, storeNextAut, storePassword }

@@ -223,7 +223,7 @@ const GroupSC = styled.div`
   }
 `
 
-export default function Login({ session }) {
+export default function Login({ error }) {
   const store = useContext(StoreContext)
   const initialValues = {
     email: '',
@@ -259,7 +259,7 @@ export default function Login({ session }) {
             {props => (
               <Form data="form" action="">
                 <h1>FAZER LOGIN</h1>
-                <ShowMessage error={session} />
+                <ShowMessage error={error} />
                 <GroupSC>
                   <div data="label">
                     <label htmlFor="email">Email</label>
@@ -327,21 +327,8 @@ export default function Login({ session }) {
 }
 
 export async function getServerSideProps({ req, query }) {
-  let session = await getSession({ req })
-
-  /* se tiver msg dentro da query, exibe a mensagem. Isso é utilizado para exibir mensagem de notificações */
-  /* Ex: mensagem de verificar o email para pode verificar o cadastro */
-  if (query && query.msg) {
-    try {
-      const msg = JSON.parse(query.msg)
-      session = { ...session, ...msg }
-    } catch (error) {
-      /* Se tiver algum erro, retornar session padrão */
-      session = session
-    }
-  }
-
-  /* se session existir o usuario ja está autenticado. */
+  const session = await getSession({ req })
+  /* Se o usuario tiver logado redireciona para o home */
   if (session && session.id) {
     return {
       redirect: {
@@ -350,8 +337,20 @@ export async function getServerSideProps({ req, query }) {
       }
     }
   }
+  /* Verifica se veio alguma query, se tiver transformar em objeto */
+  /* Essas mensagem são passadas quando cadastrar um novo usuario */
+  /* ex: mensagem orientando verificar o email */
+  if (query && query.msg) {
+    try {
+      const msg = JSON.parse(query.msg)
+      return {
+        props: { error: msg },
+      }
+    } catch (error) {
+    }
+  }
 
   return {
-    props: { session },
+    props: {},
   }
 }

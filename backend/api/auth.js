@@ -1,4 +1,5 @@
 const jwt = require("jwt-simple")
+const bcrypt = require('bcrypt-nodejs')
 const { SOFTCONNECT_KEY } = require("../.env")
 
 module.exports = app => {
@@ -15,12 +16,12 @@ module.exports = app => {
                 }
                 return result;
         }
-
         /* GERA O TOKEN UTILIZADO PARA AUTENTICAR USUARIO NOVO E PARA RESTAURAR SENHA */
         const generateTokenAuth = (user) => {
                 /* divide por 1000 para transformar em segundos */
                 const data = Math.floor(Date.now() / 1000)
                 const tokenAuth = {
+                        id: user.id,
                         key_auth: user.key_auth,
                         email: user.email,
                         email_auth: user.email_auth,
@@ -28,6 +29,10 @@ module.exports = app => {
                         exp: data + (60 * 15)
                 }
                 return jwt.encode(tokenAuth, SOFTCONNECT_KEY)
+        }
+        const encryptPassword = password => {
+                const salt = bcrypt.genSaltSync(8)
+                return bcrypt.hashSync(password, salt)
         }
 
         const signinNextAuth = async (req, res) => {
@@ -82,9 +87,11 @@ module.exports = app => {
                 }
         }
 
+        /* Faz o cadastro inicial */
         const save = async (req, res) => {
                 const id = Number(req.params.id);
                 const body = req.body;
+
                 const modelo = {
                         nome: body.nome,
                         email: body.email,
@@ -93,6 +100,7 @@ module.exports = app => {
                         numero: body.numero,
                         complemento: body.complemento
                 }
+
                 try {
                         existOrError(modelo.nome, { nome: "Nome completo deve ser informado." })
                         existOrError(modelo.email, { email: "E-mail deve ser informado." })
@@ -131,7 +139,10 @@ module.exports = app => {
 
                                 app.db(table)
                                         .insert({ ...modelo, ...endereco })
-                                        .then(() => {
+                                        .returning("id")
+                                        .then((id) => {
+                                                /* ID do usuario */
+                                                modelo.id = id[0]
                                                 /* Envio de email não é de forma assincrono */
                                                 /* generateTokenAuth, gera o token utilizado para autenticar email ou recuperar senha */
                                                 sendEmail({ email: modelo.email, body: generateTokenAuth(modelo), template: 'AUTHENTICATION' });
@@ -149,5 +160,58 @@ module.exports = app => {
                 }
         }
 
-        return { save, signinNextAuth }
+        const newPassword = async (req, res) => {
+                const id = Number(req.params.id);
+                const body = req.body;
+
+                const modelo = {
+                        email: body.email,
+                        senha: body.senha,
+                        confirsenha: body.confirsenha,
+                        key_auth: body.key_auth,
+                        email_auth: body.email_auth,
+                        exp: body.exp,
+                }
+
+                try {
+                        existOrError(id, "id não pode ser nulo")
+                        existOrError(modelo.email, "email não pode ser nulo")
+                        existOrError(modelo.senha, "senha não pode ser nulo")
+                        existOrError(modelo.confirsenha, "confirsenha não pode ser nulo")
+                        existOrError(modelo.key_auth, "key_auth não pode ser nulo")
+
+                        const user = await app.db(table).where({ id: id }).first()
+                        if (!user) throw "usuario não encontrado na base"
+                        if (user.email != modelo.email) throw "email não confere"
+                        if (user.key_auth != modelo.key_auth) throw "key_auth não confere"
+                        if (user.bloqueado) return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
+                        if (!(modelo.exp > (Date.now() / 1000))) throw "token expirado"
+
+                } catch (error) {
+                        utility_console("newPassword", error)
+                        return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
+                }
+
+                try {
+                        delete modelo.confirsenha
+                        delete modelo.exp
+                        modelo.senha = encryptPassword(modelo.senha)
+                        modelo.email_auth = true
+                        modelo.key_auth = null
+
+                        app.db(table)
+                                .update(modelo)
+                                .where({ id: id })
+                                .then(() => res.status(200).send({ 200: "Ebaa!, seu foi cadastro foi finalizado, faça o login e aproveitar. <3" }))
+                                .catch((error) => {
+                                        utility_console("newPassword", error)
+                                        return res.status(400).send({ 500: msgErrorDefault });
+                                });
+                } catch (error) {
+                        utility_console("newPassword", error)
+                        return res.status(400).send({ 500: msgErrorDefault })
+                }
+        }
+
+        return { save, signinNextAuth, newPassword }
 }
