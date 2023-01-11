@@ -18,9 +18,9 @@ const storeAuth = async (data) => {
 };
 
 /* Enviar email de recuperação e criar nova senha */
-const storePassword = async (data) => {
-  if (data && data.id) {
-    return await api.put(`${prefix}/password/${data.id}`, data).then(res => res.data);
+const storePassword = async (data, id) => {
+  if (data && id) {
+    return await api.put(`${prefix}/password/${id}`, data).then(res => res.data);
   }
   return await api.post(`${prefix}/password`, data).then(res => res.data);
 };

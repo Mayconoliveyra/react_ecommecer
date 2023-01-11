@@ -1,8 +1,10 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SOFTCONNECT_ID, SOFTCONNECT_SECRET } = require("../../../../.env");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SOFTCONNECT_ID, SOFTCONNECT_SECRET, TOKEN_KEY } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { storeNextAuth } from "./index"
+const jwt = require('jsonwebtoken')
 
 export const authOptions = {
     providers: [
@@ -13,10 +15,25 @@ export const authOptions = {
         GoogleProvider({
             clientId: GOOGLE_CLIENT_ID,
             clientSecret: GOOGLE_CLIENT_SECRET
+        }),
+        CredentialsProvider({
+            name: "Credentials",
+            async authorize(credentials) {
+                if (credentials && credentials.session) {
+                    try {
+                        const userDecoded = jwt.decode(credentials.session, TOKEN_KEY);
+                        if (userDecoded) {
+                            return userDecoded
+                        }
+                    } catch (error) {
+                    }
+                }
+                return null
+            }
         })
     ],
     callbacks: {
-        async session({ session, token }) {
+        async session({ session }) {
             try {
                 /* secret é validado no backend. */
                 const modelo = {
@@ -24,9 +41,15 @@ export const authOptions = {
                     email: session.user.email,
                     secret: `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`
                 }
-                const usuario = await storeNextAuth(modelo)
+                const user = await storeNextAuth(modelo)
+                const userDecoded = jwt.decode(user, TOKEN_KEY);
+                if (userDecoded)
+                    return {
+                        ...userDecoded
+                    }
+
                 return {
-                    ...usuario
+                    400: "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente."
                 }
             } catch (error) {
                 if (error && error.response && error.response.data) {

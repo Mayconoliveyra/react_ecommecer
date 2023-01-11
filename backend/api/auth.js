@@ -1,34 +1,25 @@
 const jwt = require("jwt-simple")
+const jwtweb = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs')
-const { SOFTCONNECT_KEY } = require("../.env")
+const { TOKEN_KEY } = require("../.env")
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, contactExistOrErro } = app.api.utilities;
         const { consultCEP, sendEmail } = app.api.softconnect;
         const table = "users";
 
-        const generateRandomString = (length) => {
-                const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-                let result = "";
-                const charactersLength = characters.length;
-                for (let i = 0; i < length; i++) {
-                        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-                }
-                return result;
-        }
         /* GERA O TOKEN UTILIZADO PARA AUTENTICAR USUARIO NOVO E PARA RESTAURAR SENHA */
         const generateTokenAuth = (user) => {
                 /* divide por 1000 para transformar em segundos */
                 const data = Math.floor(Date.now() / 1000)
                 const tokenAuth = {
                         id: user.id,
-                        key_auth: user.key_auth,
                         email: user.email,
                         email_auth: user.email_auth,
                         iat: data, // emitido em
-                        exp: data + (60 * 15)
+                        exp: data + (60 * 10) // 10 minutos 
                 }
-                return jwt.encode(tokenAuth, SOFTCONNECT_KEY)
+                return jwt.encode(tokenAuth, TOKEN_KEY)
         }
         const encryptPassword = password => {
                 const salt = bcrypt.genSaltSync(8)
@@ -58,29 +49,34 @@ module.exports = app => {
                                 await app.db(table).insert(modelo)
                         }
 
-                        const userFromDb = await app.db(table).where({ email: modelo.email }).first()
+                        const user = await app.db(table).where({ email: modelo.email }).first()
 
-                        if (userFromDb.bloqueado) {
+                        if (user.bloqueado) {
                                 return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
                         }
 
+                        const data = Math.floor(Date.now() / 1000)
                         const payload = {
-                                id: userFromDb.id,
-                                nome: userFromDb.nome,
-                                email: userFromDb.email,
-                                contato: userFromDb.contato,
-                                cep: userFromDb.cep,
+                                id: user.id,
+                                nome: user.nome,
+                                email: user.email,
+                                contato: user.contato,
+                                cep: user.cep,
 
-                                logradouro: userFromDb.logradouro,
-                                numero: userFromDb.numero,
-                                complemento: userFromDb.complemento,
-                                bairro: userFromDb.bairro,
-                                localidade: userFromDb.localidade,
-                                uf: userFromDb.uf,
-                                bloqueado: userFromDb.bloqueado,
+                                logradouro: user.logradouro,
+                                numero: user.numero,
+                                complemento: user.complemento,
+                                bairro: user.bairro,
+                                localidade: user.localidade,
+                                uf: user.uf,
+                                bloqueado: user.bloqueado,
+                                distancia: user.distancia,
+                                tempo: user.tempo,
+                                iat: data, // emitido em
+                                exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(payload)
+                        return res.json(jwt.encode(payload, TOKEN_KEY))
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -112,6 +108,7 @@ module.exports = app => {
                         const isMatch = bcrypt.compareSync(modelo.senha, user.senha)
                         if (!isMatch) return res.status(400).send({ senha: "Senha incorreta" })
 
+                        const data = Math.floor(Date.now() / 1000)
                         const payload = {
                                 id: user.id,
                                 nome: user.nome,
@@ -126,9 +123,13 @@ module.exports = app => {
                                 localidade: user.localidade,
                                 uf: user.uf,
                                 bloqueado: user.bloqueado,
+                                distancia: user.distancia,
+                                tempo: user.tempo,
+                                iat: data, // emitido em
+                                exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(payload)
+                        return res.json(jwt.encode(payload, TOKEN_KEY))
                 } catch (error) {
                         utility_console("auth.signin", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -182,7 +183,6 @@ module.exports = app => {
                                                 return res.status(500).send(msgErrorDefault);
                                         });
                         } else {
-                                modelo.key_auth = generateRandomString(6)
                                 modelo.email_auth = false
 
                                 app.db(table)
@@ -195,7 +195,7 @@ module.exports = app => {
                                                 /* generateTokenAuth, gera o token utilizado para autenticar email ou recuperar senha */
                                                 sendEmail({ email: modelo.email, body: generateTokenAuth(modelo), template: 'AUTHENTICATION' });
                                                 /* Retornar o status 400 com a mensagem para autenticar o email */
-                                                return res.status(200).send({ 200: 'Caro cliente, enviamos um email de ativação. Favor verifique o seu email e siga os passos para prosseguir com o seu acesso.' })
+                                                return res.status(200).send({ 200: 'Caro cliente, enviamos um email de ativação. Por favor, acesse seu email e verifique sua caixa de entrada e spam.' })
                                         })
                                         .catch((error) => {
                                                 utility_console("auth.save.insert", error)
@@ -210,15 +210,36 @@ module.exports = app => {
 
         const newPassword = async (req, res) => {
                 const id = Number(req.params.id);
-                const body = req.body;
+
+                if (!req.body || !req.body.userJWT) {
+                        return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
+                }
+
+                /* Descriptografa o jwt, se de erro retornar erro */
+                const body = jwtweb.decode(req.body.userJWT, TOKEN_KEY);
+                if (!body) return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
 
                 const modelo = {
                         email: body.email,
                         senha: body.senha,
                         confirsenha: body.confirsenha,
-                        key_auth: body.key_auth,
                         email_auth: body.email_auth,
                         exp: body.exp,
+                }
+
+                /* Se id não tiver setado e email tiver setado envia email de recuperação de senha */
+                if (!id && modelo.email) {
+                        try {
+                                const user = await app.db.select("id", "email", "email_auth").table(table).where({ email: modelo.email }).first()
+                                if (!user) return res.status(400).send({ 400: "Não encontramos nenhum cadastro com o e-mail informados. Por favor, verifique se existe algum erro de digitação." })
+
+                                sendEmail({ email: modelo.email, body: generateTokenAuth(user), template: 'RECOVER' });
+
+                                return res.status(200).send({ 200: 'Caro cliente, enviamos um email de recuperação. Por favor, acesse seu email e verifique sua caixa de entrada e spam.' })
+                        } catch (error) {
+                                utility_console("newPassword.email-recuperar", error)
+                                return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
+                        }
                 }
 
                 try {
@@ -226,12 +247,10 @@ module.exports = app => {
                         existOrError(modelo.email, "email não pode ser nulo")
                         existOrError(modelo.senha, "senha não pode ser nulo")
                         existOrError(modelo.confirsenha, "confirsenha não pode ser nulo")
-                        existOrError(modelo.key_auth, "key_auth não pode ser nulo")
 
                         const user = await app.db(table).where({ id: id }).first()
                         if (!user) throw "usuario não encontrado na base"
                         if (user.email != modelo.email) throw "email não confere"
-                        if (user.key_auth != modelo.key_auth) throw "key_auth não confere"
                         if (user.bloqueado) return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
                         if (!(modelo.exp > (Date.now() / 1000))) throw "token expirado"
 
@@ -245,7 +264,6 @@ module.exports = app => {
                         delete modelo.exp
                         modelo.senha = encryptPassword(modelo.senha)
                         modelo.email_auth = true
-                        modelo.key_auth = null
 
                         app.db(table)
                                 .update(modelo)

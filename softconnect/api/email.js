@@ -44,6 +44,13 @@ module.exports = (app) => {
                         html: AUTHENTICATION({ ...modelo, ...store })
                     }
                     break;
+                case 'RECOVER':
+                    email = {
+                        ...email,
+                        subject: 'Assistência de senha',
+                        html: RECOVER({ ...modelo, ...store })
+                    }
+                    break;
 
                 default:
                     break;
@@ -77,6 +84,38 @@ module.exports = (app) => {
         </p>
         <b>
             <a href='${app.store.url_frontend}/conta/cadastrarsenha?authlogin=${params.body}'>Finalizar meu cadastro</a>
+        </b>
+        <br>
+        <br>
+        <br>
+        <h4 style='margin-bottom: 5px;'>Atenção!</h4>
+        <small>
+            Se você não realizou esta solicitação, por favor ignore esta mensagem.
+        </small>
+        <br>
+        <small>
+            Caso tenha dúvidas, nos envie uma mensagem: <a href=mailto:${params.atendimento_email}>${params.atendimento_email}</a>
+        </small>
+        </thead>
+    </div>
+    `
+    }
+    const RECOVER = (params) => {
+        return `
+    <div style='text-align: center;'>
+        <thead style='text-align: center;'>
+        <img
+            src=${params.url_logo}
+            alt='logo_store'
+            width='180px'
+        />
+        <hr />
+        <h4>Assistência de senha</h4>
+        <p>
+            Clique no link abaixo para restaurar sua senha:
+        </p>
+        <b>
+            <a href='${app.store.url_frontend}/conta/cadastrarsenha?authlogin=${params.body}'>Recuperar minha senha</a>
         </b>
         <br>
         <br>

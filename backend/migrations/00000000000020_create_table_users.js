@@ -22,7 +22,6 @@ exports.up = function (knex) {
             table.double("distancia").notNull().defaultTo(0)
             table.double("tempo").notNull().defaultTo(0)
 
-            table.string("key_auth", 6) /* chave de autenticação/ recuperar senha */
             table.boolean("email_auth", 1).notNull().defaultTo(0) /* Quando ta true, significa que o email foi autenticado, quando utiliza facebook e google seta como true tambem. */
 
             table.timestamp('created_at').defaultTo(knex.fn.now())

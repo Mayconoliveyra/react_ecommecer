@@ -17,6 +17,7 @@ import { storePassword } from '../../api/auth';
 const MyDataSC = styled.div`
     max-width: 35rem;
     margin: 0 auto;
+    height: 100%;
 `
 const SeusDadosSC = styled.div`
     margin: 0.5rem 0;
@@ -39,6 +40,19 @@ const SeusDadosSC = styled.div`
             border: 1px #D5D9D9 solid;
             border-radius: 0 0 0.8rem 0.8rem;
             padding: 0.3rem 0.7rem;
+            p{
+               margin: 0.5rem;
+               font-size: 1.1rem;
+            }
+            p:nth-child(3){
+               margin: 0.5rem;
+               font-size: 0.9rem;
+               a{
+                text-decoration: underline;
+                color: #0066c0;
+                font-family:${({ theme }) => theme.font.family.medium};
+               }
+            }
         }
     }
 `
@@ -66,43 +80,29 @@ const BtnConfirmSC = styled.div`
     }
 `
 
-export default function NewPassword({ data }) {
+export default function Recover() {
     const scheme = Yup.object().shape({
-        senha: Yup.string().nullable().label("Senha").required("É necessário informar uma senha.")
-            .matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
-                "Deve ter no mínimo 6 dígitos, 1 letra maiúscula, 1 minúscula e um número"
-            ),
-        confirsenha: Yup.string().oneOf([Yup.ref("senha"), null], "A confirmação de senha não confere.")
-            .required("É necessário confirmar sua senha.").label("Confirmar senha")
+        email: Yup.string().email().label("E-mail").required()
     });
 
     return (
         <>
             <Head>
-                {data.email_auth ?
-                    <title>Recuperar senha</title>
-                    :
-                    <title>Criar senha</title>
-                }
+                <title>Esqueceu sua senha</title>
             </Head>
             <MyDataSC>
                 <SeusDadosSC>
                     <div>
                         <div data="h4-title">
-                            {data.email_auth ?
-                                <h4>Recuperar senha</h4>
-                                :
-                                <h4>Criar senha</h4>
-                            }
+                            <h4>Auxilio de senha</h4>
                         </div>
                         <Formik
                             validationSchema={scheme}
-                            initialValues={{ senha: '', confirsenha: '', ...data }}
+                            initialValues={{ email: "" }}
                             onSubmit={async (values, setValues) => {
                                 /* Os dados sera convetido em jwt antes de enviar para o backend */
                                 const modelo = jwt.encode(values, TOKEN_KEY)
-                                await storePassword({ userJWT: modelo }, data.id)
+                                await storePassword({ userJWT: modelo })
                                     .then((data) => {
                                         /* Redireciona para tela inicial passando a mensagem(msg) */
                                         router.push({
@@ -129,40 +129,25 @@ export default function NewPassword({ data }) {
                             {({ errors, touched, dirty }) => (
                                 <Form data="form" action="">
                                     <ShowMessage error={errors} />
+
+                                    <p>
+                                        Insira seu endereço de e-mail cadastrado para receber um email de recuperação de senha.
+                                    </p>
                                     <Group
-                                        label="E-mail"
+                                        error={!!errors.email && touched.email}
+                                        label="Seu email"
                                         name="email"
-                                        disabled
-                                    />
-                                    {data.email_auth ?
-                                        <Group
-                                            error={!!errors.senha && touched.senha}
-                                            label="Crie sua nova senha"
-                                            name="senha"
-                                            type="password"
-                                            maxLength={55}
-                                        />
-                                        :
-                                        <Group
-                                            error={!!errors.senha && touched.senha}
-                                            label="Crie sua senha"
-                                            name="senha"
-                                            type="password"
-                                            maxLength={55}
-                                        />
-                                    }
-                                    <Group
-                                        error={!!errors.confirsenha && touched.confirsenha}
-                                        label="Confirme sua senha"
-                                        name="confirsenha"
-                                        type="password"
+                                        type="email"
+                                        autocomplete="on"
                                         maxLength={55}
                                     />
-
+                                    <p>
+                                        Se você não usa mais o endereço de e-mail associado à sua conta, entre em contato com o a <a href="#attendance"> Serviço de atendimento ao cliente</a> para ajudar a restaurar o acesso à sua conta.
+                                    </p>
                                     <BtnConfirmSC>
                                         <div data='button-submit'>
                                             <button disabled={!dirty} type="submit">
-                                                Cadastrar
+                                                Continuar
                                             </button>
                                         </div>
                                     </BtnConfirmSC>
@@ -188,28 +173,7 @@ export async function getServerSideProps({ req, query }) {
         }
     }
 
-    if (query && query.authlogin)
-        try {
-            const { TOKEN_KEY } = require("../../../../.env");
-            const jwt = require('jsonwebtoken')
-
-            const decoded = jwt.decode(query.authlogin, TOKEN_KEY);
-            const userBody = {
-                id: decoded.id,
-                email: decoded.email,
-                email_auth: decoded.email_auth,
-                exp: decoded.exp
-            }
-            return {
-                props: { data: { ...userBody } },
-            }
-        } catch (error) {
-        }
-
     return {
-        redirect: {
-            destination: "/login",
-            permanent: false,
-        }
+        props: {},
     }
 }

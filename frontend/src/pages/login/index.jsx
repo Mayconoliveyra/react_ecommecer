@@ -253,8 +253,21 @@ export default function Login({ error }) {
             initialValues={initialValues}
             onSubmit={async (values, setValues) => {
               await storeAuth(values)
-                .then(() => {
-                  router.push("/")
+                .then(async (userToken) => {
+                  /* userToken tem as informações do usuario criptografada */
+                  const res = await signIn("credentials", {
+                    redirect: false,
+                    email: values.email,
+                    password: values.senha,
+                    session: userToken,
+                  });
+                  /* Se o token for valido o usario e autenticado e redireciona para pagina home */
+                  if (!res.error) {
+                    router.push("/")
+                  } else {
+                    /* se der error atualiza a pagina */
+                    router.reload()
+                  }
                 })
                 .catch((res) => {
                   /* Se status 400, significa que o erro foi tratado. */
@@ -312,7 +325,7 @@ export default function Login({ error }) {
                   <label htmlFor="show_password" onClick={() => setFieldValue("show_password", !values.show_password)}>
                     <Field name="show_password" type="checkbox" /><span>Mostrar senha</span>
                   </label>
-                  <Link href="/login/recuperar">Esqueceu a senha?</Link>
+                  <Link href="/conta/recuperar">Esqueceu a senha?</Link>
                 </div>
 
                 <div data="btn-entrar">

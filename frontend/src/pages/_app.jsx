@@ -43,6 +43,9 @@ export default function MyApp({ Component, pageProps }) {
       case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
+      case '/conta/recuperar':
+        setTemplate({ ...defaultTemplate, showHeaderSearch: false })
+        break;
       default:
         setTemplate(defaultTemplate)
         break;

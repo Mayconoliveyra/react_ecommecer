@@ -47,7 +47,7 @@ const NavSC = styled.footer`
                 margin-top: 2rem;
                 svg{
                     font-size: 2rem;
-                    margin: 0 1.5rem;
+                    margin: 1.5rem 1.6rem;
                 }   
             } 
             p{
@@ -91,12 +91,12 @@ const NavSC = styled.footer`
                 font-family:${({ theme }) => theme.font.family.bold};
             }
             div {
-                margin-top: 2rem;
+                margin-top: 1rem;
                 display: flex;
                 align-items: center;
                 svg{
                     font-size: 2rem;
-                    margin: 0 1.5rem;
+                    margin: 1.5rem 1.6rem;
                 }   
             }          
         }
@@ -130,7 +130,7 @@ export default function Footer() {
                             Voltar ao Topo da página
                         </Link>
                     </div> */}
-                    <div data-div='attendance'>
+                    <div id="attendance" data-div='attendance'>
                         <div>
                             <h5>Atendimento</h5>
                             <div>
@@ -148,7 +148,7 @@ export default function Footer() {
                                 </Link>
                             </div>
                             <p>
-                                {store.logradouro}, {store.numero} - {store.bairro}, {store.localidade} - {store.uf}{store.cep && ", " + store.cep.substring(0, 5) + "-" + store.cep.substring(5)}
+                                {store.logradouro}, {store.numero} - {store.bairro}, {store.localidade} - {store.uf}, {store.cep}
                             </p>
                         </div>
                     </div>
