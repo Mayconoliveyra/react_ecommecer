@@ -98,6 +98,12 @@ module.exports = app => {
                         if (!user) throw { email: "Email não encontrado" }
 
                         if (user.bloqueado) return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
+
+                        /* Se tiver tentando logar sem fazer autenticação do email, envia reenvia email de autenticação */
+                        if (!user.email_auth) {
+                                sendEmail({ email: user.email, body: generateTokenAuth(user), template: 'AUTHENTICATION' });
+                                return res.status(400).send({ 400: 'Caro cliente, seu cadastro está pendente de autenticação. Por favor, acesse seu email e verifique sua caixa de entrada e spam.' })
+                        }
                 } catch (error) {
                         utility_console("signin", error);
                         return res.status(400).send(error)
@@ -167,7 +173,7 @@ module.exports = app => {
                         if (!store) return res.status(400).send({ 400: "Não foi encontrado o cadastro da empresa." })
 
                         /* endereco vem da api softconnect = cep, logradouro, localidade, bairro, uf */
-                        const endereco = await consultCEP(store.cep, modelo.cep)
+                        const endereco = await consultCEP(modelo.cep)
                         if (endereco && endereco.error) {
                                 return res.status(400).send(endereco.error)
                         }
