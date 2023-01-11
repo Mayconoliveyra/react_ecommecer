@@ -227,11 +227,12 @@ module.exports = app => {
                         exp: body.exp,
                 }
 
-                /* Se id não tiver setado e email tiver setado envia email de recuperação de senha */
+                /* Se o id não existir significa que uma requisiçã para enviar email de recuperação de senha. */
                 if (!id && modelo.email) {
                         try {
-                                const user = await app.db.select("id", "email", "email_auth").table(table).where({ email: modelo.email }).first()
+                                const user = await app.db.select("id", "email", "email_auth", "bloqueado").table(table).where({ email: modelo.email }).first()
                                 if (!user) return res.status(400).send({ 400: "Não encontramos nenhum cadastro com o e-mail informados. Por favor, verifique se existe algum erro de digitação." })
+                                if (user.bloqueado) return res.status(400).send({ 400: "Usuário bloqueado. Entre em contato com a Unidade Gestora" })
 
                                 sendEmail({ email: modelo.email, body: generateTokenAuth(user), template: 'RECOVER' });
 
