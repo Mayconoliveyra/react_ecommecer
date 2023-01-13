@@ -38,6 +38,17 @@ const SeusDadosSC = styled.div`
             border: 1px #D5D9D9 solid;
             border-radius: 0 0 0.8rem 0.8rem;
             padding: 0.3rem 0.7rem;
+
+            p{
+               margin: 0.5rem;
+               font-size: 1rem !important;
+               a{
+                text-decoration: underline;
+                color: #0066c0;
+                font-family:${({ theme }) => theme.font.family.medium};
+                font-size: 0.9rem !important;
+               }
+            }
         }
     }
 `
@@ -109,6 +120,9 @@ export default function MyData({ session }) {
                         >
                             {({ errors, touched, dirty }) => (
                                 <Form data="form" action="">
+                                    <p>
+                                        O preechimento de todas as informações é obrigatório. Entre em contato conosco se tiver dúvidas. <a href="#attendance">Atendimento ao cliente</a>
+                                    </p>
                                     <Group
                                         error={!!errors.nome && touched.nome}
                                         label="Nome completo"

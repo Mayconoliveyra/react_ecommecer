@@ -39,12 +39,15 @@ export default function MyApp({ Component, pageProps }) {
       case '/login':
       case '/carrinho':
       case '/carrinho/fechar':
-      case '/conta/meusdados':
       case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
+      case '/conta/meusdados':
       case '/conta/recuperar':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false })
+        break;
+      case '/produto/[id]':
+        setTemplate({ ...defaultTemplate, footerReduce: true })
         break;
       default:
         setTemplate(defaultTemplate)

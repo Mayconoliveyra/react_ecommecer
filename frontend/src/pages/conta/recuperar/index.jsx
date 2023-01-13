@@ -142,7 +142,7 @@ export default function Recover() {
                                         maxLength={55}
                                     />
                                     <p>
-                                        Se você não usa mais o endereço de e-mail associado à sua conta, entre em contato com o a <a href="#attendance"> Serviço de atendimento ao cliente</a> para ajudar a restaurar o acesso à sua conta.
+                                        Se você não usa mais o endereço de e-mail associado à sua conta, entre em contato. <a href="#attendance">Atendimento ao cliente</a> para ajudar a restaurar o acesso à sua conta.
                                     </p>
                                     <BtnConfirmSC>
                                         <div data='button-submit'>

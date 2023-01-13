@@ -7,6 +7,7 @@ import styled from "styled-components"
 import { moneyMask } from '../../../../masks';
 
 import MyCartContext from "../../../context/myCart"
+import StoreContext from "../../../context/store"
 
 const BtnConfirmSC = styled.div`
     [data='close']{
@@ -117,8 +118,10 @@ const MetodoEntegraSC = styled.div`
     }
 `
 
-export default function CloseOrder() {
+export default function CloseOrder({ data }) {
+    const store = useContext(StoreContext)
     const { myCart: { products, totals } } = useContext(MyCartContext)
+
     return (
         <>
             <Head>
@@ -150,8 +153,12 @@ export default function CloseOrder() {
                                         <td data="total-td">Total dos produtos:</td>
                                         <td data="td-value-total">{moneyMask(totals && totals.vlr_pagar_products)}</td>
                                     </tr>
+                                    <tr>
+                                        <td data="total-td">Valor de Frete:</td>
+                                        {/* Arredonda o valor do frete para inteiro */}
+                                        <td data="td-value-total">{moneyMask(Math.round(data.distancia_km * store.percentual_frete))}</td>
+                                    </tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -203,25 +210,40 @@ export default function CloseOrder() {
 
             </div>
         </>
-
     )
 }
 
 export async function getServerSideProps({ req }) {
     const session = await getSession({ req })
-    console.log(session)
-    /* se session existir o usuario ja está autenticado. */
-    if (false) {
-        /* if (!session || !session.id) { */
-        return {
-            redirect: {
-                destination: "/login",
-                permanent: false
+    /* Valida se tem algum campo importante pendente */
+    let valid = true;
+    if (!session) valid = false
+    if (!session || !session.email) valid = false
+    if (!session || !session.contato) valid = false
+    if (!session || !session.nome) valid = false
+    if (!session || !session.cep) valid = false
+
+    if (!valid) {
+        /* Se não tiver logando, redireciona para home */
+        if (!session) {
+            return {
+                redirect: {
+                    destination: "/login",
+                    permanent: false
+                }
+            }
+        } else {
+            /* Redireciona para tela de preenchimento do usuario */
+            return {
+                redirect: {
+                    destination: "/conta/meusdados",
+                    permanent: false
+                }
             }
         }
     }
 
     return {
-        props: { session },
+        props: { data: session },
     }
 }

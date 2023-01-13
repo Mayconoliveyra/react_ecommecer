@@ -24,17 +24,17 @@ module.exports = (app) => {
         try {
             /* Verifica se já existe o cadastro na base(CEP_origem x CEP_destino) */
             let enderecoFromDb = await app.db
-                .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia", "ad.tempo")
+                .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia_km", "ad.tempo")
                 .table("address")
                 .join('address_distance AS ad', 'address.cep', '=', 'ad.id_cep_destino')
                 .where({ 'ad.id_cep_origem': origin, 'ad.id_cep_destino': destination })
                 .first()
 
             /* Se a consulta anterior não retornar nada eu inverto os paramentros */
-            /* O resulta final será o mesmo, pois a distancia do ponto e a mesma. */
+            /* O resulta final será o mesmo, pois a distancia_km do ponto e a mesma. */
             if (!enderecoFromDb)
                 enderecoFromDb = await app.db
-                    .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia", "ad.tempo")
+                    .select("ad.id_cep_destino as cep", "address.logradouro", "address.bairro", "address.localidade", "address.uf", "ad.distancia_km", "ad.tempo")
                     .table("address")
                     .join('address_distance AS ad', 'address.cep', '=', 'ad.id_cep_destino')
                     .where({ 'ad.id_cep_origem': destination, 'ad.id_cep_destino': origin })
@@ -50,7 +50,7 @@ module.exports = (app) => {
                 if (!cepOrigem) throw { 400: "O CEP de origem não foi encontrado. Por favor, procure o atendimento." }
                 if (!cepDestino) throw { cep: "CEP não encontrado." }
 
-                /* resultDistance, já consulta a distancia e retornar o objeto com os dados para ser retornado para o cliente.  */
+                /* resultDistance, já consulta a distancia_km e retornar o objeto com os dados para ser retornado para o cliente.  */
                 const resultEndereco = await resultDistance(origin, destination)
 
                 if (!resultEndereco) throw { cep: "CEP não encontrado." }
@@ -138,14 +138,14 @@ module.exports = (app) => {
                         const duracao = res.data.rows[0].elements[0].duration.value
 
                         return {
-                            distancia: distancia,
-                            tempo: duracao,
+                            distancia_km: distancia ? distancia * 0.001 : 0, /*  distancia x 0.001, porque 1 m é 0.001 kms. */
+                            tempo: duracao ? duracao : 0,
                             api_maps: true
                         }
                     }
 
                     return {
-                        distancia: 0,
+                        distancia_km: 0,
                         tempo: 0,
                         api_maps: false
                     }
@@ -153,7 +153,7 @@ module.exports = (app) => {
                 .catch((error) => {
                     utility_console("maps.resultDistance", error);
                     return {
-                        distancia: 0,
+                        distancia_km: 0,
                         tempo: 0,
                         api_maps: false
                     }

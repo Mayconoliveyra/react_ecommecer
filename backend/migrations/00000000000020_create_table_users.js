@@ -19,8 +19,8 @@ exports.up = function (knex) {
             table.boolean("bloqueado", 1).notNull().defaultTo(0)
             table.string("motivo_bloqueio")
 
-            table.double("distancia").notNull().defaultTo(0)
-            table.double("tempo").notNull().defaultTo(0)
+            table.double("distancia_km", 8, 1).notNull().defaultTo(0)
+            table.double("tempo", 8, 1).notNull().defaultTo(0)
 
             table.boolean("email_auth", 1).notNull().defaultTo(0) /* Quando ta true, significa que o email foi autenticado, quando utiliza facebook e google seta como true tambem. */
 
