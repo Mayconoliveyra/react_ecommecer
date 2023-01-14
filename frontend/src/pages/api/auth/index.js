@@ -25,4 +25,15 @@ const storePassword = async (data, id) => {
   return await api.post(`${prefix}/password`, data).then(res => res.data);
 };
 
-export { store, storeNextAuth, storeAuth, storePassword }
+/* Verifica se o usuario está autenticado */
+const userIsAuth = async (session) => {
+  if (!session) return false
+  if (!session || !session.email) return false
+  if (!session || !session.contato) return false
+  if (!session || !session.nome) return false
+  if (!session || !session.email_auth) return false
+  if (!session || !session.cep) return false
+  return true
+}
+
+export { store, storeNextAuth, storeAuth, storePassword, userIsAuth }

@@ -1,22 +1,37 @@
 import { parseCookies, setCookie } from "nookies";
 import Head from 'next/head';
 import { getSession } from "next-auth/react"
-import { useContext } from 'react';
 import router from "next/router"
 import styled from "styled-components"
 import { Formik, Form, Field } from 'formik';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp } from "../../api/cart";
-
-import StoreContext from "../../../context/store"
+import { userIsAuth } from "../../api/auth";
 
 const BtnConfirmSC = styled.div`
-    [data='close']{
+    [data='yes-border']{
+        padding: 0.7rem 1rem;
+        border-top: 0.1rem solid #e7e7e7;
+        border-bottom: 0.1rem solid #e7e7e7;
+        display: flex;
+        a, button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            flex: 1;
+            background: #FFD814;
+            border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+        }
+    }
+    [data='no-border']{
         margin-top: 1rem;
         padding: 0.7rem 1rem;
         display: flex;
-        button{   
+        a, button{   
             display: flex;
             align-items: center;
             justify-content: center;
@@ -125,9 +140,7 @@ const GroupSC = styled.li`
         }
 `
 
-export default function CloseOrder({ session, totals }) {
-    const store = useContext(StoreContext)
-
+export default function CloseOrder({ totals }) {
     const initialValues = {
         pgt_metodo: 'frete',
         pgt_forma: 'pix'
@@ -142,10 +155,8 @@ export default function CloseOrder({ session, totals }) {
             <Formik
                 initialValues={initialValues}
                 onSubmit={(values) => {
-                    console.log(totals)
                     /* Se for 'retirada na loja' não vai ser setado formad e pagamento(pgt_forma) */
                     if (values.pgt_metodo == 'retirada') delete values.pgt_forma
-                    values.vlr_frete = moneyMask(Math.round(session.distancia_km * store.percentual_frete))
 
                     setCookie(null, "myCartPayment", JSON.stringify(values), {
                         maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
@@ -156,6 +167,13 @@ export default function CloseOrder({ session, totals }) {
             >
                 {({ values }) => (
                     <Form data="form" action="">
+                        <BtnConfirmSC>
+                            <div data='yes-border'>
+                                <button type="submit">
+                                    Continuar
+                                </button >
+                            </div>
+                        </BtnConfirmSC>
                         <CloseOrderSC>
                             <div>
                                 <div data="resume">
@@ -176,7 +194,7 @@ export default function CloseOrder({ session, totals }) {
                                                 <td data="total-td">Valor de Frete:</td>
                                                 {/* Arredonda o valor do frete para inteiro */}
                                                 {values.pgt_metodo == 'frete' ?
-                                                    <td data="td-value-total">{moneyMask(Math.round(session.distancia_km * store.percentual_frete))}</td>
+                                                    <td data="td-value-total">{moneyMask(totals.vlr_frete)}</td>
                                                     :
                                                     <td data="td-value-total">{moneyMask(0.00)}</td>
                                                 }
@@ -232,7 +250,7 @@ export default function CloseOrder({ session, totals }) {
                         }
 
                         <BtnConfirmSC>
-                            <div data='close'>
+                            <div data='no-border'>
                                 <button type="submit">
                                     Continuar
                                 </button >
@@ -247,40 +265,41 @@ export default function CloseOrder({ session, totals }) {
 
 export async function getServerSideProps(context) {
     const { myCartId } = parseCookies(context);
+
+    /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
-    /* Valida se tem algum campo importante pendente */
-    let valid = true;
-    if (!session) valid = false
-    if (!session || !session.email) valid = false
-    if (!session || !session.contato) valid = false
-    if (!session || !session.nome) valid = false
-    if (!session || !session.email_auth) valid = false
-    if (!session || !session.cep) valid = false
-
-    if (!valid) {
-        /* Se não tiver logando, redireciona para home */
-        if (!session) {
-            return {
-                redirect: {
-                    destination: "/login",
-                    permanent: false
-                }
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false
             }
-        } else {
-            /* Redireciona para tela de preenchimento do usuario */
-            return {
-                redirect: {
-                    destination: "/conta/meusdados",
-                    permanent: false
-                }
+        }
+    }
+    const userAuth = await userIsAuth(session)
+    if (!userAuth) {
+        return {
+            redirect: {
+                destination: "/conta/meusdados",
+                permanent: false
             }
         }
     }
 
-    const data = await getCartTemp(myCartId)
+    /* Se não tiver setado redireciona para tela home */
+    if (!myCartId) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
 
-    /* Se não tiver setado redireciona para tela home*/
+    const data = await getCartTemp(myCartId, session.id)
+
+    /* Se não tiver setado redireciona para tela home */
     if (!data || !data.totals) {
         return {
             redirect: {

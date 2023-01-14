@@ -29,12 +29,12 @@ const BtnConfirmSC = styled.div`
             font-family: ${({ theme }) => theme.font.family.medium};
         }          
     }
-    [data='close']{
+    [data='yes-border']{
         padding: 0.7rem 1rem;
         border-top: 0.1rem solid #e7e7e7;
         border-bottom: 0.1rem solid #e7e7e7;
         display: flex;
-        a{   
+        a, button{   
             display: flex;
             align-items: center;
             justify-content: center;
@@ -42,7 +42,23 @@ const BtnConfirmSC = styled.div`
             font-size: 1.15rem;
             flex: 1;
             background: #FFD814;
-            border: solid 2px #FCD200;
+            border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+        }
+    }
+    [data='no-border']{
+        margin-top: 1rem;
+        padding: 0.7rem 1rem;
+        display: flex;
+        a, button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            flex: 1;
+            background: #FFD814;
+            border:solid 2px #FCD200;
             border-radius: 0.45rem;
         }
     }
@@ -83,7 +99,7 @@ export default function Cart() {
                         <div data='subtotal'>
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
                         </div>
-                        <div data='close'>
+                        <div data='yes-border'>
                             <Link href="carrinho/fechar">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
@@ -111,6 +127,16 @@ export default function Cart() {
                         </>
                     }
                 </SectionProductSC>
+
+                {products && products.length > 5 && (
+                    <BtnConfirmSC>
+                        <div data='no-border'>
+                            <Link href="carrinho/fechar">
+                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                            </Link>
+                        </div>
+                    </BtnConfirmSC>
+                )}
             </div>
         </>
     )

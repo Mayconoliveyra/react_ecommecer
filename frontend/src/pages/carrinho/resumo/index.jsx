@@ -1,4 +1,5 @@
 import { parseCookies } from "nookies";
+import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from "styled-components"
@@ -7,14 +8,31 @@ import { CardPayment } from "../../../components/card/cardPayment"
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp } from '../../api/cart';
+import { userIsAuth } from "../../api/auth";
 
 const BtnConfirmSC = styled.div`
-    [data='close']{
+    [data='yes-border']{
         padding: 0.7rem 1rem;
         border-top: 0.1rem solid #e7e7e7;
         border-bottom: 0.1rem solid #e7e7e7;
         display: flex;
-        a{   
+        a, button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            flex: 1;
+            background: #FFD814;
+            border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+        }
+    }
+    [data='no-border']{
+        margin-top: 1rem;
+        padding: 0.7rem 1rem;
+        display: flex;
+        a, button{   
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,15 +211,13 @@ export default function Resume({ products, totals, payment }) {
                 <title>Confirmar pedido</title>
             </Head>
             <div>
-                {products && products.length > 0 && (
-                    <BtnConfirmSC>
-                        <div data='close'>
-                            <Link href="/">
-                                Confirmar pedido
-                            </Link>
-                        </div>
-                    </BtnConfirmSC>
-                )}
+                <BtnConfirmSC>
+                    <div data='yes-border'>
+                        <Link href="/">
+                            Confirmar pedido
+                        </Link>
+                    </div>
+                </BtnConfirmSC>
                 <PaymentValueSC>
                     <div>
                         <div data="resume">
@@ -300,6 +316,14 @@ export default function Resume({ products, totals, payment }) {
                         </>
                     }
                 </SectionProductSC>
+
+                <BtnConfirmSC>
+                    <div data='no-border'>
+                        <button type="button">
+                            Confirmar pedido
+                        </button >
+                    </div>
+                </BtnConfirmSC>
             </div>
         </>
 
@@ -310,8 +334,39 @@ export async function getServerSideProps(context) {
     const { myCartId, myCartPayment } = parseCookies(context);
     const data = await getCartTemp(myCartId)
 
+    /* SESSSÃO USUARIO LOGADO */
+    const req = context.req
+    const session = await getSession({ req })
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false
+            }
+        }
+    }
+    const userAuth = await userIsAuth(session)
+    if (!userAuth) {
+        return {
+            redirect: {
+                destination: "/conta/meusdados",
+                permanent: false
+            }
+        }
+    }
+
     /* Se myCartPayment tiver null, significa que nao foi preenchido ou foi expirado(1m). */
     if (!myCartPayment) {
+        return {
+            redirect: {
+                destination: "/carrinho",
+                permanent: false
+            }
+        }
+    }
+
+    /* Se não tiver setado redireciona */
+    if (!myCartId) {
         return {
             redirect: {
                 destination: "/carrinho",

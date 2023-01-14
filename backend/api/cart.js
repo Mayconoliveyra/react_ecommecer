@@ -3,6 +3,7 @@ module.exports = (app) => {
 
     const getCartTemp = async (req, res) => {
         const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
+        const id_user = Number(req.query.id_user); /* ID do usuario. */
 
         try {
             existOrError(id, "[id] id_storage não pode ser nulo.")
@@ -49,6 +50,14 @@ module.exports = (app) => {
             AND ((products.disabled)=FALSE) 
             AND ((temp_cart.id_storage)='${id}'));
             `)
+
+            /* Seta o valor de frete */
+            if (id_user && products[0].length > 0) {
+                const store = app.store
+                const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
+                existOrError(user, "[user] não foi encontrado.")
+                totals[0][0].vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
+            }
 
             res.json({ products: products[0], totals: totals[0][0] })
         } catch (error) {
