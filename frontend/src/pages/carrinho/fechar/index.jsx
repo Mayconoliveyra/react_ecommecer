@@ -1,16 +1,14 @@
+import { parseCookies, setCookie } from "nookies";
 import Head from 'next/head';
 import { getSession } from "next-auth/react"
 import { useContext } from 'react';
-import Link from 'next/link';
+import router from "next/router"
 import styled from "styled-components"
-import * as Yup from "yup";
-import { pt } from "yup-locale-pt";
-Yup.setLocale(pt);
 import { Formik, Form, Field } from 'formik';
 
 import { moneyMask } from '../../../../masks';
+import { getCartTemp } from "../../api/cart";
 
-import MyCartContext from "../../../context/myCart"
 import StoreContext from "../../../context/store"
 
 const BtnConfirmSC = styled.div`
@@ -18,7 +16,7 @@ const BtnConfirmSC = styled.div`
         margin-top: 1rem;
         padding: 0.7rem 1rem;
         display: flex;
-        a{   
+        button{   
             display: flex;
             align-items: center;
             justify-content: center;
@@ -127,17 +125,12 @@ const GroupSC = styled.li`
         }
 `
 
-export default function CloseOrder({ data }) {
+export default function CloseOrder({ session, totals }) {
     const store = useContext(StoreContext)
-    const { myCart: { products, totals } } = useContext(MyCartContext)
-
-    const scheme = Yup.object().shape({
-        email: Yup.string().email().label("E-mail").required()
-    });
 
     const initialValues = {
-        method: 'frete',
-        payment: 'pix'
+        pgt_metodo: 'frete',
+        pgt_forma: 'pix'
     }
 
     return (
@@ -147,10 +140,18 @@ export default function CloseOrder({ data }) {
             </Head>
 
             <Formik
-                validationSchema={scheme}
                 initialValues={initialValues}
                 onSubmit={(values) => {
-                    console.log(values)
+                    console.log(totals)
+                    /* Se for 'retirada na loja' não vai ser setado formad e pagamento(pgt_forma) */
+                    if (values.pgt_metodo == 'retirada') delete values.pgt_forma
+                    values.vlr_frete = moneyMask(Math.round(session.distancia_km * store.percentual_frete))
+
+                    setCookie(null, "myCartPayment", JSON.stringify(values), {
+                        maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
+                        path: "/"
+                    });
+                    router.push("/carrinho/resumo")
                 }}
             >
                 {({ values }) => (
@@ -174,8 +175,8 @@ export default function CloseOrder({ data }) {
                                             <tr>
                                                 <td data="total-td">Valor de Frete:</td>
                                                 {/* Arredonda o valor do frete para inteiro */}
-                                                {values.method == 'frete' ?
-                                                    <td data="td-value-total">{moneyMask(Math.round(data.distancia_km * store.percentual_frete))}</td>
+                                                {values.pgt_metodo == 'frete' ?
+                                                    <td data="td-value-total">{moneyMask(Math.round(session.distancia_km * store.percentual_frete))}</td>
                                                     :
                                                     <td data="td-value-total">{moneyMask(0.00)}</td>
                                                 }
@@ -193,18 +194,18 @@ export default function CloseOrder({ data }) {
                                 <div data="ul-li" role="group-method">
                                     <ul>
                                         <GroupSC>
-                                            <Field name="method" type="radio" id="frete" value="frete" />
+                                            <Field name="pgt_metodo" type="radio" id="frete" value="frete" />
                                             <label htmlFor="frete">Receber em casa(Frete)</label>
                                         </GroupSC>
                                         <GroupSC>
-                                            <Field name="method" type="radio" id="retirada" value="retirada" />
+                                            <Field name="pgt_metodo" type="radio" id="retirada" value="retirada" />
                                             <label htmlFor="retirada">Retirada na loja</label>
                                         </GroupSC>
                                     </ul>
                                 </div>
                             </div>
                         </MetodoEntegraSC>
-                        {values.method == 'frete' &&
+                        {values.pgt_metodo == 'frete' &&
                             <MetodoEntegraSC>
                                 <div>
                                     <div data="metodo-entrega">
@@ -213,15 +214,15 @@ export default function CloseOrder({ data }) {
                                     <div data="ul-li" role="group-payment">
                                         <ul>
                                             <GroupSC>
-                                                <Field name="payment" type="radio" id="pix" value="pix" />
+                                                <Field name="pgt_forma" type="radio" id="pix" value="pix" />
                                                 <label htmlFor="pix">PIX</label>
                                             </GroupSC>
                                             <GroupSC>
-                                                <Field name="payment" type="radio" id="cartao" value="cartao" />
+                                                <Field name="pgt_forma" type="radio" id="cartao" value="cartao" />
                                                 <label htmlFor="cartao">Cartão</label>
                                             </GroupSC>
                                             <GroupSC>
-                                                <Field name="payment" type="radio" id="entrega" value="entrega" />
+                                                <Field name="pgt_forma" type="radio" id="entrega" value="entrega" />
                                                 <label htmlFor="entrega">Pagar na entrega</label>
                                             </GroupSC>
                                         </ul>
@@ -232,9 +233,9 @@ export default function CloseOrder({ data }) {
 
                         <BtnConfirmSC>
                             <div data='close'>
-                                <Link href="/carrinho/resumo">
+                                <button type="submit">
                                     Continuar
-                                </Link>
+                                </button >
                             </div>
                         </BtnConfirmSC>
                     </Form>
@@ -244,7 +245,9 @@ export default function CloseOrder({ data }) {
     )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps(context) {
+    const { myCartId } = parseCookies(context);
+    const req = context.req
     const session = await getSession({ req })
     /* Valida se tem algum campo importante pendente */
     let valid = true;
@@ -275,7 +278,19 @@ export async function getServerSideProps({ req }) {
         }
     }
 
+    const data = await getCartTemp(myCartId)
+
+    /* Se não tiver setado redireciona para tela home*/
+    if (!data || !data.totals) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+
     return {
-        props: { data: session },
+        props: { session: session, totals: data.totals },
     }
 }

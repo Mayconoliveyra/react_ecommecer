@@ -1,3 +1,4 @@
+import { parseCookies } from "nookies";
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
@@ -71,6 +72,7 @@ export const BtnsIncrementer = ({ product }) => {
     const { setMyCart } = useContext(MyCartContext)
     const refQuantity = useRef();
     const [quantity, setQuantity] = useState(product.quantity)
+    const { myCartId } = parseCookies();
 
     const handleQuantity = async (newValue) => {
         /* newValue é utilizado nos botoes + e - */
@@ -86,13 +88,13 @@ export const BtnsIncrementer = ({ product }) => {
 
     const handleRemoveProduct = async (id) => {
         /* Para remover o produto do carrinho basta enviar o id com a quantiade 0 */
-        await storeQuantity(id, 0)
-        await setMyCart(await getCartTemp())
+        await storeQuantity(id, 0, myCartId)
+        await setMyCart(await getCartTemp(myCartId))
     }
 
     const handleAddMyCart = async (id, quantity) => {
-        await storeQuantity(id, quantity)
-        await setMyCart(await getCartTemp())
+        await storeQuantity(id, quantity, myCartId)
+        await setMyCart(await getCartTemp(myCartId))
     }
 
     return (

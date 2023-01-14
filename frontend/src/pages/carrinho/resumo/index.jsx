@@ -1,3 +1,4 @@
+import { parseCookies } from "nookies";
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from "styled-components"
@@ -185,9 +186,7 @@ const SectionProductSC = styled.div`
         }
     }
 `
-export default function Resume({ data }) {
-    const { products, totals } = data
-
+export default function Resume({ products, totals, payment }) {
     return (
         <>
             <Head>
@@ -198,7 +197,7 @@ export default function Resume({ data }) {
                     <BtnConfirmSC>
                         <div data='close'>
                             <Link href="/">
-                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                                Confirmar pedido
                             </Link>
                         </div>
                     </BtnConfirmSC>
@@ -307,17 +306,31 @@ export default function Resume({ data }) {
     )
 }
 
-export async function getServerSideProps(req) {
-    console.log(req)
-    const data = await getCartTemp('1671727195144-1102939')
-    console.log(data)
-    if (!data) {
+export async function getServerSideProps(context) {
+    const { myCartId, myCartPayment } = parseCookies(context);
+    const data = await getCartTemp(myCartId)
+
+    /* Se myCartPayment tiver null, significa que nao foi preenchido ou foi expirado(1m). */
+    if (!myCartPayment) {
         return {
-            notFound: true,
+            redirect: {
+                destination: "/carrinho",
+                permanent: false
+            }
+        }
+    }
+
+    /* Se não tiver setado redireciona para tela home*/
+    if (!data || !data.totals || !data.products) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
         }
     }
 
     return {
-        props: { data },
+        props: { products: data.products, totals: data.totals, payment: JSON.parse(myCartPayment) },
     }
 }

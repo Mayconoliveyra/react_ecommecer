@@ -1,3 +1,4 @@
+import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useContext, useRef, useState } from "react";
@@ -144,6 +145,7 @@ export default function Product({ data }) {
     const refQuantity = useRef();
     const [quantity, setQuantity] = useState(1)
     const router = useRouter()
+    const { myCartId } = parseCookies();
 
     const handleQuantity = (newValue) => {
         /* newValue é utilizado nos botoes + e - */
@@ -154,8 +156,8 @@ export default function Product({ data }) {
     }
 
     const handleAddMyCart = async (id, quantity) => {
-        await storeQuantity(id, quantity)
-        await setMyCart(await getCartTemp())
+        await storeQuantity(id, quantity, myCartId)
+        await setMyCart(await getCartTemp(myCartId))
         router.push("/")
     }
 

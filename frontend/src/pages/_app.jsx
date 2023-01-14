@@ -1,3 +1,4 @@
+import { parseCookies, setCookie } from "nookies";
 import { GlobalStyles } from "../styles/global-styles"
 import { ThemeProvider } from "styled-components"
 import { ToastContainer } from "react-toastify";
@@ -26,6 +27,8 @@ export default function MyApp({ Component, pageProps }) {
   const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
+  const { myCartId } = parseCookies();
+  const teste = parseCookies();
 
   useEffect(() => {
     handleStore();
@@ -65,9 +68,18 @@ export default function MyApp({ Component, pageProps }) {
     setStore(await getStore())
   }
   const handleMyCart = async () => {
-    const now = `${Date.now()}-${(Math.random() * (9999999 - 1000000) + 1000000).toFixed()}`
-    if (!localStorage.getItem("myCartId")) localStorage.setItem('myCartId', JSON.stringify(now))
-    setMyCart(await getCartTemp())
+    console.log("COOKIES[_APP]")
+    console.log(teste)
+    /*Verifica se id_storage está setado. So carrega o carrinh se tiver id. */
+    if (!myCartId) {
+      const now = `${Date.now()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}`
+      setCookie(null, "myCartId", now, {
+        maxAge: 60 * 60 * 24 * 30,  /* EXPIRA EM 30 DIAS. "seg * min * hrs * dias" */
+        path: "/"
+      });
+    } else {
+      setMyCart(await getCartTemp(myCartId))
+    }
   }
 
   return (

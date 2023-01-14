@@ -38,7 +38,10 @@ module.exports = (app) => {
             Sum(If(promotion=True,price_promotion*quantity,price*quantity)) AS vlr_pagar_products, 
             Sum(temp_cart.quantity) AS qtd_products, Sum(price*quantity) AS vlr_products, 
             Sum(price_promotion*quantity) AS vlr_products_promotion, 
-            Sum(If(promotion=True,price*quantity-price_promotion*quantity,0)) AS vlr_diferenca_promotion
+            Sum(If(promotion=True,price*quantity-price_promotion*quantity,0)) AS vlr_diferenca_promotion, 
+            NULL  AS pgt_metodo, 
+            NULL AS pgt_forma,  
+            0.00 AS vlr_frete  
             FROM temp_cart 
             INNER JOIN products ON temp_cart.id_product = products.id
             GROUP BY products.deleted_at, products.disabled, temp_cart.id_storage

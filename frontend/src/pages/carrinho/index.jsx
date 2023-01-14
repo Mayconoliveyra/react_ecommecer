@@ -113,6 +113,5 @@ export default function Cart() {
                 </SectionProductSC>
             </div>
         </>
-
     )
 }
