@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { getSession } from "next-auth/react"
 import router from "next/router"
 import styled from "styled-components"
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp } from "../../api/cart";
@@ -100,6 +100,8 @@ const MetodoEntegraSC = styled.div`
     padding: 0 0.7rem;
     >div{
         color: #0F1111;
+        border:${({ error }) => error && "solid 1px #d00"};
+        box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
         [data="metodo-entrega"]{
             border: 1px #D5D9D9 solid;
             border-radius: 0.3rem 0.3rem 0 0;
@@ -119,6 +121,17 @@ const MetodoEntegraSC = styled.div`
                     padding:1.2rem;
                     border: 1px #D5D9D9 solid;
                 }
+            }
+        }
+        [data="error"]{
+            text-align: center;
+            font-size: 1.3rem;
+            color: #e72626;
+            margin-top: 0.0rem;
+            padding: 0.6rem;
+            small{
+                padding: 0px;
+                margin: 0px;
             }
         }
     }
@@ -142,8 +155,8 @@ const GroupSC = styled.li`
 
 export default function CloseOrder({ totals }) {
     const initialValues = {
-        pgt_metodo: 'frete',
-        pgt_forma: 'pix'
+        pgt_metodo: 'Receber em casa(Frete)',
+        pgt_forma: 'PIX'
     }
 
     return (
@@ -154,18 +167,19 @@ export default function CloseOrder({ totals }) {
 
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values) => {
-                    /* Se for 'retirada na loja' não vai ser setado formad e pagamento(pgt_forma) */
-                    if (values.pgt_metodo == 'retirada') delete values.pgt_forma
-
-                    setCookie(null, "myCartPayment", JSON.stringify(values), {
-                        maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
-                        path: "/"
-                    });
-                    router.push("/carrinho/resumo")
+                onSubmit={(values, setValues) => {
+                    if (values.pgt_metodo == "Retirada na loja" && values.pgt_forma == "Pagar na entrega") {
+                        setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
+                    } else {
+                        setCookie(null, "myCartPayment", JSON.stringify(values), {
+                            maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
+                            path: "/"
+                        });
+                        router.push("/carrinho/resumo")
+                    }
                 }}
             >
-                {({ values }) => (
+                {({ values, errors }) => (
                     <Form data="form" action="">
                         <BtnConfirmSC>
                             <div data='yes-border'>
@@ -192,8 +206,7 @@ export default function CloseOrder({ totals }) {
                                             </tr>
                                             <tr>
                                                 <td data="total-td">Valor de Frete:</td>
-                                                {/* Arredonda o valor do frete para inteiro */}
-                                                {values.pgt_metodo == 'frete' ?
+                                                {values.pgt_metodo == "Receber em casa(Frete)" ?
                                                     <td data="td-value-total">{moneyMask(totals.vlr_frete)}</td>
                                                     :
                                                     <td data="td-value-total">{moneyMask(0.00)}</td>
@@ -212,42 +225,52 @@ export default function CloseOrder({ totals }) {
                                 <div data="ul-li" role="group-method">
                                     <ul>
                                         <GroupSC>
-                                            <Field name="pgt_metodo" type="radio" id="frete" value="frete" />
+                                            <Field name="pgt_metodo" type="radio" id="frete" value="Receber em casa(Frete)" />
                                             <label htmlFor="frete">Receber em casa(Frete)</label>
                                         </GroupSC>
                                         <GroupSC>
-                                            <Field name="pgt_metodo" type="radio" id="retirada" value="retirada" />
+                                            <Field name="pgt_metodo" type="radio" id="retirada" value="Retirada na loja" />
                                             <label htmlFor="retirada">Retirada na loja</label>
                                         </GroupSC>
                                     </ul>
                                 </div>
                             </div>
                         </MetodoEntegraSC>
-                        {values.pgt_metodo == 'frete' &&
-                            <MetodoEntegraSC>
-                                <div>
-                                    <div data="metodo-entrega">
-                                        <h4>Forma de pagamento</h4>
-                                    </div>
-                                    <div data="ul-li" role="group-payment">
-                                        <ul>
-                                            <GroupSC>
-                                                <Field name="pgt_forma" type="radio" id="pix" value="pix" />
-                                                <label htmlFor="pix">PIX</label>
-                                            </GroupSC>
-                                            <GroupSC>
-                                                <Field name="pgt_forma" type="radio" id="cartao" value="cartao" />
-                                                <label htmlFor="cartao">Cartão</label>
-                                            </GroupSC>
-                                            <GroupSC>
-                                                <Field name="pgt_forma" type="radio" id="entrega" value="entrega" />
-                                                <label htmlFor="entrega">Pagar na entrega</label>
-                                            </GroupSC>
-                                        </ul>
-                                    </div>
+
+                        <MetodoEntegraSC error={!!errors.pgt_forma}>
+                            <div>
+                                <div data="metodo-entrega">
+                                    <h4>Forma de pagamento</h4>
                                 </div>
-                            </MetodoEntegraSC>
-                        }
+                                <div data="ul-li" role="group-payment">
+                                    <ul>
+                                        <GroupSC>
+                                            <Field name="pgt_forma" type="radio" id="pix" value="PIX" />
+                                            <label htmlFor="pix">PIX</label>
+                                        </GroupSC>
+                                        <GroupSC>
+                                            <Field name="pgt_forma" type="radio" id="cartao" value="Cartão" />
+                                            <label htmlFor="cartao">Cartão</label>
+                                        </GroupSC>
+                                        <GroupSC>
+                                            <Field name="pgt_forma" type="radio" id="p_entrega" value="Pagar na loja" />
+                                            <label htmlFor="p_entrega">Pagar na loja</label>
+                                        </GroupSC>
+                                        {values.pgt_metodo == "Receber em casa(Frete)" &&
+                                            <GroupSC>
+                                                <Field name="pgt_forma" type="radio" id="p_loja" value="Pagar na entrega" />
+                                                <label htmlFor="p_loja">Pagar na entrega</label>
+                                            </GroupSC>
+                                        }
+                                    </ul>
+                                </div>
+                                <div data="error">
+                                    <small>
+                                        <ErrorMessage name="pgt_forma" />
+                                    </small>
+                                </div>
+                            </div>
+                        </MetodoEntegraSC>
 
                         <BtnConfirmSC>
                             <div data='no-border'>

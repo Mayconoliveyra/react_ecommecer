@@ -98,7 +98,6 @@ const PaymentValueSC = styled.div`
     }
 `
 const DeliveryAddresSC = styled.div`
-    /* border:solid 1px red; */
     margin: 1rem 0;
     padding: 0 0.7rem;
     >div{
@@ -204,7 +203,7 @@ const SectionProductSC = styled.div`
         }
     }
 `
-export default function Resume({ products, totals, payment }) {
+export default function Resume({ session, products, totals, payment }) {
     return (
         <>
             <Head>
@@ -230,16 +229,30 @@ export default function Resume({ products, totals, payment }) {
                                         <td>Itens:</td>
                                         <td data="td-value">{moneyMask(totals.vlr_pagar_products)}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Frete:</td>
-                                        <td data="td-value">R$ 14,55 temp</td>
-                                    </tr>
-                                    <tr>
-                                        <td data="total-td">Total do pedido:</td>
-                                        <td data="td-value-total">{moneyMask(totals.vlr_pagar_products)}</td>
-                                    </tr>
+                                    {payment.pgt_metodo == "Receber em casa(Frete)" ?
+                                        <>
+                                            <tr>
+                                                <td>Frete:</td>
+                                                <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td data="total-td">Total do pedido:</td>
+                                                <td data="td-value-total">{moneyMask(totals.vlr_pagar_com_frete)}</td>
+                                            </tr>
+                                        </>
+                                        :
+                                        <>
+                                            <tr>
+                                                <td>Frete:</td>
+                                                <td data="td-value">{moneyMask(0.00)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td data="total-td">Total do pedido:</td>
+                                                <td data="td-value-total">{moneyMask(totals.vlr_pagar_sem_frete)}</td>
+                                            </tr>
+                                        </>
+                                    }
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -252,34 +265,46 @@ export default function Resume({ products, totals, payment }) {
                         <div data="table-values">
                             <table>
                                 <tbody>
-                                    <tr>
-                                        <td data="name-user">Maycon Deyvid Brito de Oliveira</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Rua Empresário Paulo Miranda D`Oliveira
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            168
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Loja Cazimi Construção
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            João Pessoa, PB, 58046520
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Telefone: 999675920
-                                        </td>
-                                    </tr>
+                                    {payment.pgt_metodo == "Receber em casa(Frete)" ?
+                                        <>
+                                            <tr>
+                                                <td data="name-user">{session.nome}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    {session.logradouro}
+                                                </td>
+                                            </tr>
+                                            {session.numero &&
+                                                <tr>
+                                                    <td>
+                                                        {session.numero}
+                                                    </td>
+                                                </tr>
+                                            }
+                                            {session.complemento &&
+                                                <tr>
+                                                    <td>
+                                                        {session.complemento}
+                                                    </td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td>
+                                                    {session.localidade}, {session.uf}, {session.cep}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Contato: {session.contato}
+                                                </td>
+                                            </tr>
+                                        </>
+                                        :
+                                        <tr>
+                                            <td>{payment.pgt_metodo}</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -291,6 +316,16 @@ export default function Resume({ products, totals, payment }) {
                             <h4>Informações de pagamento</h4>
                         </div>
                         <div data="table-values">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td data="name-user">Forma de pagamento</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{payment.pgt_forma}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>
@@ -332,7 +367,6 @@ export default function Resume({ products, totals, payment }) {
 
 export async function getServerSideProps(context) {
     const { myCartId, myCartPayment } = parseCookies(context);
-    const data = await getCartTemp(myCartId)
 
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
@@ -375,6 +409,8 @@ export async function getServerSideProps(context) {
         }
     }
 
+    const data = await getCartTemp(myCartId, session.id)
+
     /* Se não tiver setado redireciona para tela home*/
     if (!data || !data.totals || !data.products) {
         return {
@@ -386,6 +422,6 @@ export async function getServerSideProps(context) {
     }
 
     return {
-        props: { products: data.products, totals: data.totals, payment: JSON.parse(myCartPayment) },
+        props: { session: session, products: data.products, totals: data.totals, payment: JSON.parse(myCartPayment) },
     }
 }

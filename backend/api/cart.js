@@ -12,7 +12,6 @@ module.exports = (app) => {
             return res.status(400).send(error)
         }
 
-
         try {
             const products = await app.db.raw(`
             SELECT 
@@ -42,7 +41,8 @@ module.exports = (app) => {
             Sum(If(promotion=True,price*quantity-price_promotion*quantity,0)) AS vlr_diferenca_promotion, 
             NULL  AS pgt_metodo, 
             NULL AS pgt_forma,  
-            0.00 AS vlr_frete  
+            0.00 AS vlr_frete, 
+            0.00 AS vlr_pagar  
             FROM temp_cart 
             INNER JOIN products ON temp_cart.id_product = products.id
             GROUP BY products.deleted_at, products.disabled, temp_cart.id_storage
@@ -57,6 +57,8 @@ module.exports = (app) => {
                 const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
                 totals[0][0].vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
+                totals[0][0].vlr_pagar_com_frete = totals[0][0].vlr_pagar_products + Math.round(user.distancia_km * store.percentual_frete)
+                totals[0][0].vlr_pagar_sem_frete = totals[0][0].vlr_pagar_products
             }
 
             res.json({ products: products[0], totals: totals[0][0] })
