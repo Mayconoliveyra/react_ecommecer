@@ -39,11 +39,11 @@ export default function MyApp({ Component, pageProps }) {
       case '/login':
       case '/carrinho':
       case '/carrinho/fechar':
-      case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
       case '/conta/meusdados':
       case '/conta/recuperar':
+      case '/conta/endereco':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false })
         break;
       case '/produto/[id]':

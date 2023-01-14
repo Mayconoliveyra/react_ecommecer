@@ -62,6 +62,7 @@ module.exports = app => {
                                 email: user.email,
                                 contato: user.contato,
                                 cep: user.cep,
+                                email_auth: user.email_auth,
 
                                 logradouro: user.logradouro,
                                 numero: user.numero,
@@ -104,6 +105,10 @@ module.exports = app => {
                                 sendEmail({ email: user.email, body: generateTokenAuth(user), template: 'AUTHENTICATION' });
                                 return res.status(400).send({ 400: 'Caro cliente, seu cadastro está pendente de autenticação. Por favor, acesse seu email e verifique sua caixa de entrada e spam.' })
                         }
+
+                        if (!user.senha) {
+                                return res.status(400).send({ 400: 'Caro cliente, identificamos que o seu cadastro não foi realizado a configuração da senha, isso ocorre quando o login é feito através do Facebook ou Google. Para progredir com o login utilizando email e senha, utilize a opção "Esqueceu a senha?".' })
+                        }
                 } catch (error) {
                         utility_console("signin", error);
                         return res.status(400).send(error)
@@ -121,6 +126,7 @@ module.exports = app => {
                                 email: user.email,
                                 contato: user.contato,
                                 cep: user.cep,
+                                email_auth: user.email_auth,
 
                                 logradouro: user.logradouro,
                                 numero: user.numero,

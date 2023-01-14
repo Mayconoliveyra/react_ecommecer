@@ -19,6 +19,8 @@ const GroupSC = styled.div`
         border: 0.1rem solid #a6a6a6;
         box-shadow: 0 0.1rem 0 rgb(0 0 0 / 7%) inset;
         border-radius: 0.2rem;
+
+        /* PARAMENTRO 'error' */
         border-color:${({ error }) => error && "#d00"};
         box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
         input{

@@ -21,7 +21,7 @@ const BtnConfirmSC = styled.div`
             font-size: 1.15rem;
             flex: 1;
             background: #FFD814;
-            border-color: #FCD200;
+            border:solid 2px #FCD200;
             border-radius: 0.45rem;
         }
     }

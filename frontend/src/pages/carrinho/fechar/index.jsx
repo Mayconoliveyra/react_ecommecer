@@ -3,6 +3,10 @@ import { getSession } from "next-auth/react"
 import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
+import * as Yup from "yup";
+import { pt } from "yup-locale-pt";
+Yup.setLocale(pt);
+import { Formik, Form, Field } from 'formik';
 
 import { moneyMask } from '../../../../masks';
 
@@ -11,9 +15,8 @@ import StoreContext from "../../../context/store"
 
 const BtnConfirmSC = styled.div`
     [data='close']{
+        margin-top: 1rem;
         padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
-        border-bottom: 0.1rem solid #e7e7e7;
         display: flex;
         a{   
             display: flex;
@@ -23,7 +26,7 @@ const BtnConfirmSC = styled.div`
             font-size: 1.15rem;
             flex: 1;
             background: #FFD814;
-            border-color: #FCD200;
+            border:solid 2px #FCD200;
             border-radius: 0.45rem;
         }
     }
@@ -102,113 +105,141 @@ const MetodoEntegraSC = styled.div`
                     align-items: center;
                     padding:1.2rem;
                     border: 1px #D5D9D9 solid;
-                    input{
-                        width:2rem;
-                        height:2rem;
-                        margin-right: 1rem;
-                    }
-                    label{
-                        font-size: 1.2rem;
-                        width: 100%;
-                    }
                 }
             }
-           
         }
     }
+`
+const GroupSC = styled.li`
+    display: flex;
+    align-items: center;
+    padding: 0 1.2rem !important;
+    border: 1px #D5D9D9 solid;
+        input{
+            width:2rem;
+            height:2rem;
+            margin-right: 1rem;
+        }
+        label{
+            font-size: 1.2rem;
+            flex:1;
+            padding:1.2rem;
+        }
 `
 
 export default function CloseOrder({ data }) {
     const store = useContext(StoreContext)
     const { myCart: { products, totals } } = useContext(MyCartContext)
 
+    const scheme = Yup.object().shape({
+        email: Yup.string().email().label("E-mail").required()
+    });
+
+    const initialValues = {
+        method: 'frete',
+        payment: 'pix'
+    }
+
     return (
         <>
             <Head>
-                <title>Confirmar pedido</title>
+                <title>Método de Entrega e Pagamento</title>
             </Head>
-            <div>
-                {products && products.length > 0 && (
-                    <BtnConfirmSC>
-                        <div data='close'>
-                            <Link href="/">
-                                Fechar pedido ({totals && totals.qtd_products} {totals && totals.qtd_products == 1 ? 'Item' : "Itens"})
-                            </Link>
-                        </div>
-                    </BtnConfirmSC>
+
+            <Formik
+                validationSchema={scheme}
+                initialValues={initialValues}
+                onSubmit={(values) => {
+                    console.log(values)
+                }}
+            >
+                {({ values }) => (
+                    <Form data="form" action="">
+                        <CloseOrderSC>
+                            <div>
+                                <div data="resume">
+                                    <h4>Resumo</h4>
+                                </div>
+                                <div data="table-values">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Quantidade:</td>
+                                                <td data="td-value">{totals && totals.qtd_products}</td>
+                                            </tr>
+                                            <tr>
+                                                <td data="total-td">Total dos produtos:</td>
+                                                <td data="td-value-total">{moneyMask(totals && totals.vlr_pagar_products)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td data="total-td">Valor de Frete:</td>
+                                                {/* Arredonda o valor do frete para inteiro */}
+                                                {values.method == 'frete' ?
+                                                    <td data="td-value-total">{moneyMask(Math.round(data.distancia_km * store.percentual_frete))}</td>
+                                                    :
+                                                    <td data="td-value-total">{moneyMask(0.00)}</td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </CloseOrderSC>
+                        <MetodoEntegraSC>
+                            <div>
+                                <div data="metodo-entrega">
+                                    <h4>Método de entrega</h4>
+                                </div>
+                                <div data="ul-li" role="group-method">
+                                    <ul>
+                                        <GroupSC>
+                                            <Field name="method" type="radio" id="frete" value="frete" />
+                                            <label htmlFor="frete">Receber em casa(Frete)</label>
+                                        </GroupSC>
+                                        <GroupSC>
+                                            <Field name="method" type="radio" id="retirada" value="retirada" />
+                                            <label htmlFor="retirada">Retirada na loja</label>
+                                        </GroupSC>
+                                    </ul>
+                                </div>
+                            </div>
+                        </MetodoEntegraSC>
+                        {values.method == 'frete' &&
+                            <MetodoEntegraSC>
+                                <div>
+                                    <div data="metodo-entrega">
+                                        <h4>Forma de pagamento</h4>
+                                    </div>
+                                    <div data="ul-li" role="group-payment">
+                                        <ul>
+                                            <GroupSC>
+                                                <Field name="payment" type="radio" id="pix" value="pix" />
+                                                <label htmlFor="pix">PIX</label>
+                                            </GroupSC>
+                                            <GroupSC>
+                                                <Field name="payment" type="radio" id="cartao" value="cartao" />
+                                                <label htmlFor="cartao">Cartão</label>
+                                            </GroupSC>
+                                            <GroupSC>
+                                                <Field name="payment" type="radio" id="entrega" value="entrega" />
+                                                <label htmlFor="entrega">Pagar na entrega</label>
+                                            </GroupSC>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </MetodoEntegraSC>
+                        }
+
+                        <BtnConfirmSC>
+                            <div data='close'>
+                                <Link href="/carrinho/resumo">
+                                    Continuar
+                                </Link>
+                            </div>
+                        </BtnConfirmSC>
+                    </Form>
                 )}
-                <CloseOrderSC>
-                    <div>
-                        <div data="resume">
-                            <h4>Resumo</h4>
-                        </div>
-                        <div data="table-values">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>Quantidade:</td>
-                                        <td data="td-value">{totals && totals.qtd_products}</td>
-                                    </tr>
-                                    <tr>
-                                        <td data="total-td">Total dos produtos:</td>
-                                        <td data="td-value-total">{moneyMask(totals && totals.vlr_pagar_products)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td data="total-td">Valor de Frete:</td>
-                                        {/* Arredonda o valor do frete para inteiro */}
-                                        <td data="td-value-total">{moneyMask(Math.round(data.distancia_km * store.percentual_frete))}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </CloseOrderSC>
-
-                <MetodoEntegraSC>
-                    <div>
-                        <div data="metodo-entrega">
-                            <h4>Método de entrega</h4>
-                        </div>
-                        <div data="ul-li">
-                            <ul>
-                                <li>
-                                    <input type="radio" id="frete" name="method" value="frete" />
-                                    <label htmlFor="frete">Receber em casa(Frete)</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="retirada" name="method" value="retirada" />
-                                    <label htmlFor="retirada">Retirada na loja</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </MetodoEntegraSC>
-
-                <MetodoEntegraSC>
-                    <div>
-                        <div data="metodo-entrega">
-                            <h4>Forma de pagamento</h4>
-                        </div>
-                        <div data="ul-li">
-                            <ul>
-                                <li>
-                                    <input type="radio" id="entrega" name="payment" value="entrega" />
-                                    <label htmlFor="entrega">Pagar na entrega</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="pix" name="payment" value="pix" />
-                                    <label htmlFor="pix">PIX</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="cartao" name="payment" value="cartao" />
-                                    <label htmlFor="cartao">Cartão</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </MetodoEntegraSC>
-
-            </div>
+            </Formik>
         </>
     )
 }
@@ -221,6 +252,7 @@ export async function getServerSideProps({ req }) {
     if (!session || !session.email) valid = false
     if (!session || !session.contato) valid = false
     if (!session || !session.nome) valid = false
+    if (!session || !session.email_auth) valid = false
     if (!session || !session.cep) valid = false
 
     if (!valid) {

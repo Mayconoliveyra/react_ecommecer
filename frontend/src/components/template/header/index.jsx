@@ -82,8 +82,15 @@ export default function Header() {
 
                     {session && session.id ?
                         <button data="user-login" onClick={() => setTemplate({ ...template, showMenu: false, showMenuLogin: true, showNav: false })}>
-                            {/* Se tiver logado exibe o primeiro nome do usuario */}
-                            <span>{session.nome.split(' ')[0]}</span>  <PersonFillGear />
+                            {session.nome && session.nome != 'Não informado' ?
+                                <>
+                                    <span>{session.nome.split(' ')[0]}</span>  <PersonFillGear />
+                                </>
+                                :
+                                <>
+                                    <span>Não informado</span>  <PersonFillGear />
+                                </>
+                            }
                         </button>
                         :
                         <Link href="/login" data="user-login">
