@@ -127,5 +127,65 @@ module.exports = (app) => {
         }
     };
 
-    return { getCartTemp, saveIncrementer };
+    /* Salvar pedido/ finalizar compra */
+    const savePedido = async (req, res) => {
+        const body = req.body
+        const modelo = {
+            id_storage: body.id_storage,
+            id_product: body.id_product,
+            quantity: body.quantity,
+        }
+
+        try {
+            existOrError(modelo.id_storage, "[id_storage] não pode ser nulo.")
+            existOrError(modelo.id_product, "[id_product] não pode ser nulo.")
+
+            const productDB = await app.db("products").where({ id: modelo.id_product }).first()
+            existOrError(productDB, "[id_product] mercadoria não existe.")
+        } catch (error) {
+            utility_console("cart.saveIncrementer", error)
+            return res.status(400).send(error)
+        }
+
+        const tempCartDB = await app.db("temp_cart")
+            .where({ id_storage: modelo.id_storage })
+            .andWhere({ id_product: modelo.id_product })
+            .first()
+
+        if (tempCartDB) {
+            /* Se a mercadoria ja  ja existir no carrinho e a nova quantidade for 0, eu vou excluir a mercadoria do carrinho */
+            /* Se a quantidade for maior que 0, vou apenas atualizar a quantidade */
+            if (modelo.quantity == 0) {
+                app.db("temp_cart")
+                    .delete(modelo)
+                    .where({ id: tempCartDB.id })
+                    .then(() => res.status(204).send())
+                    .catch((error) => {
+                        utility_console("cart.saveIncrementer.delete", error)
+                        return res.status(500).send(msgErrorDefault);
+                    });
+            } else {
+                app.db("temp_cart")
+                    .update(modelo)
+                    .where({ id: tempCartDB.id })
+                    .then(() => res.status(204).send())
+                    .catch((error) => {
+                        utility_console("cart.saveIncrementer.update", error)
+                        return res.status(500).send(msgErrorDefault);
+                    });
+            }
+        } else {
+            /* Se a quantidade for menos que 1, atualizo para 1 */
+            if (modelo.quantity < 1) modelo.quantity = 1
+            app.db("temp_cart")
+                .insert(modelo)
+                .then(() => res.status(204).send())
+                .catch((error) => {
+                    utility_console("cart.saveIncrementer.insert", error)
+                    return res.status(500).send(msgErrorDefault);
+                });
+        }
+    };
+
+    return { getCartTemp, saveIncrementer, savePedido };
 };

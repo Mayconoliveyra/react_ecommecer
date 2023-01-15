@@ -1,8 +1,8 @@
 import { parseCookies } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
-import Link from 'next/link';
 import styled from "styled-components"
+import router from "next/router"
 
 import { CardPayment } from "../../../components/card/cardPayment"
 
@@ -204,6 +204,13 @@ const SectionProductSC = styled.div`
     }
 `
 export default function Resume({ session, products, totals, payment }) {
+    const handleFinalizar = () => {
+        console.log("finalizado")
+        console.log(payment)
+        if (payment.pgt_forma == "Pagar na loja" || payment.pgt_forma == "Pagar na entrega") {
+            
+        }
+    }
     return (
         <>
             <Head>
@@ -212,9 +219,9 @@ export default function Resume({ session, products, totals, payment }) {
             <div>
                 <BtnConfirmSC>
                     <div data='yes-border'>
-                        <Link href="/">
+                        <button type="button" onClick={() => handleFinalizar()}>
                             Confirmar pedido
-                        </Link>
+                        </button >
                     </div>
                 </BtnConfirmSC>
                 <PaymentValueSC>
@@ -354,7 +361,7 @@ export default function Resume({ session, products, totals, payment }) {
 
                 <BtnConfirmSC>
                     <div data='no-border'>
-                        <button type="button">
+                        <button type="button" onClick={() => handleFinalizar()}>
                             Confirmar pedido
                         </button >
                     </div>
