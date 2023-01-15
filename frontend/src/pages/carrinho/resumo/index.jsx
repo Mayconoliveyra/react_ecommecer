@@ -7,8 +7,9 @@ import router from "next/router"
 import { CardPayment } from "../../../components/card/cardPayment"
 
 import { moneyMask } from '../../../../masks';
-import { getCartTemp } from '../../api/cart';
+import { getCartTemp, storePedido } from '../../api/cart';
 import { userIsAuth } from "../../api/auth";
+import { showError } from "../../../../global";
 
 const BtnConfirmSC = styled.div`
     [data='yes-border']{
@@ -204,11 +205,22 @@ const SectionProductSC = styled.div`
     }
 `
 export default function Resume({ session, products, totals, payment }) {
-    const handleFinalizar = () => {
-        console.log("finalizado")
-        console.log(payment)
+    const handleFinalizar = async () => {
+        const dataPedido = {
+            id_user: session.id,
+            id_storage: session.id_storage,
+            ...totals,
+            ...payment
+        }
+
         if (payment.pgt_forma == "Pagar na loja" || payment.pgt_forma == "Pagar na entrega") {
-            
+            const statusPedido = await storePedido(dataPedido)
+                .then((res) => console.log(res))
+                .catch((error) => {
+                    router.push("/")
+                    return showError(error)
+                })
+            console.log(statusPedido)
         }
     }
     return (
@@ -429,6 +441,6 @@ export async function getServerSideProps(context) {
     }
 
     return {
-        props: { session: session, products: data.products, totals: data.totals, payment: JSON.parse(myCartPayment) },
+        props: { session: { ...session, id_storage: myCartId }, products: data.products, totals: data.totals, payment: JSON.parse(myCartPayment) },
     }
 }

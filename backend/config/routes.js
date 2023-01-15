@@ -39,4 +39,8 @@ module.exports = (app) => {
   app.route("/cart/:id")
     .all(app.config.passport.authenticate())
     .get(app.api.cart.getCartTemp)
+
+  app.route("/cart/save-pedido")
+    .all(app.config.passport.authenticate())
+    .post(app.api.cart.savePedido)
 };

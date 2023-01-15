@@ -226,7 +226,7 @@ export default function CloseOrder({ totals }) {
                                     <ul>
                                         <GroupSC>
                                             <Field name="pgt_metodo" type="radio" id="frete" value="Receber em casa(Frete)" />
-                                            <label htmlFor="frete">Receber em casa(Frete)</label>
+                                            <label htmlFor="frete">Receber em casa{totals.percentual_frete > 0 ? "(Com Frete)" : "(Sem Frete)"}</label>
                                         </GroupSC>
                                         <GroupSC>
                                             <Field name="pgt_metodo" type="radio" id="retirada" value="Retirada na loja" />

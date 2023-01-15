@@ -14,8 +14,8 @@ exports.up = function (knex) {
             table.string("img_5")
             table.string("img_6")
 
-            table.double("price").notNull().defaultTo(0);
-            table.double("price_promotion").notNull().defaultTo(0);
+            table.double("price", 8, 2).notNull().defaultTo(0);
+            table.double("price_promotion", 8, 2).notNull().defaultTo(0);
             table.boolean("promotion", 1).notNull().defaultTo(0);
 
             table.string("description")
