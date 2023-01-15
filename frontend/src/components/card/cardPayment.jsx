@@ -10,8 +10,8 @@ const CardOneSC = styled.div`
         align-items: center;
         max-height: 15rem;
         background-color: #fff;
+        border-bottom: 0.1rem solid #e7e7e7;
         [data='a-card']{
-            border-bottom: 0.1rem solid #e7e7e7;
             width: 100%;
             height: 100%;
             display: flex;
@@ -49,7 +49,7 @@ const CardOneSC = styled.div`
                 } 
                 [data="quantity"]{
                         border-radius: 0.25rem;
-                        background: #F0F2F2;
+                        background: #f4f5f5;
                         box-shadow: 0 0.2rem 0.5rem rgb(15 17 17 / 15%);
                         border: solid 1px #D5D9D9;
                         padding: 0.75rem 1rem;;
@@ -62,6 +62,9 @@ const CardOneSC = styled.div`
                 }
             }
         }
+        &:last-child{
+            border-bottom: transparent;
+        } 
 `
 const ImgCardSC = styled.div`
     display: flex;
