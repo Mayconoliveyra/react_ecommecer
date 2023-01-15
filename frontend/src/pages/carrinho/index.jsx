@@ -4,64 +4,31 @@ import Link from 'next/link';
 import styled from "styled-components"
 
 import { CardOne } from "../../components/card/cardOne"
+import { ButtonSC } from '../../components/button';
+
 import { moneyMask } from '../../../masks';
 
 import MyCartContext from "../../context/myCart"
 
-const BtnConfirmSC = styled.div`
-    [data='subtotal']{
-        padding: 1rem 1.4rem;
-        display: flex;
-        align-items: center;
-        font-size: 1.3rem;
-        font-family: ${({ theme }) => theme.font.family.medium};
+const SubTotal = styled.div`
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    font-family: ${({ theme }) => theme.font.family.medium};
 
-        span:nth-child(1) {
-            margin-left: 10px;
-            margin-right: 1px;
-            position:relative;
-            top: -0.1rem;
-            font-size: 1rem;
-            font-family: ${({ theme }) => theme.font.family.bold};
-        }
-        span:nth-child(2) {
-            font-size: 1.6rem;
-            font-family: ${({ theme }) => theme.font.family.medium};
-        }          
+    span:nth-child(1) {
+        margin-left: 10px;
+        margin-right: 1px;
+        position:relative;
+        top: -0.1rem;
+        font-size: 1rem;
+        font-family: ${({ theme }) => theme.font.family.bold};
     }
-    [data='yes-border']{
-        padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
-        border-bottom: 0.1rem solid #e7e7e7;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
-    [data='no-border']{
-        margin-top: 1rem;
-        padding: 0.7rem 1rem;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
+    span:nth-child(2) {
+        font-size: 1.6rem;
+        font-family: ${({ theme }) => theme.font.family.medium};
+    }          
 `
 const SectionProductSC = styled.div`
     padding:0.6rem;
@@ -95,16 +62,16 @@ export default function Cart() {
             </Head>
             <div>
                 {products && products.length > 0 && (
-                    <BtnConfirmSC>
-                        <div data='subtotal'>
+                    <ButtonSC>
+                        <SubTotal>
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
-                        </div>
-                        <div data='yes-border'>
+                        </SubTotal>
+                        <div data='btn-confirm'>
                             <Link href="carrinho/fechar">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
-                    </BtnConfirmSC>
+                    </ButtonSC>
                 )}
 
                 <SectionProductSC>
@@ -129,13 +96,13 @@ export default function Cart() {
                 </SectionProductSC>
 
                 {products && products.length > 5 && (
-                    <BtnConfirmSC>
-                        <div data='no-border'>
+                    <ButtonSC>
+                        <div data='btn-confirm-noborder'>
                             <Link href="carrinho/fechar">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </div>
-                    </BtnConfirmSC>
+                    </ButtonSC>
                 )}
             </div>
         </>

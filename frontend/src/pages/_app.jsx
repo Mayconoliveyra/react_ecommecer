@@ -42,6 +42,7 @@ export default function MyApp({ Component, pageProps }) {
       case '/login':
       case '/carrinho':
       case '/carrinho/fechar':
+      case '/carrinho/finalizado':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
       case '/conta/meusdados':

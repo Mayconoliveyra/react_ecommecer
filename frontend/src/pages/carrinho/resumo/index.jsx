@@ -5,47 +5,13 @@ import styled from "styled-components"
 import router from "next/router"
 
 import { CardPayment } from "../../../components/card/cardPayment"
+import { ButtonSC } from '../../../components/button';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp, storePedido } from '../../api/cart';
 import { userIsAuth } from "../../api/auth";
 import { showError } from "../../../../global";
 
-const BtnConfirmSC = styled.div`
-    [data='yes-border']{
-        padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
-        border-bottom: 0.1rem solid #e7e7e7;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
-    [data='no-border']{
-        margin-top: 1rem;
-        padding: 0.7rem 1rem;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
-`
 const PaymentValueSC = styled.div`
     /* border:solid 1px red; */
     margin: 1rem 0;
@@ -229,13 +195,13 @@ export default function Resume({ session, products, totals, payment }) {
                 <title>Confirmar pedido</title>
             </Head>
             <div>
-                <BtnConfirmSC>
-                    <div data='yes-border'>
+                <ButtonSC>
+                    <div data='btn-confirm'>
                         <button type="button" onClick={() => handleFinalizar()}>
                             Confirmar pedido
                         </button >
                     </div>
-                </BtnConfirmSC>
+                </ButtonSC>
                 <PaymentValueSC>
                     <div>
                         <div data="resume">
@@ -371,13 +337,13 @@ export default function Resume({ session, products, totals, payment }) {
                     }
                 </SectionProductSC>
 
-                <BtnConfirmSC>
-                    <div data='no-border'>
+                <ButtonSC>
+                    <div data='btn-confirm-noborder'>
                         <button type="button" onClick={() => handleFinalizar()}>
                             Confirmar pedido
                         </button >
                     </div>
-                </BtnConfirmSC>
+                </ButtonSC>
             </div>
         </>
 

@@ -5,45 +5,12 @@ import router from "next/router"
 import styled from "styled-components"
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
+import { ButtonSC } from '../../../components/button';
+
 import { moneyMask } from '../../../../masks';
 import { getCartTemp } from "../../api/cart";
 import { userIsAuth } from "../../api/auth";
 
-const BtnConfirmSC = styled.div`
-    [data='yes-border']{
-        padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
-        border-bottom: 0.1rem solid #e7e7e7;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
-    [data='no-border']{
-        margin-top: 1rem;
-        padding: 0.7rem 1rem;
-        display: flex;
-        a, button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.15rem;
-            flex: 1;
-            background: #FFD814;
-            border:solid 2px #FCD200;
-            border-radius: 0.45rem;
-        }
-    }
-`
 const CloseOrderSC = styled.div`
     margin: 1rem 0;
     padding: 0 0.7rem;
@@ -181,13 +148,13 @@ export default function CloseOrder({ totals }) {
             >
                 {({ values, errors }) => (
                     <Form data="form" action="">
-                        <BtnConfirmSC>
-                            <div data='yes-border'>
+                        <ButtonSC>
+                            <div data='btn-confirm'>
                                 <button type="submit">
                                     Continuar
                                 </button >
                             </div>
-                        </BtnConfirmSC>
+                        </ButtonSC>
                         <CloseOrderSC>
                             <div>
                                 <div data="resume">
@@ -272,13 +239,13 @@ export default function CloseOrder({ totals }) {
                             </div>
                         </MetodoEntegraSC>
 
-                        <BtnConfirmSC>
-                            <div data='no-border'>
+                        <ButtonSC>
+                            <div data='btn-confirm-noborder'>
                                 <button type="submit">
                                     Continuar
                                 </button >
                             </div>
-                        </BtnConfirmSC>
+                        </ButtonSC>
                     </Form>
                 )}
             </Formik>
