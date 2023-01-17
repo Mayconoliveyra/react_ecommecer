@@ -16,12 +16,13 @@
     "cors": "2.8.4",
     "crypto-js": "4.1.1",
     "express": "4.16.3",
+    "gn-api-sdk-node": "^3.0.3",
     "jwt-simple": "0.5.1",
     "knex": "0.16.2",
     "mysql2": "^2.3.3",
+    "nodemailer": "6.8.0",
     "passport": "0.4.0",
-    "passport-jwt": "4.0.0",
-    "nodemailer": "6.8.0"
+    "passport-jwt": "4.0.0"
   },
   "devDependencies": {
     "nodemon": "1.18.4"

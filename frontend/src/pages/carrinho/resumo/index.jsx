@@ -178,16 +178,17 @@ export default function Resume({ session, products, totals, payment }) {
             ...totals,
             ...payment
         }
-
-        if (payment.pgt_forma == "Pagar na loja" || payment.pgt_forma == "Pagar na entrega") {
-            const statusPedido = await storePedido(dataPedido)
-                .then((res) => console.log(res))
-                .catch((error) => {
-                    router.push("/")
-                    return showError(error)
-                })
-            console.log(statusPedido)
+        const rotasPagamento = {
+            "Pagar na loja": "/carrinho/pagamento/pagarloja"
         }
+
+        /* if (payment.pgt_forma == "Pagar na loja" || payment.pgt_forma == "Pagar na entrega") { */
+        await storePedido(dataPedido)
+            .then(() => router.push(rotasPagamento[payment.pgt_forma]))
+            .catch((error) => {
+                router.push("/")
+                return showError(error)
+            })
     }
     return (
         <>

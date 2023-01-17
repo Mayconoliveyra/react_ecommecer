@@ -1,4 +1,4 @@
-const { API_PORT } = require("./.env")
+const { API_PORT } = require("./client")
 const app = require("express")()
 const consign = require("consign");
 const db = require("./config/db")

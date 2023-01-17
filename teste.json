@@ -1,0 +1,91 @@
+{
+    "parametros": {
+        "inicio": "2022-01-22T16:01:35.000Z",
+        "fim": "2023-11-30T20:10:00.000Z",
+        "paginacao": {
+            "paginaAtual": 0,
+            "itensPorPagina": 100,
+            "quantidadeDePaginas": 1,
+            "quantidadeTotalDeItens": 2
+        }
+    },
+    "cobs": [
+        {
+            "calendario": {
+                "criacao": "2023-01-17T00:33:12.000Z",
+                "expiracao": 3600
+            },
+            "txid": "c2211b66318a4077998a102af31cbaa2",
+            "revisao": 0,
+            "loc": {
+                "id": 2,
+                "location": "qrcodes-pix.gerencianet.com.br/v2/975f5c79efca491eb5d13e9c0d6aa53d",
+                "tipoCob": "cob",
+                "criacao": "2023-01-17T00:33:12.000Z"
+            },
+            "location": "qrcodes-pix.gerencianet.com.br/v2/975f5c79efca491eb5d13e9c0d6aa53d",
+            "status": "ATIVA",
+            "devedor": {
+                "cpf": "18765777034",
+                "nome": "Maycon Oliveira"
+            },
+            "valor": {
+                "original": "0.10"
+            },
+            "chave": "softconnect.tecnologia@gmail.com",
+            "infoAdicionais": [
+                {
+                    "nome": "Pagamento em",
+                    "valor": "CAZIMI CONSTRUÇÃO"
+                },
+                {
+                    "nome": "Pedido",
+                    "valor": "156"
+                }
+            ]
+        },
+        {
+            "calendario": {
+                "criacao": "2023-01-16T23: 40: 16.000Z",
+                "expiracao": 3600
+            },
+            "txid": "fb02c73f7db44ed6811608747ece3b49",
+            "revisao": 0,
+            "loc": {
+                "id": 1,
+                "location": "qrcodes-pix.gerencianet.com.br/v2/e64b0410c9714ac2894bdc4989264e43",
+                "tipoCob": "cob",
+                "criacao": "2023-01-16T23: 40: 16.000Z"
+            },
+            "location": "qrcodes-pix.gerencianet.com.br/v2/e64b0410c9714ac2894bdc4989264e43",
+            "status": "CONCLUIDA",
+            "devedor": {
+                "cpf": "18765777034",
+                "nome": "Maycon Oliveira"
+            },
+            "valor": {
+                "original": "0.10"
+            },
+            "chave": "softconnect.tecnologia@gmail.com",
+            "infoAdicionais": [
+                {
+                    "nome": "Pagamento em",
+                    "valor": "CAZIMI CONSTRUÇÃO"
+                },
+                {
+                    "nome": "Pedido",
+                    "valor": "156"
+                }
+            ],
+            "pix": [
+                {
+                    "endToEndId": "E18236120202301162350s1432f7a24d",
+                    "txid": "fb02c73f7db44ed6811608747ece3b49",
+                    "valor": "0.10",
+                    "chave": "softconnect.tecnologia@gmail.com",
+                    "horario": "2023-01-16T23: 50: 47.000Z"
+                }
+            ]
+        }
+    ]
+}

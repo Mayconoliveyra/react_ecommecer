@@ -6,5 +6,10 @@ module.exports = (app) => {
   app.route("/api/sandemail")
     .all(app.config.passport.authenticate())
     .post(app.api.email.sendEmail)
+
+  app.route("/api/gerencianet/pix")
+    .all(app.config.passport.authenticate())
+    .get(app.api.gerencianet.consultPixList)
+    .post(app.api.gerencianet.createPixImmediate)
 };
 

@@ -67,7 +67,7 @@ const MainSC = styled.div`
         }
     }
 `
-export default function Finished() {
+export default function PaymentStore() {
     return (
         <>
             <Head>
@@ -83,7 +83,7 @@ export default function Finished() {
                             Seu pedido foi reservado.
                         </h1>
                         <h2>
-                            Você tem até 24 horas para fazer a retirada na loja. Caso não seja retirado em 24 horas seu pedido será automaticamente cancelado automaticamente e os valores estornados.
+                            Você tem até 24 horas para fazer a retirada na loja. Caso não seja retirado o pedido será automaticamente cancelado e os valores estornados.
                         </h2>
                     </div>
                     <div data="nmr-pedido">
@@ -125,6 +125,7 @@ export default function Finished() {
 export async function getServerSideProps(context) {
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
+    console.log(context)
     const session = await getSession({ req })
     if (!session) {
         return {

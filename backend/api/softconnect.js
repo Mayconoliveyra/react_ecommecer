@@ -4,8 +4,9 @@ const jwt = require("jwt-simple")
 
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
-
     const consultCEP = async (cep_destination) => {
+        /* console.log("[TOKEN] INTEGRAR SOFTCONNECT")
+        console.log(jwt.encode(app.store, SOFTCONNECT_KEY)) */
         const url = `/api/maps?destination=${cep_destination}`
         const softconnect = await axios.create({
             baseURL: `${SOFTCONNECT_API}${url}`,
