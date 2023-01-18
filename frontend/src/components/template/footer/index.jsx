@@ -129,7 +129,7 @@ export default function Footer() {
                             <h5>Atendimento</h5>
                             <div>
                                 {store.a_whatsapp &&
-                                    <Link href={`https://api.whatsapp.com/send?phone=55${store.a_whatsapp}`} target={'_blank'}>
+                                    <Link href={`https://api.whatsapp.com/send?phone=55${store.a_whatsapp.replace(/\D/g, '')}`} target={'_blank'}>
                                         <Whatsapp />
                                     </Link>
                                 }
