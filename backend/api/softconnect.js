@@ -34,7 +34,6 @@ module.exports = (app) => {
                 .then((res) => res.data)
                 .catch(() => false);
 
-            console.log(store)
             if (!store) {
                 return { error: msgErrorDefault }
             }
