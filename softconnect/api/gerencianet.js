@@ -5,7 +5,6 @@ module.exports = (app) => {
     const { utility_console, msgErrorDefault } = app.api.utilities;
 
     const createPixImmediate = async (req, res) => {
-
         const gerencianet = new Gerencianet(options)
 
         const body = {

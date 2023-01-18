@@ -37,6 +37,10 @@ exports.up = function (knex) {
             table.string("email_port").notNull().defaultTo("587");
             table.boolean("email_secure", 1).notNull().defaultTo(0)
 
+            table.boolean("gt_ativo", 1).notNull().defaultTo(0) /* gerencianet */
+            table.string("gt_client_id") /* gerencianet */
+            table.string("gt_client_secret") /* gerencianet */
+
             table.string("url_site").notNull().unique();
             table.string("url_server").notNull().unique();
             table.string("client_id").notNull().unique();

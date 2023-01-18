@@ -1,4 +1,4 @@
-const { softconnectAxios } = require("../Servers");
+const { softconnectAxios } = require("../servers");
 
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;

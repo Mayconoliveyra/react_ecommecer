@@ -12,7 +12,7 @@ const softconnectAxios = () => {
         iat: data, // emitido em
         exp: data + (60 * 1) // 1 minutos 
     }
-
+    
     return axios.create({
         baseURL: `${SOFTCONNECT_API}`,
         headers: {
