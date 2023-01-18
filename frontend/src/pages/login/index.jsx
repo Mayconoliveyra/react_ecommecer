@@ -307,7 +307,7 @@ export default function Login({ error }) {
                     <label htmlFor="senha">Senha</label>
                   </div>
                   <div data="input">
-                    <Field name="senha" type="password" maxLength="255" />
+                    <Field name="senha" type="password" autoComplete='off' maxLength="255" />
                     {values.show_password && values.senha && (
                       <div data="show-password">
                         <span name="senha" value>{values.senha}</span>

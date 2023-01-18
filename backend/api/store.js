@@ -5,7 +5,7 @@ module.exports = (app) => {
         const resStore = await store()
 
         if (resStore.error) {
-            return res.status(500).send(resStore.error)
+            return res.status(400).send({ 500: resStore.error })
         }
 
         return res.json(resStore)

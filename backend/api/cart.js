@@ -1,5 +1,6 @@
 module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
+    const { store } = app.api.softconnect;
 
     const saveIncrementer = async (req, res) => {
         const body = req.body
@@ -59,7 +60,7 @@ module.exports = (app) => {
                 });
         }
     };
-
+    
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
     /* AS 2 TEM INFORMAÇÕES QUE PRECISAM ESTÁ EM IGUAL EM AMBAS, SE FOR ALTERAR ALGO ANALISAR SE PRECISA ALTERAR A OUTRA TAMBEM. */
     const getCartTemp = async (req, res) => {
@@ -115,14 +116,18 @@ module.exports = (app) => {
 
             /* Seta o valor de frete */
             if (id_user && products[0].length > 0) {
-                const store = app.store
+
+                const storeData = await store()
+                if (!storeData) throw "[storeData] não encontrado"
+                if (storeData.error) throw "[storeData] retorno error."
+
                 const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
-                totals[0][0].vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
-                totals[0][0].vlr_pagar_com_frete = totals[0][0].vlr_pagar_products + Math.round(user.distancia_km * store.percentual_frete)
+                totals[0][0].vlr_frete = Math.round(user.distancia_km * storeData.percentual_frete)
+                totals[0][0].vlr_pagar_com_frete = totals[0][0].vlr_pagar_products + Math.round(user.distancia_km * storeData.percentual_frete)
                 totals[0][0].vlr_pagar_sem_frete = totals[0][0].vlr_pagar_products
                 totals[0][0].distancia_km = user.distancia_km
-                totals[0][0].percentual_frete = store.percentual_frete
+                totals[0][0].percentual_frete = storeData.percentual_frete
             }
 
             res.json({ products: products[0], totals: totals[0][0] })
@@ -173,14 +178,18 @@ module.exports = (app) => {
             AND ((products.disabled)=FALSE) 
             AND ((temp_cart.id_storage)='${modelo.id_storage}'));
             `)
-            const store = app.store
+
+            const storeData = await store()
+            if (!storeData) throw "[storeData] não encontrado"
+            if (storeData.error) throw "[storeData] retorno error."
+
             const user = await app.db.select("nome", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")
-            salesHeader[0][0].vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
-            salesHeader[0][0].vlr_pagar_com_frete = salesHeader[0][0].vlr_pagar_products + Math.round(user.distancia_km * store.percentual_frete)
+            salesHeader[0][0].vlr_frete = Math.round(user.distancia_km * storeData.percentual_frete)
+            salesHeader[0][0].vlr_pagar_com_frete = salesHeader[0][0].vlr_pagar_products + Math.round(user.distancia_km * storeData.percentual_frete)
             salesHeader[0][0].vlr_pagar_sem_frete = salesHeader[0][0].vlr_pagar_products
             salesHeader[0][0].distancia_km = user.distancia_km
-            salesHeader[0][0].percentual_frete = store.percentual_frete
+            salesHeader[0][0].percentual_frete = storeData.percentual_frete
 
             if (modelo.vlr_pagar_com_frete != salesHeader[0][0].vlr_pagar_com_frete) throw "[vlr_pagar_com_frete] diverge do somatório."
             if (modelo.vlr_pagar_sem_frete != salesHeader[0][0].vlr_pagar_sem_frete) throw "[vlr_pagar_sem_frete] diverge do somatório."

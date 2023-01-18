@@ -1,4 +1,3 @@
-import { parseCookies } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import Link from 'next/link';
@@ -125,7 +124,6 @@ export default function PaymentStore() {
 export async function getServerSideProps(context) {
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
-    console.log(context)
     const session = await getSession({ req })
     if (!session) {
         return {
