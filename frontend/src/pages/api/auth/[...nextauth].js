@@ -1,4 +1,5 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SOFTCONNECT_ID, SOFTCONNECT_SECRET, TOKEN_KEY } = require("../../../../.env");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, TOKEN_KEY } = require("../../../../.env");
+const { CLIENT_ID, CLIENT_SECRET } = require("../../../../client");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -39,7 +40,7 @@ export const authOptions = {
                 const modelo = {
                     nome: session.user.name,
                     email: session.user.email,
-                    secret: `${SOFTCONNECT_ID}${SOFTCONNECT_SECRET}`
+                    secret: `${CLIENT_ID}${CLIENT_SECRET}`
                 }
                 const user = await storeNextAuth(modelo)
                 const userDecoded = jwt.decode(user, TOKEN_KEY);

@@ -14,6 +14,7 @@ module.exports = (app) => {
             iat: data, // emitido em
             exp: data + (60 * 1) // 1 minutos 
         }
+      /*   console.log(jwt.encode(payload, SOFTCONNECT_KEY)) */
         return axios.create({
             baseURL: `${SOFTCONNECT_API}`,
             headers: {

@@ -66,7 +66,12 @@ export default function MyApp({ Component, pageProps }) {
   }, [template])
 
   const handleStore = async () => {
-    setStore(await getStore())
+    /* bloqueios, erros, tem que ser tratado aqui(!!pendente!!) */
+    await getStore()
+      .then((res) => {
+        setStore(res.data)
+      })
+      .catch((error => console.log(error)))
   }
   const handleMyCart = async () => {
     console.log("COOKIES[_APP]")
