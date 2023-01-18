@@ -35,7 +35,7 @@ module.exports = app => {
 
                 try {
                         existOrError(modelo.email, "[email], não poder ser nulo")
-                        if (body.secret != `${app.store.id_key}${app.store.secret_key}`) throw "Token de autenticação(AUTH) inválido."
+                        if (body.secret != `${app.store.client_id}${app.store.client_secret}`) throw "Token de autenticação(AUTH) inválido."
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: "Desculpe-nos!. Não foi possível realizar o seu cadastro. Por favor, tente novamente utilizando outra opção de cadastro." })
@@ -215,7 +215,7 @@ module.exports = app => {
                                         });
                         }
                 } catch (error) {
-                        utility_console("auth.save", error)
+                        utility_console("save", error)
                         return res.status(400).send({ 500: msgErrorDefault })
                 }
         }

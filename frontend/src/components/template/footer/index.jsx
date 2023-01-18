@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CaretUpFill, Instagram, Facebook, Twitter, Youtube, Whatsapp, Messenger, EnvelopeAtFill } from "react-bootstrap-icons";
+import { Instagram, Facebook, Twitter, Youtube, Whatsapp, Messenger, EnvelopeAtFill } from "react-bootstrap-icons";
 import Link from "next/link";
 import { useContext } from "react";
 
@@ -124,28 +124,30 @@ export default function Footer() {
         <NavSC>
             {!template.footerReduce && (
                 <>
-                    {/* <div data-div='return-top'>
-                        <Link href="#exibir-header">
-                            <CaretUpFill />
-                            Voltar ao Topo da página
-                        </Link>
-                    </div> */}
                     <div id="attendance" data-div='attendance'>
                         <div>
                             <h5>Atendimento</h5>
                             <div>
-                                <Link href="https://api.whatsapp.com/send?phone=558399675920" target={'_blank'}>
-                                    <Whatsapp />
-                                </Link>
-                                <Link href="http://m.me/maycon.deyved" target={'_blank'}>
-                                    <Messenger />
-                                </Link>
-                                <Link href={`https://ig.me/m/${store.a_instagram}`} target={'_blank'}>
-                                    <Instagram />
-                                </Link>
-                                <Link href={`mailto:${store.a_email}?subject=Atendimento`} target={'_blank'}>
-                                    <EnvelopeAtFill />
-                                </Link>
+                                {store.a_whatsapp &&
+                                    <Link href={`https://api.whatsapp.com/send?phone=55${store.a_whatsapp}`} target={'_blank'}>
+                                        <Whatsapp />
+                                    </Link>
+                                }
+                                {store.a_messenger &&
+                                    <Link href={`http://m.me/${store.a_messenger}`} target={'_blank'}>
+                                        <Messenger />
+                                    </Link>
+                                }
+                                {store.a_instagram &&
+                                    <Link href={`https://ig.me/m/${store.a_instagram}`} target={'_blank'}>
+                                        <Instagram />
+                                    </Link>
+                                }
+                                {store.a_email &&
+                                    <Link href={`mailto:${store.a_email}?subject=Atendimento`} target={'_blank'}>
+                                        <EnvelopeAtFill />
+                                    </Link>
+                                }
                             </div>
                             <p>
                                 {store.logradouro}, {store.numero} - {store.bairro}, {store.localidade} - {store.uf}, {store.cep}
@@ -178,25 +180,33 @@ export default function Footer() {
                 <div>
                     <h5>Mídias sociais</h5>
                     <div>
-                        <Link href={`https://www.facebook.com/${store.midia_facebook}`} target={'_blank'}>
-                            <Facebook />
-                        </Link>
-                        <Link href={`https://www.instagram.com/${store.midia_instagram}`} target={'_blank'}>
-                            <Instagram />
-                        </Link>
-                        <Link href={`https://twitter.com/${store.midia_twitter}`} target={'_blank'}>
-                            <Twitter />
-                        </Link>
-                        <Link href={`https://www.youtube.com/channel/${store.midia_yutube}`} target={'_blank'}>
-                            <Youtube />
-                        </Link>
+                        {store.m_facebook &&
+                            <Link href={`https://www.facebook.com/${store.m_facebook}`} target={'_blank'}>
+                                <Facebook />
+                            </Link>
+                        }
+                        {store.m_instagram &&
+                            <Link href={`https://www.instagram.com/${store.m_instagram}`} target={'_blank'}>
+                                <Instagram />
+                            </Link>
+                        }
+                        {store.m_twitter &&
+                            <Link href={`https://twitter.com/${store.m_twitter}`} target={'_blank'}>
+                                <Twitter />
+                            </Link>
+                        }
+                        {store.m_yutube &&
+                            <Link href={`https://www.youtube.com/channel/${store.m_yutube}`} target={'_blank'}>
+                                <Youtube />
+                            </Link>
+                        }
                     </div>
                 </div>
             </div>
             <div data-div='terms'>
                 <div>
                     <h6>
-                        {store.termo_uso}
+                        Todos os direitos reservados. Os preços anunciados podem ser alterados sem prévio aviso. A loja não é responsável por erros descritivos. As fotos contidas nesta página são meramente ilustrativas do produto e podem variar de acordo com o fornecedor/lote do fabricante.
                     </h6>
                 </div>
             </div>
