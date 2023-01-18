@@ -21,16 +21,16 @@ module.exports = (app) => {
             }
             /* Configuração padrão de email */
             const transporter = nodemailer.createTransport({
-                host: store.config_email_host,
-                port: store.config_email_port,
-                secure: store.config_email_secure,
+                host: store.email_host,
+                port: store.email_port,
+                secure: store.email_secure,
                 auth: {
-                    user: store.config_email_user,
-                    pass: store.config_email_pass
+                    user: store.email_user,
+                    pass: store.email_pass
                 }
             })
             let email = {
-                from: `"${store.nome} " <${store.config_email_user}>`,
+                from: `"${store.nome} " <${store.email_user}>`,
                 to: modelo.email,
                 subject: modelo.title,
                 html: modelo.body
@@ -83,7 +83,7 @@ module.exports = (app) => {
             Clique no link abaixo para finalizar o processo de cadastro:
         </p>
         <b>
-            <a href='${app.store.url_frontend}/conta/cadastrarsenha?authlogin=${params.body}'>Finalizar meu cadastro</a>
+            <a href='${app.store.url_site}/conta/cadastrarsenha?authlogin=${params.body}'>Finalizar meu cadastro</a>
         </b>
         <br>
         <br>
@@ -94,7 +94,7 @@ module.exports = (app) => {
         </small>
         <br>
         <small>
-            Caso tenha dúvidas, nos envie uma mensagem: <a href=mailto:${params.atendimento_email}>${params.atendimento_email}</a>
+            Caso tenha dúvidas, nos envie uma mensagem: <a href=mailto:${params.a_email}>${params.a_email}</a>
         </small>
         </thead>
     </div>
@@ -126,7 +126,7 @@ module.exports = (app) => {
         </small>
         <br>
         <small>
-            Caso tenha dúvidas, nos envie uma mensagem: <a href=mailto:${params.atendimento_email}>${params.atendimento_email}</a>
+            Caso tenha dúvidas, nos envie uma mensagem: <a href=mailto:${params.a_email}>${params.a_email}</a>
         </small>
         </thead>
     </div>

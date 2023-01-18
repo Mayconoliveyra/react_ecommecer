@@ -1,5 +1,4 @@
 import { api } from "../axios";
-
 const prefix = "/user";
 
 /* Alterar o cadastro */

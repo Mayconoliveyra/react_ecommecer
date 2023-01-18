@@ -9,7 +9,7 @@ const payload = {
   client_id: CLIENT_ID,
   client_secret: CLIENT_SECRET,
   iat: data,
-  exp: data + (60 * 1) // 1 minutos 
+  exp: data + (60 * 60 * 24) // 24hrs
 }
 const api = () => {
   return axios.create({
