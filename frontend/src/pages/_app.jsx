@@ -1,7 +1,7 @@
 import { parseCookies, setCookie } from "nookies";
 import { GlobalStyles } from "../styles/global-styles"
 import { ThemeProvider } from "styled-components"
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react"
@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     handleStore();
-    handleMyCart();
+    /* handleMyCart(); */
   }, [])
 
   /* Ajusta o template de acordo com a rota que está sendo acessada (TemplateContext) */
@@ -69,6 +69,7 @@ export default function MyApp({ Component, pageProps }) {
     /* bloqueios, erros, tem que ser tratado aqui(!!pendente!!) */
     await getStore()
       .then((res) => {
+        if (res.data.error) return toast.error(res.data.error)
         setStore(res.data)
       })
       .catch((error => console.log(error)))

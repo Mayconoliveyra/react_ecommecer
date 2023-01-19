@@ -15,5 +15,10 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .get(app.api.gerencianet.consultPixList)
     .post(app.api.gerencianet.createPixImmediate)
+
+  /* Utilizada no frontend do cliente */
+  app.route("/public/api/store")
+    .all(app.config.passportStore.authenticate())
+    .get(app.api.store.get)
 };
 

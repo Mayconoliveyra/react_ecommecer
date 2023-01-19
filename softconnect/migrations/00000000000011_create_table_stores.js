@@ -43,6 +43,7 @@ exports.up = function (knex) {
 
             table.string("url_site").notNull().unique();
             table.string("url_server").notNull().unique();
+
             table.string("client_id").notNull().unique();
             table.string("client_secret").notNull().unique();
 
@@ -77,6 +78,10 @@ exports.up = function (knex) {
                     email_host: "smtp.gmail.com",
                     email_port: "587",
                     email_secure: false,
+
+                    gt_ativo: true,
+                    gt_client_id: "Client_Id_ad14bdfd6a29459fc293e580d60f3918ec330a60",
+                    gt_client_secret: "Client_Secret_f8dbeaada0a60217980a920913f081bc3d765b76",
 
                     url_site: "http://10.0.0.200:3000",
                     url_server: "http://10.0.0.200:3030",

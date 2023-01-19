@@ -1,11 +1,10 @@
-const Gerencianet = require('gn-api-sdk-node')
-const options = require('../credentials')
+const { GerencianetST } = require('../servers')
 
 module.exports = (app) => {
     const { utility_console, msgErrorDefault } = app.api.utilities;
 
     const createPixImmediate = async (req, res) => {
-        const gerencianet = new Gerencianet(options)
+        const gerencianet = await GerencianetST(app.store.gt_client_id, app.store.gt_client_secret)
 
         const body = {
             calendario: {

@@ -2,8 +2,8 @@ module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
 
     const get = async (req, res) => {
-        if (!app.store) return res.json({ error: msgErrorDefault });
         const store = app.store
+        if (!store) return res.json({ error: msgErrorDefault })
 
         const modelo = {
             nome: store.nome,
@@ -28,7 +28,7 @@ module.exports = (app) => {
             m_yutube: store.m_yutube
         }
 
-        res.json(modelo)
+        return res.json(modelo)
     };
 
     return { get };

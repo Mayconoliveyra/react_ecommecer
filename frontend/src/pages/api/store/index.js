@@ -1,9 +1,8 @@
-import { api } from "../axios";
-const prefix = "/store";
+import { storeST } from "../axios";
 
 const get = async () => {
-  const axios = await api();
-  return await axios.get(prefix);
+  const axios = await storeST();
+  return await axios.get();
 };
 
 export { get }

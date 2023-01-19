@@ -1,32 +1,33 @@
-const { softconnectAxios } = require("../servers");
+const { SoftconnectAPI } = require("../config/servers");
 
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
 
     const store = async () => {
         try {
-            const softconnect = await softconnectAxios();
+            const softconnect = await SoftconnectAPI();
             const url = `/api/store`
 
             const store = await softconnect.get(url)
                 .then((res) => res.data)
                 .catch(() => false);
 
-
-            if (!store) {
-                return { error: msgErrorDefault }
+            console.log(store)
+            /* Se não encontrar ou retornar erro, retornar store false. */
+            if (!store || store.error) {
+                return false
             }
 
             return store
         } catch (error) {
             utility_console("softconnect.store", error)
-            return { error: msgErrorDefault }
+            return false
         }
     }
 
     const consultCEP = async (cep_destination) => {
         try {
-            const softconnect = await softconnectAxios();
+            const softconnect = await SoftconnectAPI();
             const url = `/api/maps?destination=${cep_destination}`
 
             const endereco = await softconnect.get(url)
@@ -45,7 +46,7 @@ module.exports = (app) => {
     /* Envio de email não é de forma assincrono */
     const sendEmail = async ({ email, title, body, template = false }) => {
         try {
-            const softconnect = await softconnectAxios();
+            const softconnect = await SoftconnectAPI();
 
             const url = `/api/sandemail`
             /* Envio de email não é de forma assincrono */

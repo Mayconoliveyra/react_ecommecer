@@ -60,10 +60,14 @@ module.exports = (app) => {
                 });
         }
     };
-    
+
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
     /* AS 2 TEM INFORMAÇÕES QUE PRECISAM ESTÁ EM IGUAL EM AMBAS, SE FOR ALTERAR ALGO ANALISAR SE PRECISA ALTERAR A OUTRA TAMBEM. */
     const getCartTemp = async (req, res) => {
+        /* Carreta loja. */
+        const storeData = await store()
+        if (!storeData || storeData.error) return res.status(500).send("Não foi possível carregar os dados da empresa.");
+
         const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
         const id_user = Number(req.query.id_user); /* ID do usuario. */
 
@@ -116,11 +120,6 @@ module.exports = (app) => {
 
             /* Seta o valor de frete */
             if (id_user && products[0].length > 0) {
-
-                const storeData = await store()
-                if (!storeData) throw "[storeData] não encontrado"
-                if (storeData.error) throw "[storeData] retorno error."
-
                 const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
                 totals[0][0].vlr_frete = Math.round(user.distancia_km * storeData.percentual_frete)
@@ -137,6 +136,10 @@ module.exports = (app) => {
         }
     };
     const savePedido = async (req, res) => {
+        /* Carreta loja. */
+        const storeData = await store()
+        if (!storeData || storeData.error) return res.status(500).send("Não foi possível carregar os dados da empresa.");
+
         const body = req.body
         const modelo = {
             id_user: body.id_user,
@@ -178,10 +181,6 @@ module.exports = (app) => {
             AND ((products.disabled)=FALSE) 
             AND ((temp_cart.id_storage)='${modelo.id_storage}'));
             `)
-
-            const storeData = await store()
-            if (!storeData) throw "[storeData] não encontrado"
-            if (storeData.error) throw "[storeData] retorno error."
 
             const user = await app.db.select("nome", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")

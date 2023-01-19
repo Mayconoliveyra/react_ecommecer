@@ -8,10 +8,10 @@ module.exports = app => {
                 secretOrKey: SOFTCONNECT_KEY,
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         }
-        const strategy = new Strategy(params, (payload, done) => {
+        const strategy = new Strategy(params, async (payload, done) => {
+                console.log("oi")
                 const { id, client_id, client_secret } = payload
-                
-                app.db("stores")
+                await app.db("stores")
                         .where({ id: id, client_id: client_id })
                         .andWhere({ client_secret: client_secret })
                         .first()
@@ -38,6 +38,8 @@ module.exports = app => {
                                         .catch((error) =>
                                                 console.log("passport.strategy: " + error)
                                         );
+
+                                app.store = false
                                 return done(err, false)
                         })
         })
