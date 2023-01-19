@@ -1,5 +1,5 @@
 import jwt from "jwt-simple"
-const { TOKEN_KEY } = require("../../../../.env");
+const { SECRET_KEY_SERVER } = require("../../../../.env");
 import Head from 'next/head';
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
@@ -101,7 +101,7 @@ export default function NewPassword({ data }) {
                             initialValues={{ senha: '', confirsenha: '', ...data }}
                             onSubmit={async (values, setValues) => {
                                 /* Os dados sera convetido em jwt antes de enviar para o backend */
-                                const modelo = jwt.encode(values, TOKEN_KEY)
+                                const modelo = jwt.encode(values, SECRET_KEY_SERVER)
                                 await storePassword({ userJWT: modelo }, data.id)
                                     .then((data) => {
                                         /* Redireciona para tela inicial passando a mensagem(msg) */
@@ -190,10 +190,10 @@ export async function getServerSideProps({ req, query }) {
 
     if (query && query.authlogin)
         try {
-            const { TOKEN_KEY } = require("../../../../.env");
+            const { SECRET_KEY_SERVER } = require("../../../../.env");
             const jwt = require('jsonwebtoken')
 
-            const decoded = jwt.decode(query.authlogin, TOKEN_KEY);
+            const decoded = jwt.decode(query.authlogin, SECRET_KEY_SERVER);
             const userBody = {
                 id: decoded.id,
                 email: decoded.email,

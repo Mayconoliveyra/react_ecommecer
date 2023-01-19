@@ -1,7 +1,8 @@
+const { SECRET_KEY_SERVER } = require("../.env")
 const jwt = require("jwt-simple")
 const jwtweb = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs')
-const { TOKEN_KEY } = require("../.env")
+
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, contactExistOrErro } = app.api.utilities;
@@ -19,7 +20,7 @@ module.exports = app => {
                         iat: data, // emitido em
                         exp: data + (60 * 10) // 10 minutos 
                 }
-                return jwt.encode(tokenAuth, TOKEN_KEY)
+                return jwt.encode(tokenAuth, SECRET_KEY_SERVER)
         }
         const encryptPassword = password => {
                 const salt = bcrypt.genSaltSync(8)
@@ -77,7 +78,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, TOKEN_KEY))
+                        return res.json(jwt.encode(payload, SECRET_KEY_SERVER))
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -141,7 +142,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, TOKEN_KEY))
+                        return res.json(jwt.encode(payload, SECRET_KEY_SERVER))
                 } catch (error) {
                         utility_console("auth.signin", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -228,7 +229,7 @@ module.exports = app => {
                 }
 
                 /* Descriptografa o jwt, se de erro retornar erro */
-                const body = jwtweb.decode(req.body.userJWT, TOKEN_KEY);
+                const body = jwtweb.decode(req.body.userJWT, SECRET_KEY_SERVER);
                 if (!body) return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
 
                 const modelo = {

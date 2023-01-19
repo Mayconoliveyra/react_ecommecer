@@ -1,9 +1,6 @@
-const { API_PORT } = require("./client")
 const app = require("express")()
 const consign = require("consign");
-const db = require("./config/db")
 
-app.db = db
 consign()
     .include('./config/passport.js')
     .then("./config/middlewares.js")
@@ -14,7 +11,7 @@ consign()
     .then("./config/routes.js")
     .into(app) /* into = dentro */
 
-app.listen(API_PORT, () => {
-    console.log(`[${API_PORT}]Backend executando...`)
+app.listen(3030, () => {
+    console.log("Backend executando...")
 })
 

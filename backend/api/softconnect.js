@@ -1,29 +1,5 @@
-const { SoftconnectAPI } = require("../config/servers");
-
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
-
-    const store = async () => {
-        try {
-            const softconnect = await SoftconnectAPI();
-            const url = `/api/store`
-
-            const store = await softconnect.get(url)
-                .then((res) => res.data)
-                .catch(() => false);
-
-            console.log(store)
-            /* Se não encontrar ou retornar erro, retornar store false. */
-            if (!store || store.error) {
-                return false
-            }
-
-            return store
-        } catch (error) {
-            utility_console("softconnect.store", error)
-            return false
-        }
-    }
 
     const consultCEP = async (cep_destination) => {
         try {
@@ -58,7 +34,6 @@ module.exports = (app) => {
     }
 
     return {
-        store,
         consultCEP,
         sendEmail,
     };

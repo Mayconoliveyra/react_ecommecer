@@ -1,42 +1,25 @@
-const { TOKEN_KEY, SOFTCONNECT_API } = require("../../../../.env");
-const { ID, CLIENT_ID, CLIENT_SECRET, URL_SERVER } = require("../../../../client");
+const { URL_SERVER, SECRET_KEY_SERVER } = require("../../../../.env");
+const { ID, CLIENT_ID, CLIENT_SECRET } = require("../../../../client");
 import axios from "axios";
 const jwt = require("jwt-simple")
 
-const data = Math.floor(Date.now() / 1000)
-const payload = {
-  id: ID,
-  client_id: CLIENT_ID,
-  client_secret: CLIENT_SECRET,
-  iat: data,
-  exp: data + (60 * 60 * 24) //24hrs
-}
 const api = () => {
+  const data = Math.floor(Date.now() / 1000)
+  const payload = {
+    id: ID,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    iat: data,
+    exp: data + (60 * 1) // 1min
+  }
+
   return axios.create({
     baseURL: URL_SERVER,
     headers: {
-      "Authorization": `Bearer ${jwt.encode(payload, TOKEN_KEY)}`,
+      "Authorization": `Bearer ${jwt.encode(payload, SECRET_KEY_SERVER)}`,
       "Access-Control-Allow-Origin": "*"
     },
   })
 };
 
-
-const payloadST = {
-  id: ID,
-  client_id: CLIENT_ID,
-  client_secret: CLIENT_SECRET,
-  iat: data,
-  exp: data + (60 * 1) // 1 min
-}
-const storeST = () => {
-  return axios.create({
-    baseURL: `${SOFTCONNECT_API}/public/api/store`,
-    headers: {
-      "Authorization": `Bearer ${jwt.encode(payloadST, TOKEN_KEY)}`,
-      "Access-Control-Allow-Origin": "*"
-    },
-  })
-};
-
-export { api, storeST };
+export { api };

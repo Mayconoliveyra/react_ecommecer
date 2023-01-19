@@ -1,4 +1,4 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, TOKEN_KEY } = require("../../../../.env");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SECRET_KEY_SERVER } = require("../../../../.env");
 const { CLIENT_ID, CLIENT_SECRET } = require("../../../../client");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
@@ -22,7 +22,7 @@ export const authOptions = {
             async authorize(credentials) {
                 if (credentials && credentials.session) {
                     try {
-                        const userDecoded = jwt.decode(credentials.session, TOKEN_KEY);
+                        const userDecoded = jwt.decode(credentials.session, SECRET_KEY_SERVER);
                         if (userDecoded) {
                             return userDecoded
                         }
@@ -43,7 +43,7 @@ export const authOptions = {
                     secret: `${CLIENT_ID}${CLIENT_SECRET}`
                 }
                 const user = await storeNextAuth(modelo)
-                const userDecoded = jwt.decode(user, TOKEN_KEY);
+                const userDecoded = jwt.decode(user, SECRET_KEY_SERVER);
                 if (userDecoded)
                     return {
                         ...userDecoded
