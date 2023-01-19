@@ -1,5 +1,4 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SECRET_KEY_SERVER } = require("../../../../.env");
-const { CLIENT_ID, CLIENT_SECRET } = require("../../../../client");
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SECRET_KEY_AUTH } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -22,7 +21,7 @@ export const authOptions = {
             async authorize(credentials) {
                 if (credentials && credentials.session) {
                     try {
-                        const userDecoded = jwt.decode(credentials.session, SECRET_KEY_SERVER);
+                        const userDecoded = jwt.decode(credentials.session, SECRET_KEY_AUTH);
                         if (userDecoded) {
                             return userDecoded
                         }
@@ -36,14 +35,12 @@ export const authOptions = {
     callbacks: {
         async session({ session }) {
             try {
-                /* secret é validado no backend. */
                 const modelo = {
                     nome: session.user.name,
                     email: session.user.email,
-                    secret: `${CLIENT_ID}${CLIENT_SECRET}`
                 }
                 const user = await storeNextAuth(modelo)
-                const userDecoded = jwt.decode(user, SECRET_KEY_SERVER);
+                const userDecoded = jwt.decode(user, SECRET_KEY_AUTH);
                 if (userDecoded)
                     return {
                         ...userDecoded

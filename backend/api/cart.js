@@ -1,6 +1,5 @@
 module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
-    const { store } = app.api.softconnect;
 
     const saveIncrementer = async (req, res) => {
         const body = req.body
@@ -65,8 +64,8 @@ module.exports = (app) => {
     /* AS 2 TEM INFORMAÇÕES QUE PRECISAM ESTÁ EM IGUAL EM AMBAS, SE FOR ALTERAR ALGO ANALISAR SE PRECISA ALTERAR A OUTRA TAMBEM. */
     const getCartTemp = async (req, res) => {
         /* Carreta loja. */
-        const storeData = await store()
-        if (!storeData || storeData.error) return res.status(500).send("Não foi possível carregar os dados da empresa.");
+        const storeData = app.store
+        if (!storeData) return res.status(500).send("Não foi possível carregar os dados da empresa.");
 
         const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
         const id_user = Number(req.query.id_user); /* ID do usuario. */
@@ -137,8 +136,8 @@ module.exports = (app) => {
     };
     const savePedido = async (req, res) => {
         /* Carreta loja. */
-        const storeData = await store()
-        if (!storeData || storeData.error) return res.status(500).send("Não foi possível carregar os dados da empresa.");
+        const storeData = app.store
+        if (!storeData) return res.status(500).send("Não foi possível carregar os dados da empresa.");
 
         const body = req.body
         const modelo = {

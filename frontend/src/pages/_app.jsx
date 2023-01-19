@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     handleStore();
-    /* handleMyCart(); */
+    handleMyCart();
   }, [])
 
   /* Ajusta o template de acordo com a rota que está sendo acessada (TemplateContext) */

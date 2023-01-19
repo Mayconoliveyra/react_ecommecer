@@ -14,6 +14,7 @@ const storeNextAuth = async (data) => {
   const axios = await api();
   return await axios.post(`signin-next-auth`, data).then(res => res.data);
 };
+
 const storeAuth = async (data) => {
   const axios = await api();
   return await axios.post(`signin`, data).then(res => res.data);

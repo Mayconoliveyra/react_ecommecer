@@ -10,7 +10,7 @@ const api = () => {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     iat: data,
-    exp: data + (60 * 1) // 1min
+    exp: data + (30) // 30 SEG
   }
 
   return axios.create({

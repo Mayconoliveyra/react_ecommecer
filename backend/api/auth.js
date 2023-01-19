@@ -1,4 +1,4 @@
-const { SECRET_KEY_SERVER } = require("../.env")
+const { SECRET_KEY_AUTH } = require("../.env")
 const jwt = require("jwt-simple")
 const jwtweb = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs')
@@ -20,7 +20,7 @@ module.exports = app => {
                         iat: data, // emitido em
                         exp: data + (60 * 10) // 10 minutos 
                 }
-                return jwt.encode(tokenAuth, SECRET_KEY_SERVER)
+                return jwt.encode(tokenAuth, SECRET_KEY_AUTH)
         }
         const encryptPassword = password => {
                 const salt = bcrypt.genSaltSync(8)
@@ -36,7 +36,6 @@ module.exports = app => {
 
                 try {
                         existOrError(modelo.email, "[email], não poder ser nulo")
-                        if (body.secret != `${app.store.client_id}${app.store.client_secret}`) throw "Token de autenticação(AUTH) inválido."
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: "Desculpe-nos!. Não foi possível realizar o seu cadastro. Por favor, tente novamente utilizando outra opção de cadastro." })
@@ -78,7 +77,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, SECRET_KEY_SERVER))
+                        return res.json(jwt.encode(payload, SECRET_KEY_AUTH))
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -142,7 +141,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, SECRET_KEY_SERVER))
+                        return res.json(jwt.encode(payload, SECRET_KEY_AUTH))
                 } catch (error) {
                         utility_console("auth.signin", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -229,7 +228,7 @@ module.exports = app => {
                 }
 
                 /* Descriptografa o jwt, se de erro retornar erro */
-                const body = jwtweb.decode(req.body.userJWT, SECRET_KEY_SERVER);
+                const body = jwtweb.decode(req.body.userJWT, SECRET_KEY_AUTH);
                 if (!body) return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
 
                 const modelo = {

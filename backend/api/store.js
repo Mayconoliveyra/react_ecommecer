@@ -1,6 +1,4 @@
 module.exports = (app) => {
-    const { store } = app.api.softconnect;
-
     const get = async (req, res) => {
         const store = app.store
         const modelo = {
