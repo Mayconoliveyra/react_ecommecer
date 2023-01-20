@@ -1,8 +1,8 @@
-const { BASE_CONNECT } = require("./.env");
+const { DB_SOFTCONNECT } = require("./.env");
 
 module.exports = {
   client: "mysql2",
-  connection: BASE_CONNECT,
+  connection: DB_SOFTCONNECT,
   pool: {
     min: 2,
     max: 10

@@ -54,9 +54,31 @@ exports.up = function (knex) {
         .then(function () {
             return knex("stores").insert([
                 {
+                    id: 1,
                     nome: "Softconnect",
-                    url_logo: "https://d2r9epyceweg5n.cloudfront.net/stores/001/448/935/themes/common/logo-678818323-1642765237-494caf53526e230fd98593b4ae0e6a121642765237-320-0.png?0",
+                    url_logo: "Softconnect",
                     cpf: "116.751.744-07",
+                    cep: "58046-520",
+                    logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
+                    bairro: "Portal do Sol",
+                    localidade: "João Pessoa",
+                    uf: "PB",
+                    numero: "S/N",
+
+                    email_user: "Softconnect",
+                    email_pass: "Softconnect",
+
+                    url_site: "Softconnect",
+                    client_database: "Softconnect",
+
+                    client_id: "Softconnect",
+                    client_secret: "Softconnect",
+                },
+                {
+                    id: 2,
+                    nome: "Cazimi",
+                    url_logo: "https://d2r9epyceweg5n.cloudfront.net/stores/001/448/935/themes/common/logo-678818323-1642765237-494caf53526e230fd98593b4ae0e6a121642765237-320-0.png?0",
+                    cnpj: "32.550.788/0001-04",
                     cep: "58046-520",
                     logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
                     bairro: "Portal do Sol",
@@ -88,7 +110,8 @@ exports.up = function (knex) {
 
                     client_id: "H7eH2CuTNjdKUaHsc2aE93tXsNcT94",
                     client_secret: "JLT8LqVeKHHXxrJXiutm6pVxR3eyJS",
-                }
+                },
+
             ]);
         });
 };

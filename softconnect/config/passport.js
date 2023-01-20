@@ -1,11 +1,11 @@
-const { SECRET_KEY_SERVER } = require("../.env")
+const { SECRET_KEY_SOFTCONNECT } = require("../.env")
 const passport = require("passport")
 const passportJwt = require("passport-jwt")
 const { Strategy, ExtractJwt } = passportJwt
 
 module.exports = app => {
         const params = {
-                secretOrKey: SECRET_KEY_SERVER,
+                secretOrKey: SECRET_KEY_SOFTCONNECT,
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         }
         const strategy = new Strategy(params, async (payload, done) => {
