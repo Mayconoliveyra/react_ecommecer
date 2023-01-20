@@ -40,7 +40,7 @@ const validateStore = (store) => {
                 if (!store.email_host) throw "Store[email_host] não pode ser nulo."
                 if (!store.email_port) throw "Store[email_port] não pode ser nulo."
                 if (!store.url_site) throw "Store[url_site] não pode ser nulo."
-                if (!store.client_base) throw "Store[client_base] não pode ser nulo."
+                if (!store.client_database) throw "Store[client_database] não pode ser nulo."
                 if (store.gt_ativo) {
                         if (!store.gt_client_id) throw "Store[gt_client_id] não pode ser nulo."
                         if (!store.gt_client_secret) throw "Store[gt_client_secret] não pode ser nulo."
@@ -50,6 +50,8 @@ const validateStore = (store) => {
         }
 }
 
+const softconnect = knex(config("db_softconnect"))
+
 module.exports = app => {
         const params = {
                 secretOrKey: SECRET_KEY_SERVER,
@@ -58,9 +60,9 @@ module.exports = app => {
 
         const strategy = new Strategy(params, async (payload, done) => {
                 const { id, client_id, client_secret } = payload
-                const softconnect = knex(config("db_softconnect"))
                 try {
                         if (!id) throw "[id] não pode ser nulo"
+                        if (id == 1) throw "[id] id=1, está reservado e não pode ser utilizado aqui!."
                         if (!client_id) throw "[client_id] não pode ser nulo"
                         if (!client_secret) throw "[client_secret] não pode ser nulo"
 
@@ -74,10 +76,23 @@ module.exports = app => {
                         const storeValid = validateStore(store)
                         if (storeValid) throw storeValid
 
-                        app.db = knex(config(store.client_base))
-                        /* Faz uma consulta, apenas para testa a conexão com a base do cliente. */
-                        await app.db("temp_cart").where({ id: 1 }).first()
-                        app.st = knex(config("db_softconnect"))
+                        /* Seta a instancia da loja, caso ainda nao tiver setana na variavel "app.connections" */
+                        const storeDatabase = store.client_database
+                        if (!app.connections[storeDatabase]) {
+                                const conexao = knex(config(storeDatabase))
+
+                                await conexao.migrate.latest()
+                                /* Testando se as principais tabelas estão setadas. */
+                                await conexao("products").where({ id: 1 }).first()
+                                await conexao("users").where({ id: 1 }).first()
+                                await conexao("temp_cart").where({ id: 1 }).first()
+
+                                /* Seta instancia para ser utilizada nas proximas requisição; */
+                                app.connections[storeDatabase] = conexao
+                        }
+
+                        app.db = app.connections[storeDatabase]
+                        app.st = softconnect
                         app.store = store
 
                         return done(null, { ...payload })
@@ -90,7 +105,6 @@ module.exports = app => {
                         app.st = false
                         app.db = false
                         app.store = false
-
                         return done(null, false)
                 }
         })
