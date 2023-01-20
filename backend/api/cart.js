@@ -63,10 +63,6 @@ module.exports = (app) => {
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
     /* AS 2 TEM INFORMAÇÕES QUE PRECISAM ESTÁ EM IGUAL EM AMBAS, SE FOR ALTERAR ALGO ANALISAR SE PRECISA ALTERAR A OUTRA TAMBEM. */
     const getCartTemp = async (req, res) => {
-        /* Carreta loja. */
-        const storeData = app.store
-        if (!storeData) return res.status(500).send("Não foi possível carregar os dados da empresa.");
-
         const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
         const id_user = Number(req.query.id_user); /* ID do usuario. */
 
@@ -100,7 +96,7 @@ module.exports = (app) => {
             AND tc.id_storage = '${id}'`)
 
             /*!Atenção!, se alterar essa consulta verificar se precisa alterar em savePedido tambem */
-            const totals = await app.db.raw(`
+            const rawTotals = await app.db.raw(`
             SELECT 
             ROUND(Sum(If(promotion=True,price_promotion*quantity,price*quantity)),2) AS vlr_pagar_products, 
             ROUND(Sum(temp_cart.quantity),2) AS qtd_products, 
@@ -116,29 +112,29 @@ module.exports = (app) => {
             AND ((products.disabled)=FALSE) 
             AND ((temp_cart.id_storage)='${id}'));
             `)
+            const totals = rawTotals[0][0]
 
             /* Seta o valor de frete */
             if (id_user && products[0].length > 0) {
+                const store = app.store
+
                 const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
-                totals[0][0].vlr_frete = Math.round(user.distancia_km * storeData.percentual_frete)
-                totals[0][0].vlr_pagar_com_frete = totals[0][0].vlr_pagar_products + Math.round(user.distancia_km * storeData.percentual_frete)
-                totals[0][0].vlr_pagar_sem_frete = totals[0][0].vlr_pagar_products
-                totals[0][0].distancia_km = user.distancia_km
-                totals[0][0].percentual_frete = storeData.percentual_frete
+
+                totals.vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
+                totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
+                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                totals.distancia_km = user.distancia_km
+                totals.percentual_frete = store.percentual_frete
             }
 
-            res.json({ products: products[0], totals: totals[0][0] })
+            res.json({ products: products[0], totals: totals })
         } catch (error) {
             utility_console("cart.getCartTemp", error)
             return res.status(500).send(msgErrorDefault);
         }
     };
     const savePedido = async (req, res) => {
-        /* Carreta loja. */
-        const storeData = app.store
-        if (!storeData) return res.status(500).send("Não foi possível carregar os dados da empresa.");
-
         const body = req.body
         const modelo = {
             id_user: body.id_user,
@@ -164,7 +160,7 @@ module.exports = (app) => {
             existOrError(modelo.pgt_forma, "[pgt_forma] não pode ser nulo.")
 
             /*!Atenção!, se alterar essa consulta verificar se precisa alterar em getCartTemp tambem */
-            const salesHeader = await app.db.raw(`
+            const rawTotals = await app.db.raw(`
             SELECT 
             ROUND(Sum(If(promotion=True,price_promotion*quantity,price*quantity)),2) AS vlr_pagar_products, 
             ROUND(Sum(temp_cart.quantity),2) AS qtd_products, 
@@ -180,25 +176,54 @@ module.exports = (app) => {
             AND ((products.disabled)=FALSE) 
             AND ((temp_cart.id_storage)='${modelo.id_storage}'));
             `)
+            const totals = rawTotals[0][0]
 
-            const user = await app.db.select("nome", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
+            const store = app.store
+
+            const user = await app.db.select("id", "nome", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")
-            salesHeader[0][0].vlr_frete = Math.round(user.distancia_km * storeData.percentual_frete)
-            salesHeader[0][0].vlr_pagar_com_frete = salesHeader[0][0].vlr_pagar_products + Math.round(user.distancia_km * storeData.percentual_frete)
-            salesHeader[0][0].vlr_pagar_sem_frete = salesHeader[0][0].vlr_pagar_products
-            salesHeader[0][0].distancia_km = user.distancia_km
-            salesHeader[0][0].percentual_frete = storeData.percentual_frete
+            totals.vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
+            totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
+            totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+            totals.distancia_km = user.distancia_km
+            totals.percentual_frete = store.percentual_frete
 
-            if (modelo.vlr_pagar_com_frete != salesHeader[0][0].vlr_pagar_com_frete) throw "[vlr_pagar_com_frete] diverge do somatório."
-            if (modelo.vlr_pagar_sem_frete != salesHeader[0][0].vlr_pagar_sem_frete) throw "[vlr_pagar_sem_frete] diverge do somatório."
-            if (modelo.vlr_frete != salesHeader[0][0].vlr_frete) throw "[vlr_frete] diverge do somatório."
-            if (modelo.distancia_km != salesHeader[0][0].distancia_km) throw "[distancia_km] diverge do somatório."
-            if (modelo.percentual_frete != salesHeader[0][0].percentual_frete) throw "[percentual_frete] diverge do somatório."
-            const modeloSalesHeader = { ...salesHeader[0][0], ...modelo, ...user }
+            if (modelo.vlr_pagar_com_frete != totals.vlr_pagar_com_frete) throw "[vlr_pagar_com_frete] diverge do somatório."
+            if (modelo.vlr_pagar_sem_frete != totals.vlr_pagar_sem_frete) throw "[vlr_pagar_sem_frete] diverge do somatório."
+            if (modelo.vlr_frete != totals.vlr_frete) throw "[vlr_frete] diverge do somatório."
+            if (modelo.distancia_km != totals.distancia_km) throw "[distancia_km] diverge do somatório."
+            if (modelo.percentual_frete != totals.percentual_frete) throw "[percentual_frete] diverge do somatório."
 
+            const modeloTotals = {
+                id_user: user.id,
+                id_storage: modelo.id_storage,
+                nome: user.nome,
+                email: user.email,
+                contato: user.contato,
+                cep: user.cep,
+                logradouro: user.logradouro,
+                complemento: user.complemento,
+                bairro: user.bairro,
+                localidade: user.localidade,
+                uf: user.uf,
+                numero: user.numero,
+                distancia_km: user.distancia_km,
+                tempo: user.tempo,
+                vlr_pagar_products: totals.vlr_pagar_products,
+                qtd_products: totals.qtd_products,
+                vlr_products: totals.vlr_products,
+                vlr_products_promotion: totals.vlr_products_promotion,
+                vlr_diferenca_promotion: totals.vlr_diferenca_promotion,
+                vlr_frete: totals.vlr_frete,
+                vlr_pagar_com_frete: totals.vlr_pagar_com_frete,
+                vlr_pagar_sem_frete: totals.vlr_pagar_sem_frete,
+                pgt_metodo: modelo.pgt_metodo,
+                pgt_forma: modelo.pgt_forma,
+                percentual_frete: totals.percentual_frete
+            }
             await app.db.transaction(async trans => {
                 /* CADASTRA O CABEÇALHO DO PEDIDO E RETORNA O ID */
-                const idSalesHeader = await trans.insert(modeloSalesHeader)
+                const idTotalsHeader = await trans.insert(modeloTotals)
                     .table("sales_header")
                     .returning('id')
                     .then((id) => id[0])
@@ -206,7 +231,7 @@ module.exports = (app) => {
                 /*!Atenção!, se alterar essa consulta verificar se precisa alterar em getCartTemp tambem */
                 const salesProducts = await trans.raw(`
                 SELECT 
-                ${idSalesHeader} AS id_sale, 
+                ${idTotalsHeader} AS id_sale, 
                 p.id AS id_product, 
                 p.name, 
                 p.url_img, 
@@ -240,7 +265,7 @@ module.exports = (app) => {
                     .table("sales_products")
 
                 /* Retornar o ID do pedido */
-                return res.json(idSalesHeader)
+                return res.json(idTotalsHeader)
             })
         } catch (error) {
             utility_console("savePedido", error)

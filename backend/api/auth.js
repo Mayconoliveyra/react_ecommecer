@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt-nodejs')
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, contactExistOrErro } = app.api.utilities;
-        const { consultCEP, sendEmail } = app.api.softconnect;
+        const { consultCEP } = app.api.services.maps;
+        const { sendEmail } = app.api.services.email;
         const table = "users";
 
         /* GERA O TOKEN UTILIZADO PARA AUTENTICAR USUARIO NOVO E PARA RESTAURAR SENHA */
@@ -175,12 +176,10 @@ module.exports = app => {
                 }
 
                 try {
-                        const store = app.store
-                        if (!store) return res.status(400).send({ 400: "Não foi encontrado o cadastro da empresa." })
-
                         /* endereco vem da api softconnect = cep, logradouro, localidade, bairro, uf */
                         const endereco = await consultCEP(modelo.cep)
-                        if (endereco && endereco.error) {
+                        /* Se tiver error no consulta cep é retornado dentro de "error" */
+                        if (endereco.error) {
                                 return res.status(400).send(endereco.error)
                         }
 

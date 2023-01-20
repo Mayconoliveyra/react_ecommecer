@@ -1,7 +1,7 @@
 const CryptoJS = require("crypto-js");
 
 /* Não pode ser alterada se já foi utilizada, poís, vai dar erro para descriptografar */
-const SECRET_ENCRYPT = "qQaZSaCVZoEkLBiF5zBhg6G5KWfhD9s-ZooQjzQko94";
+const SECRET_ENCRYPT = "6vUFBdd3EchhdacEzUpEJ4bVDGoEmBSz2dALGka8";
 
 module.exports = (app) => {
     const msgErrorDefault = "Não foi possível realizar a operação!. Por favor, atualize a página e tente novamente.";
@@ -88,11 +88,12 @@ module.exports = (app) => {
         /* Salva no banco de dados */
         if (saveDB) {
             const moodelo = {
+                id_store: app.store.id,
                 name: name,
                 error: JSON.stringify(error),
             };
 
-            app.db
+            app.st
                 .insert(moodelo)
                 .table("_error_backend")
                 .then()
