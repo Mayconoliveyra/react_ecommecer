@@ -1,13 +1,13 @@
 const { SECRET_KEY_AUTH } = require("../.env")
 const jwt = require("jwt-simple")
 const jwtweb = require('jsonwebtoken')
-const bcrypt = require('bcrypt-nodejs')
-
+const bcrypt = require('bcrypt')
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, contactExistOrErro } = app.api.utilities;
         const { consultCEP } = app.api.services.maps;
         const { sendEmail } = app.api.services.email;
+
         const table = "users";
 
         /* GERA O TOKEN UTILIZADO PARA AUTENTICAR USUARIO NOVO E PARA RESTAURAR SENHA */
@@ -24,7 +24,7 @@ module.exports = app => {
                 return jwt.encode(tokenAuth, SECRET_KEY_AUTH)
         }
         const encryptPassword = password => {
-                const salt = bcrypt.genSaltSync(8)
+                const salt = bcrypt.genSaltSync(11)
                 return bcrypt.hashSync(password, salt)
         }
 
