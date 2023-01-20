@@ -3,6 +3,7 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .get(app.api.store.get)
 
+
   app.route("/signin-next-auth")
     .all(app.config.passport.authenticate())
     .post(app.api.auth.signinNextAuth)
@@ -10,13 +11,13 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .post(app.api.auth.signin)
 
+
   app.route("/user")
     .all(app.config.passport.authenticate())
     .post(app.api.auth.save)
   app.route("/user/:id")
     .all(app.config.passport.authenticate())
     .put(app.api.auth.save)
-
   app.route("/user/password")
     .all(app.config.passport.authenticate())
     .post(app.api.auth.newPassword)
@@ -24,22 +25,21 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .put(app.api.auth.newPassword)
 
+
   app.route("/products")
     .all(app.config.passport.authenticate())
     .get(app.api.products.get)
-
   app.route("/products/:id")
     .all(app.config.passport.authenticate())
     .get(app.api.products.get)
 
+
   app.route("/cart")
     .all(app.config.passport.authenticate())
     .post(app.api.cart.saveIncrementer)
-
   app.route("/cart/:id")
     .all(app.config.passport.authenticate())
     .get(app.api.cart.getCartTemp)
-
   app.route("/cart/save-pedido")
     .all(app.config.passport.authenticate())
     .post(app.api.cart.savePedido)
