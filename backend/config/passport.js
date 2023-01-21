@@ -45,6 +45,9 @@ const validateStore = (store) => {
                         if (!store.gt_client_id) throw "Store[gt_client_id] não pode ser nulo."
                         if (!store.gt_client_secret) throw "Store[gt_client_secret] não pode ser nulo."
                 }
+                if (store.pgt_pix || store.pgt_cartao) {
+                        if (!store.gt_ativo) throw "Store pgt_pix(Forma pagamento PIX) e pgt_cartao(Forma pagamento CARTÃO) só pode está habilitado se store.gt_ativo(GERENCIANET) estiver habilitado!."
+                }
         } catch (error) {
                 return error
         }

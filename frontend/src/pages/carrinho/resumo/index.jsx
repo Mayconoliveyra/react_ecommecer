@@ -215,11 +215,15 @@ export default function Resume({ session, products, totals, payment }) {
                                         <td>Itens:</td>
                                         <td data="td-value">{moneyMask(totals.vlr_pagar_products)}</td>
                                     </tr>
-                                    {payment.pgt_metodo == "Receber em casa(Frete)" ?
+                                    {payment.pgt_metodo == "Receber em casa" ?
                                         <>
                                             <tr>
                                                 <td>Frete:</td>
-                                                <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
+                                                {!totals.cobrar_frete ?
+                                                    <td data="td-value">Frete Grátis</td>
+                                                    :
+                                                    <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
+                                                }
                                             </tr>
                                             <tr>
                                                 <td data="total-td">Total do pedido:</td>
@@ -230,7 +234,11 @@ export default function Resume({ session, products, totals, payment }) {
                                         <>
                                             <tr>
                                                 <td>Frete:</td>
-                                                <td data="td-value">{moneyMask(0.00)}</td>
+                                                {!totals.cobrar_frete ?
+                                                    <td data="td-value">Frete Grátis</td>
+                                                    :
+                                                    <td data="td-value">{moneyMask(0.00)}</td>
+                                                }
                                             </tr>
                                             <tr>
                                                 <td data="total-td">Total do pedido:</td>
@@ -251,7 +259,7 @@ export default function Resume({ session, products, totals, payment }) {
                         <div data="table-values">
                             <table>
                                 <tbody>
-                                    {payment.pgt_metodo == "Receber em casa(Frete)" ?
+                                    {payment.pgt_metodo == "Receber em casa" ?
                                         <>
                                             <tr>
                                                 <td data="name-user">{session.nome}</td>
@@ -396,6 +404,7 @@ export async function getServerSideProps(context) {
     }
 
     const data = await getCartTemp(myCartId, session.id)
+    console.log(data)
 
     /* Se não tiver setado redireciona para tela home*/
     if (!data || !data.totals || !data.products) {

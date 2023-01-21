@@ -27,9 +27,11 @@ exports.up = function (knex) {
             table.double("vlr_frete", 8, 2).notNull()
             table.double("vlr_pagar_com_frete", 8, 2).notNull()
             table.double("vlr_pagar_sem_frete", 8, 2).notNull()
-            table.string("pgt_metodo").notNull()
-            table.string("pgt_forma").notNull()
+            table.enu("pgt_metodo", ["Receber em casa", "Retirada na loja"])
+            table.enu("pgt_forma", ["PIX", "Cartão", "Pagar na loja", "Pagar na entrega"])
             table.double("percentual_frete").notNull()
+            table.boolean("cobrar_frete", 1).notNull() /* Se foi cobrado frete ou não */
+            table.double("vlr_pago", 8, 2).notNull() /* Valor a ser pago pelo cliente, ja com frete caso tenha. */
 
             table.text("pix_chave")
             table.text("pix_qrcode")

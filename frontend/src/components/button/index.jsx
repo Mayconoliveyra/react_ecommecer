@@ -15,6 +15,10 @@ const ButtonSC = styled.div`
             background: #FFD814;
             border:solid 2px #FCD200;
             border-radius: 0.45rem;
+
+            &:disabled{
+                cursor: default;
+            }
         }
     }
     [data='btn-confirm-noborder']{
@@ -31,6 +35,10 @@ const ButtonSC = styled.div`
             background: #FFD814;
             border:solid 2px #FCD200;
             border-radius: 0.45rem;
+
+            &:disabled{
+                cursor: default;
+            }
         }
     }
     [data='btn-confirm-white']{
@@ -46,6 +54,10 @@ const ButtonSC = styled.div`
             background-color: transparent;
             border:solid 2px #FCD200;
             border-radius: 0.45rem;
+
+            &:disabled{
+                cursor: default;
+            }
         }
     }
 `

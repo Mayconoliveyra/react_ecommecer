@@ -122,11 +122,24 @@ module.exports = (app) => {
                 const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
 
-                totals.vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
-                totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
-                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
-                totals.distancia_km = user.distancia_km
-                totals.percentual_frete = store.percentual_frete
+                const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
+                totals.cobrar_frete = store.cobrar_frete;
+                if (store.cobrar_frete) {
+                    /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
+                    vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
+
+                    totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
+                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                    totals.distancia_km = user.distancia_km
+                    totals.percentual_frete = store.percentual_frete
+                } else {
+                    totals.vlr_frete = 0.00;
+
+                    totals.vlr_pagar_com_frete = totals.vlr_pagar_products
+                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                    totals.distancia_km = user.distancia_km
+                    totals.percentual_frete = 0.00;
+                }
             }
 
             res.json({ products: products[0], totals: totals })
@@ -183,11 +196,37 @@ module.exports = (app) => {
 
             const user = await app.db.select("id", "nome", "cpf", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")
-            totals.vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
-            totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
-            totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
-            totals.distancia_km = user.distancia_km
-            totals.percentual_frete = store.percentual_frete
+
+            const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
+            totals.cobrar_frete = store.cobrar_frete;
+            if (store.cobrar_frete) {
+                /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
+                vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
+
+                totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
+                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                totals.distancia_km = user.distancia_km
+                totals.percentual_frete = store.percentual_frete
+            } else {
+                totals.vlr_frete = 0.00;
+
+                totals.vlr_pagar_com_frete = totals.vlr_pagar_products
+                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                totals.distancia_km = user.distancia_km
+                totals.percentual_frete = 0.00;
+            }
+
+            /* Seta o valor pago; já feito a validação de formas de pagamento e frete. */
+            if (store.cobrar_frete) {
+                /* Se for para receber em casa será cobrado o frete */
+                modelo.pgt_metodo == "Receber em casa" ?
+                    totals.vlr_pago = totals.vlr_pagar_com_frete
+                    :
+                    totals.vlr_pago = totals.vlr_pagar_sem_frete;
+            } else {
+                /* Se não tiver habilitado frete, sempre não vai pagar frete.  */
+                totals.vlr_pago = totals.vlr_pagar_sem_frete;
+            }
 
             if (modelo.vlr_pagar_com_frete != totals.vlr_pagar_com_frete) throw "[vlr_pagar_com_frete] diverge do somatório."
             if (modelo.vlr_pagar_sem_frete != totals.vlr_pagar_sem_frete) throw "[vlr_pagar_sem_frete] diverge do somatório."
@@ -221,8 +260,11 @@ module.exports = (app) => {
                 vlr_pagar_sem_frete: totals.vlr_pagar_sem_frete,
                 pgt_metodo: modelo.pgt_metodo,
                 pgt_forma: modelo.pgt_forma,
-                percentual_frete: totals.percentual_frete
+                percentual_frete: totals.percentual_frete,
+                cobrar_frete: totals.cobrar_frete,
+                vlr_pago: totals.vlr_pago
             }
+
             await app.db.transaction(async trans => {
                 /* CADASTRA O CABEÇALHO DO PEDIDO E RETORNA O ID */
                 const idTotalsHeader = await trans.insert(modeloTotals)
@@ -266,21 +308,23 @@ module.exports = (app) => {
                 await trans.insert(salesProducts[0])
                     .table("sales_products")
 
+                /* FORMA DE PAGAMENTO PIX */
+                if (modeloTotals.pgt_forma == "PIX") {
+                    /* Gera cobrança pix */
+                    const pix = await createPixImmediate({
+                        cpf: modeloTotals.cpf,
+                        nome: modeloTotals.nome,
+                        original: modeloTotals.vlr_pago,
+                        nmr_pedido: idTotalsHeader
+                    })
 
-                /* Gera cobrança pix */
-                const pix = await createPixImmediate({
-                    cpf: modeloTotals.cpf,
-                    nome: modeloTotals.nome,
-                    original: modeloTotals.vlr_pagar_com_frete,
-                    nmr_pedido: idTotalsHeader
-                })
+                    /*pix = {pix_chave:"...", pix_qrcode:"..."} */
+                    await trans.update(pix)
+                        .table("sales_header")
+                        .where({ id: idTotalsHeader })
 
-                /*pix = {pix_chave:"...", pix_qrcode:"..."} */
-                await trans.update(pix)
-                    .table("sales_header")
-                    .where({ id: idTotalsHeader })
-
-                res.json({ id: idTotalsHeader, pgt: pix })
+                    res.json({ id: idTotalsHeader, pgt: pix })
+                }
             })
         } catch (error) {
             utility_console("savePedido", error)

@@ -30,7 +30,7 @@ module.exports = (app) => {
             m_facebook: store.m_facebook,
             m_instagram: store.m_instagram,
             m_twitter: store.m_twitter,
-            m_yutube: store.m_yutube
+            m_yutube: store.m_yutube,
         }
 
         return res.json(modelo)
