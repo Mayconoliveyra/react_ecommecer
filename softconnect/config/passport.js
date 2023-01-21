@@ -9,7 +9,6 @@ module.exports = app => {
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         }
         const strategy = new Strategy(params, async (payload, done) => {
-                console.log("oi")
                 const { id, client_id, client_secret } = payload
                 await app.db("stores")
                         .where({ id: id, client_id: client_id })

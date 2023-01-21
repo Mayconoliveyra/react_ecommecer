@@ -88,7 +88,7 @@ module.exports = (app) => {
         /* Salva no banco de dados */
         if (saveDB) {
             const moodelo = {
-                id_store: app.store.id,
+                id_store: 1,
                 name: name,
                 error: JSON.stringify(error),
             };
