@@ -10,12 +10,15 @@ const moneyMask = (vlr, showRS = true) => {
     return `${valor}`; /* Exibir sem simbolo R$ */
 }
 
-const proneMask = ["(", /\d/, /\d/, ")", " ", /\d/,/\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/,];
+const proneMask = ["(", /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/,];
 
 const cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/];
+
+const cpfMask = [/\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, "-", /\d/, /\d/];
 
 export {
     moneyMask,
     proneMask,
-    cepMask
+    cepMask,
+    cpfMask
 }

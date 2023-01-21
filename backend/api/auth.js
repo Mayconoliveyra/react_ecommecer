@@ -4,7 +4,7 @@ const jwtweb = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 module.exports = app => {
-        const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, contactExistOrErro } = app.api.utilities;
+        const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, validateContact, validateCPF } = app.api.utilities;
         const { consultCEP } = app.api.services.maps;
         const { sendEmail } = app.api.services.email;
 
@@ -60,6 +60,7 @@ module.exports = app => {
                         const payload = {
                                 id: user.id,
                                 nome: user.nome,
+                                cpf: user.cpf,
                                 email: user.email,
                                 contato: user.contato,
                                 cep: user.cep,
@@ -124,6 +125,7 @@ module.exports = app => {
                         const payload = {
                                 id: user.id,
                                 nome: user.nome,
+                                cpf: user.cpf,
                                 email: user.email,
                                 contato: user.contato,
                                 cep: user.cep,
@@ -156,6 +158,7 @@ module.exports = app => {
 
                 const modelo = {
                         nome: body.nome,
+                        cpf: body.cpf,
                         email: body.email,
                         contato: body.contato,
                         cep: body.cep,
@@ -165,9 +168,11 @@ module.exports = app => {
 
                 try {
                         existOrError(modelo.nome, { nome: "Nome completo deve ser informado." })
+                        existOrError(modelo.cpf, { cpf: "CPF deve ser informado." })
+                        if (!validateCPF(modelo.cpf)) throw { cpf: "É necessário informar um CPF válido." }
                         existOrError(modelo.email, { email: "E-mail deve ser informado." })
                         existOrError(modelo.contato, { contato: "Contato deve ser informado." })
-                        contactExistOrErro(modelo.contato)
+                        if (!validateContact(modelo.contato)) throw { contato: "É necessário informar um número de contato válido." }
                         existOrError(modelo.cep, { cep: "CEP deve ser informado" })
 
                         await notExistOrErrorDB({ table: table, column: 'email', data: modelo.email, id: id }, { email: "Já existe cadastro para o e-mail informado." })

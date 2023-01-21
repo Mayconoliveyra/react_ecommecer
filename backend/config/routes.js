@@ -43,4 +43,13 @@ module.exports = (app) => {
   app.route("/cart/save-pedido")
     .all(app.config.passport.authenticate())
     .post(app.api.cart.savePedido)
+
+
+
+
+
+  /* TESTE */
+  app.route("/pix/pix-immediate")
+    .all(app.config.passport.authenticate())
+    .post(app.api.services.gerencianet.createPixImmediate)
 };

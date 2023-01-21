@@ -4,6 +4,7 @@ exports.up = function (knex) {
             table.increments("id").primary();
 
             table.string("nome").defaultTo("Não informado").notNull()
+            table.string("cpf", 14)
             table.string("email").notNull().unique()
             table.string("senha")
             table.string("contato", 15)

@@ -39,22 +39,20 @@ module.exports = (app) => {
         ).toString();
         return encryptText;
     }
-
     function decrypt(texto) {
         const bytes = CryptoJS.AES.decrypt(texto, SECRET_ENCRYPT);
         const decryptText = bytes.toString(CryptoJS.enc.Utf8);
         return decryptText;
     }
-    function contactExistOrErro(telefone) {
-        const msg = { contato: "É necessário informar um número válido." }
+    function validateContact(telefone) {
         //retira todos os caracteres menos os numeros
         telefone = telefone.replace(/\D/g, "");
 
         //verifica se tem a qtde de numero correto
-        if (!telefone.length == 11) throw msg;
+        if (!telefone.length == 11) return false;
 
         //verificar se começa com 9 o contato
-        if (parseInt(telefone.substring(2, 3)) != 9) throw msg;
+        if (parseInt(telefone.substring(2, 3)) != 9) return false;
 
         //verifica se não é nenhum numero digitado errado (propositalmente)
         for (var n = 0; n < 10; n++) {
@@ -65,7 +63,7 @@ module.exports = (app) => {
                 telefone == new Array(11).join(n) ||
                 telefone == new Array(12).join(n)
             )
-                throw msg;
+                return false;
         }
         //DDDs validos
         const codigosDDD = [
@@ -76,9 +74,60 @@ module.exports = (app) => {
         ];
         //verifica se o DDD é valido (sim, da pra verificar rsrsrs)
         if (codigosDDD.indexOf(parseInt(telefone.substring(0, 2))) == -1)
-            throw msg;
+            return false;
 
         //se passar por todas as validações acima, então está tudo certo
+        return true
+    }
+    function validateCPF(cpf) {
+        /* https://devarthur.com/javascript/funcao-javascript-para-validar-cpf */
+        var Soma = 0
+        var Resto
+
+        var strCPF = String(cpf).replace(/[^\d]/g, '')
+
+        if (strCPF.length !== 11)
+            return false
+
+        if ([
+            '00000000000',
+            '11111111111',
+            '22222222222',
+            '33333333333',
+            '44444444444',
+            '55555555555',
+            '66666666666',
+            '77777777777',
+            '88888888888',
+            '99999999999',
+        ].indexOf(strCPF) !== -1)
+            return false
+
+        for (i = 1; i <= 9; i++)
+            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+
+        Resto = (Soma * 10) % 11
+
+        if ((Resto == 10) || (Resto == 11))
+            Resto = 0
+
+        if (Resto != parseInt(strCPF.substring(9, 10)))
+            return false
+
+        Soma = 0
+
+        for (i = 1; i <= 10; i++)
+            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i)
+
+        Resto = (Soma * 10) % 11
+
+        if ((Resto == 10) || (Resto == 11))
+            Resto = 0
+
+        if (Resto != parseInt(strCPF.substring(10, 11)))
+            return false
+
+        return true
     }
     function utility_console(name = null, error = null, saveDB = true) {
         console.log("########################################")
@@ -108,7 +157,8 @@ module.exports = (app) => {
         notExistOrErrorDB,
         encrypt,
         decrypt,
-        contactExistOrErro,
+        validateContact,
+        validateCPF,
         utility_console,
         msgErrorDefault,
     };

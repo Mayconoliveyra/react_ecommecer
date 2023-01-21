@@ -10,7 +10,7 @@ Yup.setLocale(pt);
 
 import { Group } from '../../../components/input';
 
-import { proneMask, cepMask } from '../../../../masks';
+import { proneMask, cepMask, cpfMask } from '../../../../masks';
 import { store as saveUser } from '../../api/auth';
 
 const MyDataSC = styled.div`
@@ -79,6 +79,7 @@ const BtnConfirmSC = styled.div`
 export default function MyData({ session }) {
     const scheme = Yup.object().shape({
         nome: Yup.string().nullable().label("Nome").required(),
+        cpf: Yup.string().nullable().label("CPF").required().length(14, "É necessário informar um CPF válido."),
         email: Yup.string().nullable().label("E-mail").required(),
         contato: Yup.string().nullable().label("Contato").required().length(15, "É necessário informar o número completo no formato (99) 99999-9999"),
         cep: Yup.string().nullable().label("CEP").required().length(9, "É necessário informar um CEP completo."),
@@ -129,6 +130,14 @@ export default function MyData({ session }) {
                                         name="nome"
                                         placeholder="Exemplo: Jhon Doe"
                                         maxLength={55}
+                                    />
+                                    <Group
+                                        error={!!errors.cpf && touched.cpf}
+                                        label="CPF"
+                                        name="cpf"
+                                        placeholder="Exemplo: 999.999.999-99"
+                                        autocomplete="on"
+                                        mask={cpfMask}
                                     />
                                     <Group
                                         label="E-mail"

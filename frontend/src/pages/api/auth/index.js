@@ -33,6 +33,7 @@ const storePassword = async (data, id) => {
 const userIsAuth = async (session) => {
   if (!session) return false
   if (!session || !session.email) return false
+  if (!session || !session.cpf) return false
   if (!session || !session.contato) return false
   if (!session || !session.nome) return false
   if (!session || !session.email_auth) return false
