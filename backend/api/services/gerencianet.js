@@ -1,32 +1,41 @@
+const { GN_CERTIFICATE } = require("../../.env")
 const Gerencianet = require('gn-api-sdk-node')
 
 const GerencianetST = (gt_client_id, gt_client_secret) => {
     const options = {
-        sandbox: true,
+        sandbox: true, /* true= homologação; false = produção; */
         client_id: gt_client_id,
         client_secret: gt_client_secret,
-        certificate: './certs/homologacao-softconnect.p12',
-        /* certificate: './certs/producao-softconnect.p12', */
+        certificate: `./certs/${GN_CERTIFICATE}`,
     }
     return new Gerencianet(options)
 }
 
 module.exports = (app) => {
-    const { utility_console, msgErrorDefault } = app.api.utilities;
+    const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
 
-    const createPixImmediate = async ({ original, nmr_pedido }) => {
+    const createPixImmediate = async ({ cpf, nome, original, nmr_pedido, expiracao = 3600 }) => {
         try {
+            existOrError(cpf, "[cpf] não pode ser nulo.")
+            existOrError(nome, "[nome] não pode ser nulo.")
+            existOrError(original, "[original] não pode ser nulo ou 0.")
+            existOrError(nmr_pedido, "[nmr_pedido] não pode ser nulo.")
+
+            existOrError(app.store.gt_client_id, "[app.store.gt_client_id] não pode ser nulo.")
+            existOrError(app.store.gt_client_secret, "[app.store.gt_client_secret] não pode ser nulo.")
+
             const gerencianet = await GerencianetST(app.store.gt_client_id, app.store.gt_client_secret)
+
             const body = {
                 calendario: {
-                    expiracao: 3600,
+                    expiracao: expiracao,
                 },
                 devedor: {
-                    cpf: '18765777034',
-                    nome: 'Maycon Oliveira',
+                    cpf: cpf.replace(/\D/g, ''),
+                    nome: nome,
                 },
                 valor: {
-                    original: original.toString(),
+                    original: original.toFixed(2),
                 },
                 chave: 'softconnect.tecnologia@gmail.com',
                 infoAdicionais: [
@@ -41,22 +50,23 @@ module.exports = (app) => {
                 ],
             }
 
+            /* Gera cobrança pix */
             const pixImmediate = await gerencianet.pixCreateImmediateCharge([], body)
-            console.log(pixImmediate.loc.id)
 
-            await gerencianet.pixGenerateQRCode({ id: pixImmediate.loc.id })
-                .then((resposta) => {
-                    console.log(resposta)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            /* Gera cobrança qrcode(chave e data:image do qrcode) */
+            const pix = await gerencianet.pixGenerateQRCode({ id: pixImmediate.loc.id })
 
+            /* Se o pix for gerado com sucesso, vai ser retornado  imagem do qrcode e a chave qrcode. */
+            /* Caso contrario retornar erro não identificado. */
+            if (pix && pix.qrcode && pix.imagemQrcode) {
+                return { pix_chave: pix.qrcode, pix_qrcode: pix.imagemQrcode }
+            } else {
+                /* se dentro de pix não tiver os parametros necessario retornar o objeto retornado */
+                throw `Houve um erro não identificado para gerar o pix. pix: ${JSON.stringify(pix)}`
+            }
         } catch (error) {
-
+            throw `gerencianet.createPixImmediate: ${error}`
         }
-
-
     };
 
     /*  const consultPixList = async (req, res) => {

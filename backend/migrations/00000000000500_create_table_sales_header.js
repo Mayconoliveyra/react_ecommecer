@@ -6,6 +6,7 @@ exports.up = function (knex) {
             table.string("id_storage", 28).notNull();
 
             table.string("nome").notNull()
+            table.string("cpf", 14)
             table.string("email").notNull()
             table.string("contato", 15).notNull()
             table.string("cep", 9).notNull()
@@ -29,6 +30,9 @@ exports.up = function (knex) {
             table.string("pgt_metodo").notNull()
             table.string("pgt_forma").notNull()
             table.double("percentual_frete").notNull()
+
+            table.text("pix_chave")
+            table.text("pix_qrcode")
 
             table.boolean("confirmado", 1).notNull().defaultTo(0)
             table.timestamp("data_confirmado").nullable();

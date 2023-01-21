@@ -7,13 +7,6 @@ exports.up = function (knex) {
             table.string("cpf", 14).notNull().defaultTo("000.000.000-00");
             table.string("cnpj", 18).notNull().defaultTo("00.000.000/0000-00");
             table.string("url_logo").notNull();
-
-            table.double("percentual_frete").notNull().defaultTo(0)
-            table.double("valor_minimo").notNull().defaultTo(0)
-
-            table.string("resp_nome").notNull().defaultTo("Não informado");
-            table.string("resp_contato", 15)
-
             table.string("cep", 9).notNull();
             table.string("logradouro").notNull();
             table.string("bairro").notNull();
@@ -21,25 +14,42 @@ exports.up = function (knex) {
             table.string("uf", 2).notNull();
             table.string("numero").notNull();
 
-            table.string("a_whatsapp", 15)
-            table.string("a_messenger")
-            table.string("a_instagram")
-            table.string("a_email")
+            table.boolean("cobrar_frete", 1).notNull().defaultTo(1); /* Se vai ser combrado taxa de frete ou nao */
+            table.double("percentual_frete").notNull().defaultTo(0.00); /* Vai ser utilizado para calcular vende de acordo com a distancia. percentual * km */
+            table.double("taxa_min_frete", 8, 2).notNull().defaultTo(0.00);
+            table.double("vlr_min_pedido", 8, 2).notNull().defaultTo(0.00); /* Valor minimo da compra para habilitar entrega */
+            table.double("distancia_max_frete", 8, 2).notNull().defaultTo(0.00); /* distancia maxima para frete. */
 
-            table.string("m_facebook")
-            table.string("m_instagram")
-            table.string("m_twitter")
-            table.string("m_yutube")
+            table.boolean("entrega_frete", 1).notNull(); /* Metodo de entrega */
+            table.boolean("entrega_retirada", 1).notNull(); /* Metodo de entrega */
+
+            table.boolean("pgt_pix", 1).notNull().defaultTo(0); /* Forma de pagamento */
+            table.boolean("pgt_cartao", 1).notNull().defaultTo(0); /* Forma de pagamento */
+            table.boolean("pgt_loja", 1).notNull().defaultTo(1); /* Forma de pagamento */
+            table.boolean("pgt_entrega", 1).notNull().defaultTo(1); /* Forma de pagamento */
+
+            table.string("resp_nome").notNull().defaultTo("Não informado");
+            table.string("resp_contato", 15);
+
+            table.string("a_whatsapp", 15);
+            table.string("a_messenger");
+            table.string("a_instagram");
+            table.string("a_email");
+
+            table.string("m_facebook");
+            table.string("m_instagram");
+            table.string("m_twitter");
+            table.string("m_yutube");
 
             table.string("email_user").notNull();
             table.string("email_pass").notNull();
             table.string("email_host").notNull().defaultTo("smtp.gmail.com");
             table.string("email_port").notNull().defaultTo("587");
-            table.boolean("email_secure", 1).notNull().defaultTo(0)
+            table.boolean("email_secure", 1).notNull().defaultTo(0);
 
-            table.boolean("gt_ativo", 1).notNull().defaultTo(0) /* gerencianet */
-            table.string("gt_client_id") /* gerencianet */
-            table.string("gt_client_secret") /* gerencianet */
+            table.boolean("gt_ativo", 1).notNull().defaultTo(0); /* gerencianet */
+            table.string("gt_client_id"); /* gerencianet */
+            table.string("gt_client_secret"); /* gerencianet */
 
             table.string("url_site").notNull().unique();
             table.string("client_database").notNull().unique();
@@ -65,6 +75,14 @@ exports.up = function (knex) {
                     uf: "PB",
                     numero: "S/N",
 
+                    entrega_frete: false,
+                    entrega_retirada: false,
+
+                    pgt_pix: false,
+                    pgt_cartao: false,
+                    pgt_loja: false,
+                    pgt_entrega: false,
+
                     email_user: "Softconnect",
                     email_pass: "Softconnect",
 
@@ -86,6 +104,14 @@ exports.up = function (knex) {
                     uf: "PB",
                     numero: "S/N",
 
+                    entrega_frete: true,
+                    entrega_retirada: true,
+
+                    pgt_pix: true,
+                    pgt_cartao: true,
+                    pgt_loja: true,
+                    pgt_entrega: true,
+
                     a_whatsapp: "(83) 99967-5920",
                     a_messenger: "maycon.deyved",
                     a_instagram: "mayconoliveiradev",
@@ -102,8 +128,8 @@ exports.up = function (knex) {
                     email_secure: false,
 
                     gt_ativo: true,
-                    gt_client_id: "Client_Id_ad14bdfd6a29459fc293e580d60f3918ec330a60",
-                    gt_client_secret: "Client_Secret_f8dbeaada0a60217980a920913f081bc3d765b76",
+                    gt_client_id: "Client_Id_6018702c66f1fe61baf8379546f94eeab4ce6f80",
+                    gt_client_secret: "Client_Secret_85c8e14a80e7682564b88513045a22fb81118307",
 
                     url_site: "http://10.0.0.200:3000",
                     client_database: "db_challenger",

@@ -1,5 +1,6 @@
 module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
+    const { createPixImmediate } = app.api.services.gerencianet;
 
     const saveIncrementer = async (req, res) => {
         const body = req.body
@@ -180,7 +181,7 @@ module.exports = (app) => {
 
             const store = app.store
 
-            const user = await app.db.select("id", "nome", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
+            const user = await app.db.select("id", "nome", "cpf", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")
             totals.vlr_frete = Math.round(user.distancia_km * store.percentual_frete)
             totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
@@ -198,6 +199,7 @@ module.exports = (app) => {
                 id_user: user.id,
                 id_storage: modelo.id_storage,
                 nome: user.nome,
+                cpf: user.cpf,
                 email: user.email,
                 contato: user.contato,
                 cep: user.cep,
@@ -264,8 +266,21 @@ module.exports = (app) => {
                 await trans.insert(salesProducts[0])
                     .table("sales_products")
 
-                /* Retornar o ID do pedido */
-                return res.json(idTotalsHeader)
+
+                /* Gera cobrança pix */
+                const pix = await createPixImmediate({
+                    cpf: modeloTotals.cpf,
+                    nome: modeloTotals.nome,
+                    original: modeloTotals.vlr_pagar_com_frete,
+                    nmr_pedido: idTotalsHeader
+                })
+
+                /*pix = {pix_chave:"...", pix_qrcode:"..."} */
+                await trans.update(pix)
+                    .table("sales_header")
+                    .where({ id: idTotalsHeader })
+
+                res.json({ id: idTotalsHeader, pgt: pix })
             })
         } catch (error) {
             utility_console("savePedido", error)
