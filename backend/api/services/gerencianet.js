@@ -55,17 +55,56 @@ module.exports = (app) => {
 
             /* Gera cobrança qrcode(chave e data:image do qrcode) */
             const pix = await gerencianet.pixGenerateQRCode({ id: pixImmediate.loc.id })
+            const data = new Date();
+            let dataExp = new Date();
+            dataExp.setMinutes(dataExp.getMinutes() + (expiracao / 60));
+            const modeloPix = {
+                pix_criacao: data,
+                pix_expiracao: dataExp,
+                pix_txid: pixImmediate.txid,
+                pix_id: pixImmediate.loc.id,
+                pix_tipo_cob: pixImmediate.loc.tipoCob,
+                pix_status: pixImmediate.status,
+                pix_chave: pixImmediate.chave,
+                pix_pix: JSON.stringify(pixImmediate),
+                pix_qrcode: pix.qrcode,
+                pix_img_qrcode: pix.imagemQrcode,
+            }
 
             /* Se o pix for gerado com sucesso, vai ser retornado  imagem do qrcode e a chave qrcode. */
             /* Caso contrario retornar erro não identificado. */
-            if (pix && pix.qrcode && pix.imagemQrcode) {
-                return { pix_chave: pix.qrcode, pix_qrcode: pix.imagemQrcode }
+            if (modeloPix && modeloPix.pix_qrcode && modeloPix.pix_img_qrcode && modeloPix.pix_txid) {
+                return modeloPix
             } else {
                 /* se dentro de pix não tiver os parametros necessario retornar o objeto retornado */
                 throw `Houve um erro não identificado para gerar o pix. pix: ${JSON.stringify(pix)}`
             }
         } catch (error) {
             throw `gerencianet.createPixImmediate: ${error}`
+        }
+    };
+    const pixDetail = async (txid) => {
+        try {
+            existOrError(txid, "[txid] não pode ser nulo.")
+
+            existOrError(app.store.gt_client_id, "[app.store.gt_client_id] não pode ser nulo.")
+            existOrError(app.store.gt_client_secret, "[app.store.gt_client_secret] não pode ser nulo.")
+
+            const gerencianet = await GerencianetST(app.store.gt_client_id, app.store.gt_client_secret)
+
+            /* Consultar cobrança pix */
+            const pixImmediate = await gerencianet.pixDetailCharge({ txid: txid })
+            const modeloPix = {
+                pix_txid: pixImmediate.txid,
+                pix_id: pixImmediate.loc.id,
+                pix_tipo_cob: pixImmediate.loc.tipoCob,
+                pix_status: pixImmediate.status,
+                pix_chave: pixImmediate.chave,
+            }
+
+            console.log(pixImmediate)
+        } catch (error) {
+            throw `gerencianet.pixDetail: ${error}`
         }
     };
 
@@ -81,5 +120,5 @@ module.exports = (app) => {
      }; */
 
     /* pixListCharges, retornar informações, mas nao tem os totais */
-    return { createPixImmediate };
+    return { createPixImmediate, pixDetail };
 };

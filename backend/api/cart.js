@@ -71,7 +71,7 @@ module.exports = (app) => {
             existOrError(id, "[id] id_storage não pode ser nulo.")
         } catch (error) {
             utility_console("cart.getCartTemp", error)
-            return res.status(400).send(error)
+            return res.status(400).send(msgErrorDefault)
         }
 
         try {
@@ -325,6 +325,17 @@ module.exports = (app) => {
 
                     res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/pix' })
                 }
+                if (modeloTotals.pgt_forma == "Cartão") {
+                    console.log("Cartão...")
+
+                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/cartao' })
+                }
+                if (modeloTotals.pgt_forma == "Pagar na loja") {
+                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/loja' })
+                }
+                if (modeloTotals.pgt_forma == "Pagar na entrega") {
+                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/entrega' })
+                }
             })
         } catch (error) {
             utility_console("savePedido", error)
@@ -333,5 +344,24 @@ module.exports = (app) => {
     };
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
 
-    return { getCartTemp, saveIncrementer, savePedido };
+    const getPixDetail = async (req, res) => {
+        const id = req.params.id; /* id do pedido */
+        const id_user = Number(req.query.id_user); /* ID do usuario. */
+
+        try {
+            existOrError(id, "[id] não pode ser nulo.")
+            existOrError(id_user, "[id_user] não pode ser nulo.")
+        } catch (error) {
+            utility_console("cart.getPagamento", error)
+            return res.status(400).send(msgErrorDefault)
+        }
+
+        const pagamento = await app.db("sales_header")
+            .select("id", "pix_chave", "pix_qrcode", "pix_img_qrcode", "pix_status", "pix_expiracao")
+            .where({ id: id })
+            .andWhere({ id_user: id_user })
+            .first()
+        return res.json(pagamento)
+    };
+    return { getCartTemp, saveIncrementer, savePedido, getPixDetail };
 };

@@ -44,6 +44,10 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .post(app.api.cart.savePedido)
 
+  app.route("/cart/pix-detalhes/:id")
+    .all(app.config.passport.authenticate())
+    .get(app.api.cart.getPixDetail)
+
 
 
 

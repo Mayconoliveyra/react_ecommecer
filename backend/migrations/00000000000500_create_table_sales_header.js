@@ -33,8 +33,16 @@ exports.up = function (knex) {
             table.boolean("cobrar_frete", 1).notNull() /* Se foi cobrado frete ou não */
             table.double("vlr_pago", 8, 2).notNull() /* Valor a ser pago pelo cliente, ja com frete caso tenha. */
 
-            table.text("pix_chave")
+            table.timestamp("pix_criacao").nullable();
+            table.timestamp("pix_expiracao").nullable();
+            table.string("pix_txid")
+            table.string("pix_id")
+            table.string("pix_tipo_cob")
+            table.string("pix_status")
+            table.string("pix_chave")
+            table.text("pix_pix")
             table.text("pix_qrcode")
+            table.text("pix_img_qrcode")
 
             table.boolean("confirmado", 1).notNull().defaultTo(0)
             table.timestamp("data_confirmado").nullable();
