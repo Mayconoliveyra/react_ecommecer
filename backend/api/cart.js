@@ -323,7 +323,7 @@ module.exports = (app) => {
                         .table("sales_header")
                         .where({ id: idTotalsHeader })
 
-                    res.json({ id: idTotalsHeader, pgt: pix })
+                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/pix' })
                 }
             })
         } catch (error) {

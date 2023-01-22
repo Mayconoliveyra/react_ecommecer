@@ -1,8 +1,9 @@
-import { parseCookies } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import styled from "styled-components"
 import router from "next/router"
+import { useContext } from "react";
 
 import { CardPayment } from "../../../components/card/cardPayment"
 import { ButtonSC } from '../../../components/button';
@@ -11,6 +12,8 @@ import { moneyMask } from '../../../../masks';
 import { getCartTemp, storePedido } from '../../api/cart';
 import { userIsAuth } from "../../api/auth";
 import { showError } from "../../../../global";
+
+import TemplateContext from "../../../context/template"
 
 const PaymentValueSC = styled.div`
     /* border:solid 1px red; */
@@ -171,20 +174,25 @@ const SectionProductSC = styled.div`
     }
 `
 export default function Resume({ session, products, totals, payment }) {
+    const { template, setTemplate } = useContext(TemplateContext)
     const handleFinalizar = async () => {
+
+        setTemplate({ ...template, loading: true })
         const dataPedido = {
             id_user: session.id,
             id_storage: session.id_storage,
             ...totals,
             ...payment
         }
-        const rotasPagamento = {
-            "Pagar na loja": "/carrinho/pagamento/pagarloja"
-        }
 
-        /* if (payment.pgt_forma == "Pagar na loja" || payment.pgt_forma == "Pagar na entrega") { */
         await storePedido(dataPedido)
-            .then(() => router.push(rotasPagamento[payment.pgt_forma]))
+            .then((res) => {
+                setCookie(null, "paymentResult", JSON.stringify(res), {
+                    maxAge: 30,
+                    path: "/"
+                });
+                router.push(res.redirect)
+            })
             .catch((error) => {
                 router.push("/")
                 return showError(error)
@@ -361,7 +369,6 @@ export default function Resume({ session, products, totals, payment }) {
 
 export async function getServerSideProps(context) {
     const { myCartId, myCartPayment } = parseCookies(context);
-
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
@@ -404,7 +411,6 @@ export async function getServerSideProps(context) {
     }
 
     const data = await getCartTemp(myCartId, session.id)
-    console.log(data)
 
     /* Se não tiver setado redireciona para tela home*/
     if (!data || !data.totals || !data.products) {

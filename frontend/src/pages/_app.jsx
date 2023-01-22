@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 import Header from "../components/template/header"
 import Content from "../components/template/content"
+import Loanding from "../components/template/loanding"
 import Nav from "../components/template/nav"
 import Menu from "../components/template/menu";
 import MenuLogin from "../components/template/menulogin";
@@ -23,7 +24,7 @@ import MyCartContext from "../context/myCart"
 
 export default function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter()
-  const defaultTemplate = { showHeaderSearch: true, showMenu: false, showNav: true, showMenuLogin: false, footerReduce: false }
+  const defaultTemplate = { loading: false, showHeaderSearch: true, showMenu: false, showNav: true, showMenuLogin: false, footerReduce: false }
   const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
@@ -108,14 +109,18 @@ export default function MyApp({ Component, pageProps }) {
           <StoreContext.Provider value={store}>
             <MyCartContext.Provider value={{ myCart, setMyCart }}>
 
-              {template.showMenu && <Menu />}
-              {template.showMenuLogin && <MenuLogin />}
-              <Header />
-              <Content>
-                <Component {...pageProps} />
-              </Content>
+              {template.loading ? <Loanding /> :
+                <>
+                  {template.showMenu && <Menu />}
+                  {template.showMenuLogin && <MenuLogin />}
+                  <Header />
+                  <Content>
+                    <Component {...pageProps} />
+                  </Content>
 
-              {template.showNav && <Nav />}
+                  {template.showNav && <Nav />}
+                </>
+              }
             </MyCartContext.Provider>
           </StoreContext.Provider>
         </TemplateContext.Provider>
