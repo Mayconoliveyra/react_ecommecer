@@ -1,4 +1,3 @@
-import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import Link from 'next/link';
@@ -123,7 +122,6 @@ export default function PixCard() {
 }
 
 export async function getServerSideProps(context) {
-    const { paymentResult } = parseCookies(context);
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
@@ -144,23 +142,7 @@ export async function getServerSideProps(context) {
             }
         }
     }
-
-    try {
-        const payment = JSON.parse(paymentResult)
-        /* Se paymentResult tiver null, significa que nao foi preenchido ou foi expirado(30s). */
-        /*  if (payment) {
-             return {
-                 redirect: {
-                     destination: "/",
-                     permanent: false
-                 }
-             }
-         } */
-
-    } catch (error) {
-
-    }
-
+    /* /FIM VALIDAÇÃO SESSION/ */
 
 
     return {

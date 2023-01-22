@@ -28,4 +28,10 @@ const storePedido = async (data) => {
   return await axios.post(`${prefix}/save-pedido`, data).then((res) => res.data);;
 };
 
-export { getCartTemp, storeQuantity, storePedido }
+const storePixPgt = async (id, id_user) => {
+  /* id = codigo do pedido;  id_user= codigo do usuario;*/
+  const axios = await api();
+  return await axios.get(`${prefix}/pix-detalhes/${id}?id_user=${id_user}`).then((res) => res.data);;
+};
+
+export { getCartTemp, storeQuantity, storePedido, storePixPgt }

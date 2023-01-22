@@ -1,12 +1,12 @@
-import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from "styled-components"
 import { CheckCircleFill } from "react-bootstrap-icons";
-import { ButtonSC } from "../../../components/button";
+import { ButtonSC } from "../../../../components/button";
 
-import { userIsAuth } from "../../api/auth";
+import { userIsAuth } from "../../../api/auth";
+import { storePixPgt } from "../../../api/cart";
 
 const MainSC = styled.div`
     max-width: ${({ theme }) => theme.width.medium};
@@ -123,7 +123,6 @@ export default function PixPayment() {
 }
 
 export async function getServerSideProps(context) {
-    const { paymentResult } = parseCookies(context);
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
@@ -144,25 +143,19 @@ export async function getServerSideProps(context) {
             }
         }
     }
+    /* /FIM VALIDAÇÃO SESSION/ */
 
-    try {
-        const payment = JSON.parse(paymentResult)
-        /* Se paymentResult tiver null, significa que nao foi preenchido ou foi expirado(30s). */
-       /*  if (payment) {
-            return {
-                redirect: {
-                    destination: "/",
-                    permanent: false
-                }
+    const { id } = context.params; /* id do pedido; */
+    const payment = await storePixPgt(id, session.id)
+    if (!payment) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
             }
-        } */
-
-    } catch (error) {
-
+        }
     }
-
-
-
+    console.log(payment)
     return {
         props: {},
     }

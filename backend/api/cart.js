@@ -323,7 +323,7 @@ module.exports = (app) => {
                         .table("sales_header")
                         .where({ id: idTotalsHeader })
 
-                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/pix' })
+                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/pix/${idTotalsHeader}` })
                 }
                 if (modeloTotals.pgt_forma == "Cartão") {
                     console.log("Cartão...")

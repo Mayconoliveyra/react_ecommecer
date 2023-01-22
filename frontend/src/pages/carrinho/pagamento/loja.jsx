@@ -142,6 +142,7 @@ export async function getServerSideProps(context) {
             }
         }
     }
+    /* /FIM VALIDAÇÃO SESSION/ */
 
     return {
         props: {},

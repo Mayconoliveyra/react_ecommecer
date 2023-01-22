@@ -1,4 +1,4 @@
-import { parseCookies, setCookie } from "nookies";
+import { parseCookies } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import styled from "styled-components"
@@ -187,10 +187,6 @@ export default function Resume({ session, products, totals, payment }) {
 
         await storePedido(dataPedido)
             .then((res) => {
-                setCookie(null, "paymentResult", JSON.stringify(res), {
-                    maxAge: 30,
-                    path: "/"
-                });
                 router.push(res.redirect)
             })
             .catch((error) => {
