@@ -1,6 +1,6 @@
 module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
-    const { createPixImmediate } = app.api.services.gerencianet;
+    const { createPixImmediate } = app.services.gerencianet;
 
     const saveIncrementer = async (req, res) => {
         const body = req.body

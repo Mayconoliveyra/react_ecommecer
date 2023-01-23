@@ -55,5 +55,5 @@ module.exports = (app) => {
   /* TESTE */
   app.route("/pix/pix-immediate")
     .all(app.config.passport.authenticate())
-    .post(app.api.services.gerencianet.createPixImmediate)
+    .post(app.services.gerencianet.createPixImmediate)
 };

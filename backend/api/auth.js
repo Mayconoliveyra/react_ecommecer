@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt')
 
 module.exports = app => {
         const { existOrError, utility_console, msgErrorDefault, notExistOrErrorDB, validateContact, validateCPF } = app.api.utilities;
-        const { consultCEP } = app.api.services.maps;
-        const { sendEmail } = app.api.services.email;
+        const { consultCEP } = app.services.maps;
+        const { sendEmail } = app.services.email;
 
         const table = "users";
 

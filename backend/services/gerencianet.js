@@ -1,4 +1,4 @@
-const { GN_CERTIFICATE } = require("../../.env")
+const { GN_CERTIFICATE } = require("../.env")
 const Gerencianet = require('gn-api-sdk-node')
 
 const GerencianetST = (gt_client_id, gt_client_secret) => {

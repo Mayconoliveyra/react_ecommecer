@@ -1,4 +1,4 @@
-const { KEY_MAPS } = require("../../.env")
+const { KEY_MAPS } = require("../.env")
 const axios = require("axios")
 
 module.exports = (app) => {
