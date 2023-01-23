@@ -50,7 +50,7 @@ const MainSC = styled.div`
                         margin: 0 0 1rem 0;
                      }
                      span{
-                        font-size: 1.15rem;
+                        font-size: 1.1rem;
                     }
                 }
             }
@@ -98,8 +98,10 @@ const MainSC = styled.div`
 export default function PixPayment({ payment }) {
     const [textCopia, setTextCopia] = useState("Copiar código Pix")
     const dataFormat = (date) => {
-        moment.locale('pt-br')
-        return moment(date, "YYYY-MM-DD hh:mm").format("DD/MM/YYYY HH:mm");
+        return `${moment(date).calendar(null, {
+            sameDay: '[Hoje]',
+            nextDay: '[Amanhã]',
+        })}, ${moment(date, "YYYY-MM-DD hh:mm").format("HH:mm")} - Horário de Brasília`;
     }
     const copiarQrcode = () => {
         //Cria um elemento input

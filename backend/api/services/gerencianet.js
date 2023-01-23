@@ -3,7 +3,7 @@ const Gerencianet = require('gn-api-sdk-node')
 
 const GerencianetST = (gt_client_id, gt_client_secret) => {
     const options = {
-        sandbox: true, /* true= homologação; false = produção; */
+        sandbox: false, /* true= homologação; false = produção; */
         client_id: gt_client_id,
         client_secret: gt_client_secret,
         certificate: `./certs/${GN_CERTIFICATE}`,
@@ -37,7 +37,7 @@ module.exports = (app) => {
                 valor: {
                     original: original.toFixed(2),
                 },
-                chave: 'softconnect.tecnologia@gmail.com',
+                chave: 'c238aec7-b73d-43d6-b84a-46b4eb578c6b',
                 infoAdicionais: [
                     {
                         nome: 'Estabelecimento Comercial:',
