@@ -43,12 +43,13 @@ export default function MyApp({ Component, pageProps }) {
       case '/login':
       case '/carrinho':
       case '/carrinho/fechar':
-      case '/carrinho/finalizado':
+      case '/carrinho/resumo':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false, footerReduce: true })
         break;
       case '/conta/meusdados':
       case '/conta/recuperar':
       case '/conta/endereco':
+      case '/carrinho/pagamento/pix/[id]':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false })
         break;
       case '/produto/[id]':

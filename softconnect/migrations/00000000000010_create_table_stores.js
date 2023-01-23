@@ -16,9 +16,9 @@ exports.up = function (knex) {
 
             table.boolean("cobrar_frete", 1).notNull().defaultTo(1); /* Se vai ser combrado taxa de frete ou nao */
             table.double("percentual_frete").notNull().defaultTo(0.00); /* Vai ser utilizado para calcular vende de acordo com a distancia. percentual * km */
-            table.double("taxa_min_frete", 8, 2).notNull().defaultTo(0.00);
-            table.double("vlr_min_pedido", 8, 2).notNull().defaultTo(0.00); /* Valor minimo da compra para habilitar entrega */
-            table.double("distancia_max_frete", 8, 2).notNull().defaultTo(0.00); /* distancia maxima para frete. */
+            table.float("taxa_min_frete").notNull().defaultTo(0.00);
+            table.float("vlr_min_pedido").notNull().defaultTo(0.00); /* Valor minimo da compra para habilitar entrega */
+            table.float("distancia_max_frete", 8, 1).notNull().defaultTo(0.00); /* distancia maxima para frete. */
 
             table.boolean("entrega_frete", 1).notNull(); /* Metodo de entrega */
             table.boolean("entrega_retirada", 1).notNull(); /* Metodo de entrega */

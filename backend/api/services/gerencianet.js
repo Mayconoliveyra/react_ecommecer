@@ -14,7 +14,7 @@ const GerencianetST = (gt_client_id, gt_client_secret) => {
 module.exports = (app) => {
     const { utility_console, existOrError, msgErrorDefault } = app.api.utilities;
 
-    const createPixImmediate = async ({ cpf, nome, original, nmr_pedido, expiracao = 3600 }) => {
+    const createPixImmediate = async ({ cpf, nome, original, nmr_pedido, expiracao = 1800 }) => {
         try {
             existOrError(cpf, "[cpf] não pode ser nulo.")
             existOrError(nome, "[nome] não pode ser nulo.")

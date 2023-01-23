@@ -14,6 +14,8 @@ import { userIsAuth } from "../../api/auth";
 import { showError } from "../../../../global";
 
 import TemplateContext from "../../../context/template"
+import StoreContext from "../../../context/store"
+import MyCartContext from "../../../context/myCart"
 
 const PaymentValueSC = styled.div`
     /* border:solid 1px red; */
@@ -175,6 +177,8 @@ const SectionProductSC = styled.div`
 `
 export default function Resume({ session, products, totals, payment }) {
     const { template, setTemplate } = useContext(TemplateContext)
+    const { setMyCart } = useContext(MyCartContext)
+    const store = useContext(StoreContext)
     const handleFinalizar = async () => {
 
         setTemplate({ ...template, loading: true })
@@ -187,6 +191,7 @@ export default function Resume({ session, products, totals, payment }) {
 
         await storePedido(dataPedido)
             .then((res) => {
+                setMyCart([]);
                 router.push(res.redirect)
             })
             .catch((error) => {
@@ -223,7 +228,7 @@ export default function Resume({ session, products, totals, payment }) {
                                         <>
                                             <tr>
                                                 <td>Frete:</td>
-                                                {!totals.cobrar_frete ?
+                                                {!store.cobrar_frete ?
                                                     <td data="td-value">Frete Grátis</td>
                                                     :
                                                     <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
@@ -238,7 +243,7 @@ export default function Resume({ session, products, totals, payment }) {
                                         <>
                                             <tr>
                                                 <td>Frete:</td>
-                                                {!totals.cobrar_frete ?
+                                                {!store.cobrar_frete ?
                                                     <td data="td-value">Frete Grátis</td>
                                                     :
                                                     <td data="td-value">{moneyMask(0.00)}</td>

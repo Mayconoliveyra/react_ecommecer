@@ -1,12 +1,15 @@
 import { getSession } from "next-auth/react"
+import Image from "next/image";
+import moment from "moment"
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from "styled-components"
-import { CheckCircleFill } from "react-bootstrap-icons";
 import { ButtonSC } from "../../../../components/button";
 
 import { userIsAuth } from "../../../api/auth";
 import { storePixPgt } from "../../../api/cart";
+import { moneyMask } from "../../../../../masks";
+import { useState } from "react";
 
 const MainSC = styled.div`
     max-width: ${({ theme }) => theme.width.medium};
@@ -14,60 +17,108 @@ const MainSC = styled.div`
     display:  flex;
     flex-direction: column;
     padding: 1rem;
-    [data="icone"]{
-        padding-bottom: 0.8rem;
-        text-align: center;
-        svg{
-            font-size: 4rem;
-            color: #067d62;
-        }
-    }
     [data="msg"]{
         h1{
             font-size: 1.7rem;
             color: #067d62;
-            text-align: center;
+            word-break: break-word;
             font-family: ${({ theme }) => theme.font.family.meidum};
             padding: 0.7rem;
         }
-        h2{
-            font-family: ${({ theme }) => theme.font.family.bold};
-            text-align: center;
-            font-size: 1.1rem;
-        }
     }
-    [data="nmr-pedido"]{
-        margin: 1.7rem 0;
-        border: 0.1rem solid #e7e7e7;
-        background-color: #fafafb;
-        padding: 3rem 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items:center;
-        p{
-            font-size: 1.3rem;
-            line-height: 1rem;
-            color: #565c69;
-            margin-bottom: 0.5rem;
-        }
-        div{
-            strong{
-                font-size: 1.7rem;
-                line-height: 2.125rem;
-                color: #42464d;
-                margin-left: 0.75rem;
-                font-family: ${({ theme }) => theme.font.family.bold}
+    [data="pgt-pix"]{
+       margin-top:10px;
+       border-radius: 8px;
+       border-top-right-radius: 8px;
+       border-bottom-right-radius: 8px;
+       padding: 1px 1px 1px 13px;
+       background-color: #2EBDAE;
+       border: solid 1px #2FBAAD;
+        [data="pix"] {
+            padding: 15px 20px;
+            border: solid 1px #2FBAAD;
+            border-radius: 8px;
+            border-top-left-radius:0;
+            border-bottom-left-radius:0;
+            background-color: #fff;
+            [data="header"]{
+                div {
+                    margin-bottom: 1.6rem;
+                    p{
+                        font-size: 1.1rem;
+                        font-family:${({ theme }) => theme.font.family.bold};
+                        margin: 0 0 1rem 0;
+                     }
+                     span{
+                        font-size: 1.15rem;
+                    }
+                }
             }
+            [data="img-qrcode"]{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            [data="pix-chave"]{
+                div {
+                    word-break: break-word;
+                    margin-bottom: 1.6rem;
+                    [data="chave-copia"]{
+                        word-break: break-all;
+                    }
+                    p{
+                        font-size: 1.1rem;
+                        font-family:${({ theme }) => theme.font.family.bold};
+                        margin: 0 0 1rem 0;
+                     }
+                     span{
+                        font-size: 1rem;
+                    }
+                    li{
+                        font-size: 1rem;
+                        padding: 3px 0;
+                    }
+                }
+            }
+       }
+    }
+    [data="msg-confirm"]{
+        padding: 10px 0;
+        span{
+            font-size: 1.2rem;
         }
     }
     [data="btn"]{
-        [data='btn-confirm-white'],
+        [data='btn-confirm-bord-laran'],
         [data='btn-confirm-noborder'] {
             padding: 0.5rem 0;
         }
     }
 `
-export default function PixPayment() {
+export default function PixPayment({ payment }) {
+    const [textCopia, setTextCopia] = useState("Copiar código Pix")
+    const dataFormat = (date) => {
+        moment.locale('pt-br')
+        return moment(date, "YYYY-MM-DD hh:mm").format("DD/MM/YYYY HH:mm");
+    }
+    const copiarQrcode = () => {
+        //Cria um elemento input
+        const inputTemp = document.createElement("input");
+        inputTemp.value = payment.pix_qrcode;
+        //Anexa o elemento ao body
+        document.body.appendChild(inputTemp);
+        //seleciona todo o texto do elemento
+        inputTemp.select();
+        //executa o comando copy
+        //aqui é feito o ato de copiar para a area de trabalho com base na seleção
+        document.execCommand("copy");
+        //remove o elemento
+        document.body.removeChild(inputTemp);
+        setTextCopia("Copiado")
+        setTimeout(() => {
+            setTextCopia("Copiar código Pix")
+        }, 1500)
+    }
     return (
         <>
             <Head>
@@ -75,29 +126,69 @@ export default function PixPayment() {
             </Head>
             <div>
                 <MainSC>
-                    <div data="icone">
-                        <CheckCircleFill />
-                    </div>
                     <div data="msg">
                         <h1>
                             Seu pedido foi reservado.
+                            Pague em até 30 minutos para processarmos seu pedido.
                         </h1>
-                        <h2>
-                            Você tem até 24 horas para fazer a retirada na loja. Caso não seja retirado o pedido será automaticamente cancelado e os valores estornados.
-                        </h2>
                     </div>
-                    <div data="nmr-pedido">
-                        <p>
-                            O número do seu pedido é:
-                        </p>
-                        <div>
-                            <strong>
-                                {(1).toLocaleString('en-US', {
-                                    minimumIntegerDigits: 7,
-                                    useGrouping: false
-                                })}
-                            </strong>
+                    <div data="pgt-pix">
+                        <div data="pix">
+                            <div data="header">
+                                <div>
+                                    <p>Vencimento</p>
+                                    <span>{dataFormat(payment.pix_expiracao)}</span>
+                                </div>
+                                <div>
+                                    <p>Valor do pedido</p>
+                                    <span>{moneyMask(payment.vlr_pago)}</span>
+                                </div>
+                            </div>
+                            <div data="img-qrcode">
+                                <Image src={payment.pix_img_qrcode} width={300} height={300} alt="qr-code" quality={100} priority={true} />
+                            </div>
+                            <div data="pix-chave">
+                                <div>
+                                    <div data="chave-copia">
+                                        <p>Em caso de erro copie o Código abaixo:</p>
+                                        <span>{payment.pix_qrcode}</span>
+                                    </div>
+                                    <ButtonSC>
+                                        <div data='btn-confirm-white'>
+                                            <button onClick={() => copiarQrcode()}>
+                                                {textCopia}
+                                            </button>
+                                        </div>
+                                    </ButtonSC>
+                                    <p>
+                                        Informações importantes sobre o pagamento
+                                    </p>
+                                    <span>
+                                        Você pode consultar o QR code e o Código em Seus Pedidos durante esse período.
+                                    </span>
+                                    <p></p>
+                                    <span>
+                                        Após finalizar o pedido, realize o pagamento em até 30 minutos. Caso contrário, o pedido será cancelado e um novo deverá ser feito. Lembre-se que Ofertas podem ter expirado após esse período.
+                                    </span>
+                                </div>
+                                <div>
+                                    <p>
+                                        Como pagar com Pix
+                                    </p>
+                                    <ol>
+                                        <li>
+                                            1. <span>Entre no aplicativo da sua instituição financeira e acesse o ambiente Pix;</span>
+                                        </li>
+                                        <li>2. Escolha a opção de Copiar e Colar o código Pix;</li>
+                                        <li>3. Cole o código Pix;</li>
+                                        <li>4. Confirme as informações e confirme o pagamento.</li>
+                                    </ol>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div data="msg-confirm">
+                        <span>A confirmação será enviada para o seu e-mail e whatsapp.</span>
                     </div>
                     <div data="btn">
                         <ButtonSC>
@@ -108,7 +199,7 @@ export default function PixPayment() {
                             </div>
                         </ButtonSC>
                         <ButtonSC>
-                            <div data='btn-confirm-white'>
+                            <div data='btn-confirm-bord-laran'>
                                 <Link href="/conta/meuspedidos">
                                     Ver meus pedidos
                                 </Link>
@@ -118,7 +209,6 @@ export default function PixPayment() {
                 </MainSC>
             </div>
         </>
-
     )
 }
 
@@ -144,19 +234,28 @@ export async function getServerSideProps(context) {
         }
     }
     /* /FIM VALIDAÇÃO SESSION/ */
+    try {
+        const { id } = context.params; /* id do pedido; */
+        const payment = await storePixPgt(id, session.id)
+        /* Se id ou pagamento tiver nulo, redireciona para home. */
+        if (!id || !payment) {
+            return {
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
+            }
+        }
 
-    const { id } = context.params; /* id do pedido; */
-    const payment = await storePixPgt(id, session.id)
-    if (!payment) {
+        return {
+            props: { payment: payment },
+        }
+    } catch (error) {
         return {
             redirect: {
                 destination: "/",
                 permanent: false
             }
         }
-    }
-    console.log(payment)
-    return {
-        props: {},
     }
 }

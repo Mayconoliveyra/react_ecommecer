@@ -123,7 +123,6 @@ module.exports = (app) => {
                 existOrError(user, "[user] não foi encontrado.")
 
                 const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
-                totals.cobrar_frete = store.cobrar_frete;
                 if (store.cobrar_frete) {
                     /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
                     vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
@@ -198,7 +197,6 @@ module.exports = (app) => {
             existOrError(user, "[user] não foi encontrado.")
 
             const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
-            totals.cobrar_frete = store.cobrar_frete;
             if (store.cobrar_frete) {
                 /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
                 vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
@@ -223,9 +221,16 @@ module.exports = (app) => {
                     totals.vlr_pago = totals.vlr_pagar_com_frete
                     :
                     totals.vlr_pago = totals.vlr_pagar_sem_frete;
+
+                /* Se for para receber em casa será cobrado o frete */
+                modelo.pgt_metodo == "Receber em casa" ?
+                    totals.cobrar_frete = true
+                    :
+                    totals.cobrar_frete = false
             } else {
                 /* Se não tiver habilitado frete, sempre não vai pagar frete.  */
                 totals.vlr_pago = totals.vlr_pagar_sem_frete;
+                totals.cobrar_frete = false
             }
 
             if (modelo.vlr_pagar_com_frete != totals.vlr_pagar_com_frete) throw "[vlr_pagar_com_frete] diverge do somatório."
@@ -345,23 +350,29 @@ module.exports = (app) => {
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
 
     const getPixDetail = async (req, res) => {
-        const id = req.params.id; /* id do pedido */
+        const id = Number(req.params.id); /* id do pedido */
         const id_user = Number(req.query.id_user); /* ID do usuario. */
 
         try {
             existOrError(id, "[id] não pode ser nulo.")
             existOrError(id_user, "[id_user] não pode ser nulo.")
+
+            const pagamento = await app.db("sales_header")
+                .select("id", "vlr_pago", "pix_qrcode", "pix_img_qrcode", "pix_status", "pix_expiracao", "pgt_metodo", "cancelado", "pgt_forma")
+                .where({ id: id })
+                .andWhere({ id_user: id_user })
+                .first()
+
+            if (pagamento.cancelado || pagamento.pgt_forma != "PIX" || pagamento.pix_status != "ATIVA") return res.json(false)
+            const dateAt = new Date();
+            const dateExp = new Date(pagamento.pix_expiracao);
+            if (dateAt.getTime() > dateExp.getTime()) return res.json(false)
+
+            return res.json(pagamento)
         } catch (error) {
             utility_console("cart.getPagamento", error)
             return res.status(400).send(msgErrorDefault)
         }
-
-        const pagamento = await app.db("sales_header")
-            .select("id", "pix_chave", "pix_qrcode", "pix_img_qrcode", "pix_status", "pix_expiracao")
-            .where({ id: id })
-            .andWhere({ id_user: id_user })
-            .first()
-        return res.json(pagamento)
     };
     return { getCartTemp, saveIncrementer, savePedido, getPixDetail };
 };

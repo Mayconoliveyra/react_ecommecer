@@ -41,7 +41,7 @@ const ButtonSC = styled.div`
             }
         }
     }
-    [data='btn-confirm-white']{
+    [data='btn-confirm-bord-laran']{
         padding: 0.7rem 1rem;
         display: flex;
         a, button{   
@@ -53,6 +53,26 @@ const ButtonSC = styled.div`
             flex: 1;
             background-color: transparent;
             border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+
+            &:disabled{
+                cursor: default;
+            }
+        }
+    }
+    [data='btn-confirm-white']{
+        padding: 0.7rem 1rem;
+        display: flex;
+        a, button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            flex: 1;
+            background-color: transparent;
+            box-shadow: 0 0.2rem 0.5rem 0 rgb(213 217 217 / 50%);
+            border: solid 1px #D5D9D9;
             border-radius: 0.45rem;
 
             &:disabled{

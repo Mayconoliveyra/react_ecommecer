@@ -14,15 +14,15 @@ exports.up = function (knex) {
             table.string("img_4")
             table.string("img_5")
             table.string("img_6")
-            table.double("price", 8, 2).notNull()
-            table.double("price_promotion", 8, 2).notNull()
+            table.float("price").notNull()
+            table.float("price_promotion").notNull()
             table.boolean("promotion", 1).notNull()
             table.integer('id_category').unsigned().notNull().references('id').inTable('categories')
 
             /* Os que tem "p_" é referente ao pedido, o restante é igual o cadastro. */
             table.integer("p_quantity").notNull() /* Quantidade da mercadoria seleciona */
-            table.double("p_amount", 8, 2).notNull() /* [preco de venda(price)] * quantidade */
-            table.double("p_amount_promotion", 8, 2).notNull() /* [preco de venda promocional(price_promotio)] * quantidade */
+            table.decimal("p_amount", 65, 2).notNull() /* [preco de venda(price)] * quantidade */
+            table.decimal("p_amount_promotion", 65, 2).notNull() /* [preco de venda promocional(price_promotio)] * quantidade */
 
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
         })

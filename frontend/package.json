@@ -23,7 +23,8 @@
     "react-toastify": "^9.1.1",
     "styled-components": "^5.3.6",
     "yup": "^0.32.11",
-    "yup-locale-pt": "0.0.9"
+    "yup-locale-pt": "0.0.9",
+    "moment": "2.29.4"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^2.0.7"

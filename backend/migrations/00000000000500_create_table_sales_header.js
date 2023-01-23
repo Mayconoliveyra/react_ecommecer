@@ -16,22 +16,22 @@ exports.up = function (knex) {
             table.string("localidade")
             table.string("uf")
             table.string("numero")
-            table.double("distancia_km", 8, 1).notNull()
-            table.double("tempo", 8, 1).notNull()
+            table.float("distancia_km", 8, 1).notNull()
+            table.float("tempo", 8, 1).notNull()
 
-            table.double("vlr_pagar_products", 8, 2).notNull()
+            table.decimal("vlr_pagar_products", 65, 2).notNull()
             table.integer("qtd_products").notNull()
-            table.double("vlr_products", 8, 2).notNull()
-            table.double("vlr_products_promotion", 8, 2).notNull()
-            table.double("vlr_diferenca_promotion", 8, 2).notNull()
-            table.double("vlr_frete", 8, 2).notNull()
-            table.double("vlr_pagar_com_frete", 8, 2).notNull()
-            table.double("vlr_pagar_sem_frete", 8, 2).notNull()
+            table.decimal("vlr_products", 65, 2).notNull()
+            table.decimal("vlr_products_promotion", 65, 2).notNull()
+            table.decimal("vlr_diferenca_promotion", 65, 2).notNull()
+            table.float("vlr_frete").notNull()
+            table.decimal("vlr_pagar_com_frete", 65, 2).notNull()
+            table.decimal("vlr_pagar_sem_frete", 65, 2).notNull()
             table.enu("pgt_metodo", ["Receber em casa", "Retirada na loja"])
             table.enu("pgt_forma", ["PIX", "Cartão", "Pagar na loja", "Pagar na entrega"])
             table.double("percentual_frete").notNull()
             table.boolean("cobrar_frete", 1).notNull() /* Se foi cobrado frete ou não */
-            table.double("vlr_pago", 8, 2).notNull() /* Valor a ser pago pelo cliente, ja com frete caso tenha. */
+            table.decimal("vlr_pago", 65, 2).notNull() /* Valor a ser pago pelo cliente, ja com frete caso tenha. */
 
             table.timestamp("pix_criacao").nullable();
             table.timestamp("pix_expiracao").nullable();
