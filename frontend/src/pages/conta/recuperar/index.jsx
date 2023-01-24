@@ -1,5 +1,5 @@
 import jwt from "jwt-simple"
-const { SECRET_KEY_SERVER } = require("../../../../.env");
+const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
@@ -99,9 +99,9 @@ export default function Recover() {
                         <Formik
                             validationSchema={scheme}
                             initialValues={{ email: "" }}
-                            onSubmit={async (values, setValues) => {
+                            onSubmit={async (values) => {
                                 /* Os dados sera convetido em jwt antes de enviar para o backend */
-                                const modelo = jwt.encode(values, SECRET_KEY_SERVER)
+                                const modelo = jwt.encode(values, SECRET_KEY_AUTH)
                                 await storePassword({ userJWT: modelo })
                                     .then((data) => {
                                         /* Redireciona para tela inicial passando a mensagem(msg) */

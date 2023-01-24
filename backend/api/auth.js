@@ -1,6 +1,5 @@
 const { SECRET_KEY_AUTH } = require("../.env")
 const jwt = require("jwt-simple")
-const jwtweb = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 module.exports = app => {
@@ -231,9 +230,15 @@ module.exports = app => {
                         return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
                 }
 
-                /* Descriptografa o jwt, se de erro retornar erro */
-                const body = jwtweb.decode(req.body.userJWT, SECRET_KEY_AUTH);
-                if (!body) return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
+                try {
+                        /* Descriptografa o jwt, se de erro retornar erro */
+                        const body = jwt.decode(req.body.userJWT, SECRET_KEY_AUTH);
+                        if (!body) throw "[req.body.userJWT] inválido ou expirado."
+                } catch (error) {
+                        utility_console("newPassword", "[req.body.userJWT] inválido.")
+                        return res.status(400).send({ 400: "Desculpe, mas encontramos um erro no processamento de sua solicitação. Por favor, tente novamente." })
+                }
+                const body = jwt.decode(req.body.userJWT, SECRET_KEY_AUTH);
 
                 const modelo = {
                         email: body.email,

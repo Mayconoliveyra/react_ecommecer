@@ -195,6 +195,7 @@ export async function getServerSideProps(context) {
         }
     }
     /* /FIM VALIDAÇÃO SESSION/ */
+
     try {
         const { id } = context.params; /* id do pedido; */
         const payment = await storePixPgt(id, session.id)

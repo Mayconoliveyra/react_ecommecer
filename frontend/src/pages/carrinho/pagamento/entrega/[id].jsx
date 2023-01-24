@@ -54,6 +54,7 @@ export async function getServerSideProps(context) {
         }
     }
     /* /FIM VALIDAÇÃO SESSION/ */
+
     const { paymentResult } = parseCookies(context);
     const { id } = context.params; /* id do pedido; */
 

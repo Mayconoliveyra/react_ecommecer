@@ -1,10 +1,10 @@
 import jwt from "jwt-simple"
-const { SECRET_KEY_SERVER } = require("../../../../.env");
+const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -65,7 +65,56 @@ const BtnConfirmSC = styled.div`
         }
     }
 `
-
+const GroupSC = styled.div`
+  display:flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  [data="label"]{
+    padding: 0.4rem;
+    label{
+      font-family:${({ theme }) => theme.font.family.bold};
+      font-size: 1.4em;
+    }
+    
+  }
+  [data="input"]{
+    border-top-color: #949494;
+    border: 0.1rem solid #a6a6a6;
+    box-shadow: 0 0.1rem 0 rgb(0 0 0 / 7%) inset;
+    border-radius: 0.3rem 0.3rem 0 0;
+    border-right-color: #949494;
+    border-bottom-color: #949494;
+    border-left-color: #949494;
+    border-color:${({ error }) => error && "#d00"};
+    box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
+    input{
+      width: 100%;
+      background-color: transparent;
+      padding: 0.8rem;
+      padding-top: 0.9rem;
+      box-shadow: none;
+      border: 0;
+      font-size: 1.1rem;
+    }
+    [data="show-password"]{
+      width: 100%;
+      padding: 0 10px 6px 10px;
+      span{
+        color: #555!important;
+        font-size: 0.9rem !important;
+      }
+    }
+  }
+  [data="error"]{
+        font-size: 1rem;
+        color: #e72626;
+        margin-top: 0.0rem;
+        small{
+            padding: 0px;
+            margin: 0px;
+        }
+  }
+`
 export default function NewPassword({ data }) {
     const scheme = Yup.object().shape({
         senha: Yup.string().nullable().label("Senha").required("É necessário informar uma senha.")
@@ -98,10 +147,10 @@ export default function NewPassword({ data }) {
                         </div>
                         <Formik
                             validationSchema={scheme}
-                            initialValues={{ senha: '', confirsenha: '', ...data }}
+                            initialValues={{ senha: '', confirsenha: '', show_password: true, ...data }}
                             onSubmit={async (values, setValues) => {
                                 /* Os dados sera convetido em jwt antes de enviar para o backend */
-                                const modelo = jwt.encode(values, SECRET_KEY_SERVER)
+                                const modelo = jwt.encode(values, SECRET_KEY_AUTH)
                                 await storePassword({ userJWT: modelo }, data.id)
                                     .then((data) => {
                                         /* Redireciona para tela inicial passando a mensagem(msg) */
@@ -126,7 +175,7 @@ export default function NewPassword({ data }) {
                                     })
                             }}
                         >
-                            {({ errors, touched, dirty }) => (
+                            {({ values, errors, touched, dirty }) => (
                                 <Form data="form" action="">
                                     <ShowMessage error={errors} />
                                     <Group
@@ -135,21 +184,43 @@ export default function NewPassword({ data }) {
                                         disabled
                                     />
                                     {data.email_auth ?
-                                        <Group
-                                            error={!!errors.senha && touched.senha}
-                                            label="Crie sua nova senha"
-                                            name="senha"
-                                            type="password"
-                                            maxLength={55}
-                                        />
+                                        <GroupSC error={!!errors.senha && touched.senha}>
+                                            <div data="label">
+                                                <label htmlFor="senha">Crie sua nova senha</label>
+                                            </div>
+                                            <div data="input">
+                                                <Field name="senha" type="password" autoComplete='off' maxLength="55" />
+                                                {values.show_password && values.senha && (
+                                                    <div data="show-password">
+                                                        <span name="senha" value>{values.senha}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div data="error">
+                                                <small>
+                                                    <ErrorMessage name="senha" />
+                                                </small>
+                                            </div>
+                                        </GroupSC>
                                         :
-                                        <Group
-                                            error={!!errors.senha && touched.senha}
-                                            label="Crie sua senha"
-                                            name="senha"
-                                            type="password"
-                                            maxLength={55}
-                                        />
+                                        <GroupSC error={!!errors.senha && touched.senha}>
+                                            <div data="label">
+                                                <label htmlFor="senha">Crie sua senha</label>
+                                            </div>
+                                            <div data="input">
+                                                <Field name="senha" type="password" autoComplete='off' maxLength="55" />
+                                                {values.show_password && values.senha && (
+                                                    <div data="show-password">
+                                                        <span name="senha" value>{values.senha}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div data="error">
+                                                <small>
+                                                    <ErrorMessage name="senha" />
+                                                </small>
+                                            </div>
+                                        </GroupSC>
                                     }
                                     <Group
                                         error={!!errors.confirsenha && touched.confirsenha}
@@ -190,10 +261,10 @@ export async function getServerSideProps({ req, query }) {
 
     if (query && query.authlogin)
         try {
-            const { SECRET_KEY_SERVER } = require("../../../../.env");
-            const jwt = require('jsonwebtoken')
+            const { SECRET_KEY_AUTH } = require("../../../../.env");
+            const jwt = require("jwt-simple")
 
-            const decoded = jwt.decode(query.authlogin, SECRET_KEY_SERVER);
+            const decoded = jwt.decode(query.authlogin, SECRET_KEY_AUTH);
             const userBody = {
                 id: decoded.id,
                 email: decoded.email,

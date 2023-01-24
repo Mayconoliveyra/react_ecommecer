@@ -304,8 +304,6 @@ export default function CloseOrder({ totals }) {
 }
 
 export async function getServerSideProps(context) {
-    const { myCartId } = parseCookies(context);
-
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
@@ -326,7 +324,9 @@ export async function getServerSideProps(context) {
             }
         }
     }
+    /* /FIM VALIDAÇÃO SESSION/ */
 
+    const { myCartId } = parseCookies(context);
     /* Se não tiver setado redireciona para tela home */
     if (!myCartId) {
         return {

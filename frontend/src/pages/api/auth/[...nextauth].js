@@ -4,7 +4,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { storeNextAuth } from "./index"
-const jwt = require('jsonwebtoken')
+const jwt = require("jwt-simple")
 
 export const authOptions = {
     providers: [

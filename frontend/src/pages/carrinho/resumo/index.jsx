@@ -112,7 +112,6 @@ const DeliveryAddresSC = styled.div`
     }
 `
 const PaymentInfoSC = styled.div`
-    /* border:solid 1px red; */
     margin: 1rem 0;
     padding: 0 0.7rem;
     >div{
@@ -373,7 +372,6 @@ export default function Resume({ session, products, totals, payment }) {
 }
 
 export async function getServerSideProps(context) {
-    const { myCartId, myCartPayment } = parseCookies(context);
     /* SESSSÃO USUARIO LOGADO */
     const req = context.req
     const session = await getSession({ req })
@@ -394,6 +392,9 @@ export async function getServerSideProps(context) {
             }
         }
     }
+    /* /FIM VALIDAÇÃO SESSION/ */
+
+    const { myCartId, myCartPayment } = parseCookies(context);
 
     /* Se myCartPayment tiver null, significa que nao foi preenchido ou foi expirado(1m). */
     if (!myCartPayment) {
