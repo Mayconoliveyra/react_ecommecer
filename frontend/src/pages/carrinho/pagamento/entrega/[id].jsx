@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react"
 import Head from 'next/head';
 import styled from "styled-components"
 
-import { Header, NumberOrder, MsgNotification, Btns } from "../components"
+import { Header, NumberOrder, MsgNotification, Btns } from "../../../../components/pagamento/components"
 
 import { userIsAuth } from "../../../api/auth";
 

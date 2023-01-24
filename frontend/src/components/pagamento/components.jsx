@@ -2,7 +2,7 @@ import Link from "next/link"
 import styled from "styled-components"
 import { CheckCircleFill } from "react-bootstrap-icons";
 
-import { ButtonSC } from "../../../components/button";
+import { ButtonSC } from "../button";
 
 const HeaderSC = styled.div`
     [data="icone-msg"]{

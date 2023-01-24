@@ -5,7 +5,7 @@ import Head from 'next/head';
 import styled from "styled-components"
 import { ButtonSC } from "../../../../components/button";
 
-import { Header, NumberOrder, MsgNotification, Btns } from "../components"
+import { Header, NumberOrder, MsgNotification, Btns } from "../../../../components/pagamento/components"
 
 import { userIsAuth } from "../../../api/auth";
 import { storePixPgt } from "../../../api/cart";
