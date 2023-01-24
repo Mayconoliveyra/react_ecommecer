@@ -2,9 +2,10 @@ import { getSession } from "next-auth/react"
 import Image from "next/image";
 import moment from "moment"
 import Head from 'next/head';
-import Link from 'next/link';
 import styled from "styled-components"
 import { ButtonSC } from "../../../../components/button";
+
+import { Header, NumberOrder, MsgNotification, Btns } from "../components"
 
 import { userIsAuth } from "../../../api/auth";
 import { storePixPgt } from "../../../api/cart";
@@ -17,85 +18,64 @@ const MainSC = styled.div`
     display:  flex;
     flex-direction: column;
     padding: 1rem;
-    [data="msg"]{
-        h1{
-            font-size: 1.7rem;
-            color: #067d62;
-            word-break: break-word;
-            font-family: ${({ theme }) => theme.font.family.meidum};
-            padding: 0.7rem;
-        }
-    }
-    [data="pgt-pix"]{
-       margin-top:10px;
-       border-radius: 8px;
-       border-top-right-radius: 8px;
-       border-bottom-right-radius: 8px;
-       padding: 1px 1px 1px 13px;
-       background-color: #2EBDAE;
-       border: solid 1px #2FBAAD;
-        [data="pix"] {
-            padding: 15px 20px;
-            border: solid 1px #2FBAAD;
-            border-radius: 8px;
-            border-top-left-radius:0;
-            border-bottom-left-radius:0;
-            background-color: #fff;
-            [data="header"]{
-                div {
-                    margin-bottom: 1.6rem;
-                    p{
-                        font-size: 1.1rem;
-                        font-family:${({ theme }) => theme.font.family.bold};
-                        margin: 0 0 1rem 0;
-                     }
-                     span{
-                        font-size: 1.1rem;
+`
+const PixSC = styled.div`
+    margin-top: 1rem;
+    border-radius: 0.6rem;
+    border-top-right-radius: 0.6rem;
+    border-bottom-right-radius: 0.6rem;
+    padding: 1px 1px 1px 13px;
+    background-color: #2EBDAE;
+    border: solid 1px #2FBAAD;
+    [data="pix"] {
+        padding: 15px 20px;
+        border: solid 1px #2FBAAD;
+        border-radius: 8px;
+        border-top-left-radius:0;
+        border-bottom-left-radius:0;
+        background-color: #fff;
+        [data="header"]{
+            div {
+                margin-bottom: 1.6rem;
+                p{
+                    font-size: 1.1rem;
+                    font-family:${({ theme }) => theme.font.family.bold};
+                    margin: 0 0 1rem 0;
                     }
+                    span{
+                    font-size: 1.1rem;
                 }
             }
-            [data="img-qrcode"]{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            [data="pix-chave"]{
-                div {
-                    word-break: break-word;
-                    margin-bottom: 1.6rem;
-                    [data="chave-copia"]{
-                        word-break: break-all;
+        }
+        [data="img-qrcode"]{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        [data="pix-chave"]{
+            div {
+                word-break: break-word;
+                margin-bottom: 1.6rem;
+                [data="chave-copia"]{
+                    word-break: break-all;
+                }
+                p{
+                    font-size: 1.1rem;
+                    font-family:${({ theme }) => theme.font.family.bold};
+                    margin: 0 0 1rem 0;
                     }
-                    p{
-                        font-size: 1.1rem;
-                        font-family:${({ theme }) => theme.font.family.bold};
-                        margin: 0 0 1rem 0;
-                     }
-                     span{
-                        font-size: 1rem;
-                    }
-                    li{
-                        font-size: 1rem;
-                        padding: 3px 0;
-                    }
+                    span{
+                    font-size: 1rem;
+                }
+                li{
+                    font-size: 1rem;
+                    padding: 3px 0;
                 }
             }
-       }
-    }
-    [data="msg-confirm"]{
-        padding: 10px 0;
-        span{
-            font-size: 1.2rem;
-        }
-    }
-    [data="btn"]{
-        [data='btn-confirm-bord-laran'],
-        [data='btn-confirm-noborder'] {
-            padding: 0.5rem 0;
         }
     }
 `
-export default function PixPayment({ payment }) {
+export default function PixPayment({ id, payment }) {
     const [textCopia, setTextCopia] = useState("Copiar código Pix")
     const dataFormat = (date) => {
         return `${moment(date).calendar(null, {
@@ -128,13 +108,8 @@ export default function PixPayment({ payment }) {
             </Head>
             <div>
                 <MainSC>
-                    <div data="msg">
-                        <h1>
-                            Seu pedido foi reservado.
-                            Pague em até 30 minutos para processarmos seu pedido.
-                        </h1>
-                    </div>
-                    <div data="pgt-pix">
+                    <Header title="Seu pedido foi reservado." sub="Pague em até 30 minutos para processarmos seu pedido." />
+                    <PixSC>
                         <div data="pix">
                             <div data="header">
                                 <div>
@@ -188,26 +163,10 @@ export default function PixPayment({ payment }) {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div data="msg-confirm">
-                        <span>A confirmação será enviada para o seu e-mail e whatsapp.</span>
-                    </div>
-                    <div data="btn">
-                        <ButtonSC>
-                            <div data='btn-confirm-noborder'>
-                                <Link href="/">
-                                    Continuar comprando
-                                </Link>
-                            </div>
-                        </ButtonSC>
-                        <ButtonSC>
-                            <div data='btn-confirm-bord-laran'>
-                                <Link href="/conta/meuspedidos">
-                                    Ver meus pedidos
-                                </Link>
-                            </div>
-                        </ButtonSC>
-                    </div>
+                    </PixSC>
+                    <NumberOrder id={id} />
+                    <MsgNotification />
+                    <Btns />
                 </MainSC>
             </div>
         </>
@@ -250,7 +209,7 @@ export async function getServerSideProps(context) {
         }
 
         return {
-            props: { payment: payment },
+            props: { id: id, payment: payment },
         }
     } catch (error) {
         return {

@@ -50,6 +50,8 @@ export default function MyApp({ Component, pageProps }) {
       case '/conta/recuperar':
       case '/conta/endereco':
       case '/carrinho/pagamento/pix/[id]':
+      case '/carrinho/pagamento/entrega/[id]':
+      case '/carrinho/pagamento/loja/[id]':
         setTemplate({ ...defaultTemplate, showHeaderSearch: false })
         break;
       case '/produto/[id]':

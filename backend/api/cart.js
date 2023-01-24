@@ -336,10 +336,10 @@ module.exports = (app) => {
                     res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/cartao' })
                 }
                 if (modeloTotals.pgt_forma == "Pagar na loja") {
-                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/loja' })
+                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/loja/${idTotalsHeader}` })
                 }
                 if (modeloTotals.pgt_forma == "Pagar na entrega") {
-                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/entrega' })
+                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/entrega/${idTotalsHeader}` })
                 }
             })
         } catch (error) {

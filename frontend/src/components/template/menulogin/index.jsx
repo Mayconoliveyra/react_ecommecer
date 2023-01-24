@@ -113,7 +113,7 @@ export default function MenuLogin() {
                             Seus Pedidos
                         </div>
                     </li>
-                    <li><Link href="/">Meus pedidos</Link></li>
+                    <li><Link href="/conta/meuspedidos">Meus pedidos</Link></li>
                     <li data="barra"></li>
 
                     <li><button onClick={() => signOut()}>Sair</button></li>

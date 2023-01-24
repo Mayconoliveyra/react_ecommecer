@@ -156,13 +156,19 @@ export default function CloseOrder({ totals }) {
                     onSubmit={(values, setValues) => {
                         if (values.pgt_metodo == "Retirada na loja" && values.pgt_forma == "Pagar na entrega") {
                             setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
-                        } else {
-                            setCookie(null, "myCartPayment", JSON.stringify(values), {
-                                maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
-                                path: "/"
-                            });
-                            router.push("/carrinho/resumo")
+                            return
                         }
+                        if (values.pgt_metodo == "Receber em casa" && values.pgt_forma == "Pagar na loja") {
+                            setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
+                            return
+                        }
+
+                        setCookie(null, "myCartPayment", JSON.stringify(values), {
+                            maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
+                            path: "/"
+                        });
+                        router.push("/carrinho/resumo")
+
                     }}
                 >
                     {({ values, errors }) => (
@@ -252,11 +258,15 @@ export default function CloseOrder({ totals }) {
                                                     <label htmlFor="cartao">Cartão</label>
                                                 </GroupSC>
                                             }
-                                            {!!store.pgt_loja &&
-                                                <GroupSC>
-                                                    <Field name="pgt_forma" type="radio" id="p_entrega" value="Pagar na loja" />
-                                                    <label htmlFor="p_entrega">Pagar na loja</label>
-                                                </GroupSC>
+                                            {values.pgt_metodo == "Retirada na loja" &&
+                                                <>
+                                                    {!!store.pgt_loja &&
+                                                        <GroupSC>
+                                                            <Field name="pgt_forma" type="radio" id="p_entrega" value="Pagar na loja" />
+                                                            <label htmlFor="p_entrega">Pagar na loja</label>
+                                                        </GroupSC>
+                                                    }
+                                                </>
                                             }
                                             {values.pgt_metodo == "Receber em casa" &&
                                                 <>
