@@ -7,8 +7,8 @@ exports.up = function (knex) {
 
             table.integer("order")
 
-            table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
+            table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("deleted_at").nullable();
         })
         .then(function () {

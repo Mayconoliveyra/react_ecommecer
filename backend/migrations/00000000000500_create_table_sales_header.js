@@ -56,8 +56,8 @@ exports.up = function (knex) {
             table.boolean("cancelado", 1).notNull().defaultTo(0)
             table.timestamp("data_cancelado").nullable();
 
-            table.timestamp('created_at').defaultTo(knex.fn.now())
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
+            table.timestamp('created_at').defaultTo(knex.fn.now())
         })
 };
 

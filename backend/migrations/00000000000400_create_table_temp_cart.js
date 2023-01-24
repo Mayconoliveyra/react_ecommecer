@@ -5,6 +5,8 @@ exports.up = function (knex) {
             table.string("id_storage", 28).notNull();
             table.integer('id_product').unsigned().notNull().references('id').inTable('products')
             table.integer('quantity').notNull();
+            table.timestamp("updated_at").defaultTo(knex.raw(`${knex.fn.now()} ON UPDATE CURRENT_TIMESTAMP`));
+            table.timestamp('created_at').defaultTo(knex.fn.now())
         })
 };
 
