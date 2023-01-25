@@ -29,7 +29,6 @@ export default function MyApp({ Component, pageProps }) {
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
   const { myCartId } = parseCookies();
-  const teste = parseCookies();
 
   useEffect(() => {
     handleStore();
@@ -79,16 +78,19 @@ export default function MyApp({ Component, pageProps }) {
       .catch((error => console.log(error)))
   }
   const handleMyCart = async () => {
-    console.log("COOKIES[_APP]")
-    console.log(teste)
     /*Verifica se id_storage está setado. So carrega o carrinh se tiver id. */
     if (!myCartId) {
       const now = `${Date.now()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}-${(Math.random() * (9999 - 1000) + 1000).toFixed()}`
       setCookie(null, "myCartId", now, {
-        maxAge: 60 * 60 * 24 * 30,  /* EXPIRA EM 30 DIAS. "seg * min * hrs * dias" */
+        maxAge: 60 * 60 * 24 * 30 * 365, /* 1 ano */
         path: "/"
       });
     } else {
+      /* Atualiza tempo exp cokkies id_storage */
+      setCookie(null, "myCartId", myCartId, {
+        maxAge: 60 * 60 * 24 * 30 * 365, /* 1 ano */
+        path: "/"
+      });
       setMyCart(await getCartTemp(myCartId))
     }
   }
