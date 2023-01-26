@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { PersonCircle, PersonFillGear, List, Cart3, Person, PersonFill } from "react-bootstrap-icons";
+import { List, Cart3, Person } from "react-bootstrap-icons";
 import TemplateContext from "../../../context/template";
 import MyCartContext from "../../../context/myCart";
 
@@ -70,6 +70,7 @@ const HeaderSC = styled.header`
                     }
                 }
                 [data="cart"]{
+                    position: relative;
                     padding: 7px 13px 7px 5px;
                     svg{
                         font-size: 35px;
