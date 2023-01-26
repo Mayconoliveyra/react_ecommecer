@@ -4,42 +4,92 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { PersonCircle, PersonFillGear } from "react-bootstrap-icons";
+import { PersonCircle, PersonFillGear, List, Cart3, Person, PersonFill } from "react-bootstrap-icons";
 import TemplateContext from "../../../context/template";
+import MyCartContext from "../../../context/myCart";
 
 const HeaderSC = styled.header`
     background-color: ${({ theme }) => theme.colors.secondaryColor};
     #exibir-header{
-        padding: 7px 10px;
         max-width: 1120px;
         margin: 0px auto;
         display: flex;
         flex-direction:column;
         [data="cont-1"]{
+            color: #fff;
             display: flex;
             justify-content: space-between;
-            padding: 5px 5px 10px 5px;
-
-            [data="user-login"]{
-                background:transparent;
+            [data="nav-logo"]{
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                font-family:${({ theme }) => theme.font.family.bold};
-                color: #fff;
-                font-size: 16px;
-                span{
-                    overflow:hidden;
-                    max-width: 10rem;
-                    white-space: nowrap;
+                [data="nav-icon"]{
+                    background:transparent;
+                    padding: 7px;
+                    svg{
+                        font-size: 35px;
+                    }
                 }
-                svg{
-                    font-size: 25px;
-                    margin-left: 3px;
-                }
+                [data="nav-logo"]{
+                }  
             }
+            [data="user-cart"]{
+                display: flex;
+                align-items: center;
+                [data="user"]{
+                    background:transparent;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-family:${({ theme }) => theme.font.family.bold};
+                    font-size: 13px;
+                    padding: 7px 0;
+                    span{
+                        overflow:hidden;
+                        max-width: 85px;
+                        white-space: nowrap;
+                    }
+                    svg{
+                        font-size: 33px;
+                    }
+                }
+                [data="user-l"]{
+                    background:transparent;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-family:${({ theme }) => theme.font.family.bold};
+                    font-size: 17px;
+                    padding: 7px 0;
+                    span{
+                        overflow:hidden;
+                        max-width: 85px;
+                        white-space: nowrap;
+                    }
+                    svg{
+                        font-size: 33px;
+                    }
+                }
+                [data="cart"]{
+                    padding: 7px 13px 7px 5px;
+                    svg{
+                        font-size: 35px;
+                    }
+                    [data="cart-qtd"]{
+                        width: 30px;
+                        padding:0 3px;
+                        position: absolute;
+                        right: 7px;
+                        top: 2px;
+                        font-family:${({ theme }) => theme.font.family.bold};
+                        background-color: ${({ theme }) => theme.colors.secondaryColor};
+                        font-size: 16px;
+                        color: #f90;
+                    }
+                }
+            }    
         }
         [data="cont-2"]{
+            padding: 7px 10px;
             flex: 1;
             display: flex;
             justify-content: center;
@@ -57,6 +107,7 @@ const HeaderSC = styled.header`
 `
 export default function Header() {
     const { template, setTemplate } = useContext(TemplateContext)
+    const { myCart: { products } } = useContext(MyCartContext);
     const router = useRouter()
     const [inputSearch, setInputSearch] = useState('')
     const { query: { search } } = router
@@ -76,27 +127,39 @@ export default function Header() {
         <HeaderSC>
             <div id="exibir-header">
                 <div data="cont-1">
-                    <Link href="/">
-                        <Image src={'/assets/images/logo.png'} width={130} height={30} alt="logo" quality={100} priority={true} />
-                    </Link>
-
-                    {session && session.id ?
-                        <button data="user-login" onClick={() => setTemplate({ ...template, showMenu: false, showMenuLogin: true, showNav: false })}>
-                            {session.nome && session.nome != 'Não informado' ?
-                                <>
-                                    <span>{session.nome.split(' ')[0]}</span>  <PersonFillGear />
-                                </>
-                                :
-                                <>
-                                    <span>Não informado</span>  <PersonFillGear />
-                                </>
-                            }
+                    <div data="nav-logo">
+                        <button type="button" data="nav-icon" onClick={() => setTemplate({ ...template, showMenu: true, showMenuLogin: false })}>
+                            <List />
                         </button>
-                        :
-                        <Link href="/login" data="user-login">
-                            Faça seu login <PersonCircle />
+                        <Link data="nav-logo" href="/">
+                            <Image src={'/assets/images/logo.png'} width={130} height={30} alt="logo" quality={100} priority={true} />
                         </Link>
-                    }
+
+                    </div>
+
+                    <div data="user-cart">
+                        {session && session.id ?
+                            <button type="button" data="user-l" onClick={() => setTemplate({ ...template, showMenu: false, showMenuLogin: true })}>
+                                {session.nome && session.nome != 'Não informado' ?
+                                    <>
+                                        <span>{session.nome.split(' ')[0]}</span>  <Person />
+                                    </>
+                                    :
+                                    <>
+                                        <span>Não informado</span>  <Person />
+                                    </>
+                                }
+                            </button>
+                            :
+                            <Link href="/login" data="user">
+                                Faça seu login  <Person />
+                            </Link>
+                        }
+                        <Link href="/carrinho" data="cart">
+                            <span data="cart-qtd">{products && products.length ? products.length : 0}</span>
+                            <Cart3 />
+                        </Link>
+                    </div>
                 </div>
                 {template.showHeaderSearch && (
                     <div data="cont-2">
