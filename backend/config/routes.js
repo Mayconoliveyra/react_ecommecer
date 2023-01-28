@@ -19,9 +19,10 @@ module.exports = (app) => {
   app.route("/user/:id")
     .all(app.config.passport.authenticate())
     .put(userAuth(app.api.auth.save))
+
   app.route("/user/password")
     .all(app.config.passport.authenticate())
-    .post(app.api.auth.newPassword)
+    .post(app.api.auth.newPassword) /* no auth */
   app.route("/user/password/:id")
     .all(app.config.passport.authenticate())
     .put(app.api.auth.newPassword) /* no auth */
@@ -41,6 +42,10 @@ module.exports = (app) => {
   app.route("/cart/:id")
     .all(app.config.passport.authenticate())
     .get(app.api.cart.getCartTemp) /* no auth */
+
+  app.route("/cart/usuario/:id")
+    .all(app.config.passport.authenticate())
+    .get(userAuth(app.api.cart.getCartTemp))
 
   app.route("/cart/save-pedido")
     .all(app.config.passport.authenticate())

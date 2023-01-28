@@ -7,6 +7,9 @@ const getCartTemp = async (id_storage, id_user, session) => {
   const id_usuario = id_user ? `?id_user=${id_user}` : '';
   if (!id_storage) return console.log("[id_storage] NÃO FOI INFORMADO!!")
 
+  if (id_user)
+    return await axios.get(`${prefix}/usuario/${id_storage}${id_usuario}`).then(res => res.data);
+
   return await axios.get(`${prefix}/${id_storage}${id_usuario}`).then(res => res.data);
 };
 
