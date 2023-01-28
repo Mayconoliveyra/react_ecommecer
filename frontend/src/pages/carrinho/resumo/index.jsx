@@ -188,7 +188,7 @@ export default function Resume({ session, products, totals, payment }) {
             ...payment
         }
 
-        await storePedido(dataPedido)
+        await storePedido(dataPedido, session)
             .then((res) => {
                 setMyCart([]);
                 setCookie(null, "paymentResult", res.id, {
@@ -416,7 +416,7 @@ export async function getServerSideProps(context) {
         }
     }
 
-    const data = await getCartTemp(myCartId, session.id)
+    const data = await getCartTemp(myCartId, session.id, session)
 
     /* Se não tiver setado redireciona para tela home*/
     if (!data || !data.totals || !data.products) {

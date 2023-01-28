@@ -2,8 +2,8 @@ import { api } from "../axios";
 const prefix = "/user";
 
 /* Alterar o cadastro */
-const store = async (data) => {
-  const axios = await api();
+const store = async (data, session) => {
+  const axios = await api(session);
   if (data && data.id) {
     return await axios.put(`${prefix}/${data.id}`, data).then(res => res.data);
   }

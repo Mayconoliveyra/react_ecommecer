@@ -32,7 +32,8 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
   body{
-    background: #fff;
+    background: #EAEDED;
+    /* background: #fff; */
     min-height: 100vh;
   }
   
@@ -46,7 +47,10 @@ export const GlobalStyles = createGlobalStyle`
     max-width: ${({ theme }) => theme.width.large};
     width: 100%;
     margin: 0px auto;
-    min-height:calc( 100vh - 200px);
+    min-height:calc( 100vh - 50px);
+    
+    display: flex;
+    flex-direction: column;
   }
  
   h1, h2, h3, h4, h5, h6 {

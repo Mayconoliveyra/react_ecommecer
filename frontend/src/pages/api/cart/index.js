@@ -1,8 +1,8 @@
 import { api } from "../axios";
 const prefix = "/cart";
 
-const getCartTemp = async (id_storage, id_user) => {
-  const axios = await api();
+const getCartTemp = async (id_storage, id_user, session) => {
+  const axios = await api(session);
   /* Utilizado para finalizar venda, quando é passado a consulta tras o valor do frete. */
   const id_usuario = id_user ? `?id_user=${id_user}` : '';
   if (!id_storage) return console.log("[id_storage] NÃO FOI INFORMADO!!")
@@ -23,15 +23,22 @@ const storeQuantity = async (id, quantity, id_storage) => {
   return await axios.post(`${prefix}`, data);
 };
 
-const storePedido = async (data) => {
-  const axios = await api();
+const storePedido = async (data, session) => {
+  const axios = await api(session);
   return await axios.post(`${prefix}/save-pedido`, data).then((res) => res.data);;
 };
 
-const storePixPgt = async (id, id_user) => {
+const getPedidos = async ({ id, page, limi, id_sales, session }) => {
+  const axios = await api(session);
+  if (id_sales)
+    return await axios.get(`${prefix}/meus-pedidos/${id}?id_sales=${id_sales}`).then(res => res.data);
+  return await axios.get(`${prefix}/meus-pedidos/${id}?_page=${page}&_limit=${limi}`).then(res => res.data);
+};
+
+const storePixPgt = async (id, id_user, session) => {
   /* id = codigo do pedido;  id_user= codigo do usuario;*/
-  const axios = await api();
+  const axios = await api(session);
   return await axios.get(`${prefix}/pix-detalhes/${id}?id_user=${id_user}`).then((res) => res.data);;
 };
 
-export { getCartTemp, storeQuantity, storePedido, storePixPgt }
+export { getCartTemp, storeQuantity, storePedido, getPedidos, storePixPgt }

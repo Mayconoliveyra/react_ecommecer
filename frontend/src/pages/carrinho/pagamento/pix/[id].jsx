@@ -198,7 +198,7 @@ export async function getServerSideProps(context) {
 
     try {
         const { id } = context.params; /* id do pedido; */
-        const payment = await storePixPgt(id, session.id)
+        const payment = await storePixPgt(id, session.id, session)
         /* Se id ou pagamento tiver nulo, redireciona para home. */
         if (!id || !payment) {
             return {

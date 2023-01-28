@@ -100,7 +100,7 @@ export default function MyData({ session }) {
                             validationSchema={scheme}
                             initialValues={session}
                             onSubmit={async (values, setValues) => {
-                                await saveUser(values)
+                                await saveUser(values, session)
                                     .then(() => {
                                         router.reload()
                                     })

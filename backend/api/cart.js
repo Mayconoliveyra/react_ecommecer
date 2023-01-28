@@ -1,5 +1,6 @@
 module.exports = (app) => {
     const { existOrError, utility_console, msgErrorDefault } = app.api.utilities;
+    const { LimitOFFSET, orderBy } = app.api.queries;
     const { createPixImmediate } = app.services.gerencianet;
 
     const saveIncrementer = async (req, res) => {
@@ -374,5 +375,57 @@ module.exports = (app) => {
             return res.status(400).send(msgErrorDefault)
         }
     };
-    return { getCartTemp, saveIncrementer, savePedido, getPixDetail };
+
+    const getPedidos = async (req, res) => {
+        const id_user = req.params.id
+        const id_sales = Number(req.query.id_sales); /* id_sales= id do pedido. utilizado para retornar os produtos do pedido "sales_products"*/
+        const page = Number(req.query._page);
+        const limit = Number(req.query._limit);
+
+        try {
+            existOrError(id_user, "[id_user] não pode ser nulo.")
+            if (!id_sales) {
+                existOrError(page, "[page] não pode ser nulo.")
+                existOrError(limit, "[limit] não pode ser nulo.")
+            }
+        } catch (error) {
+            utility_console("cart.getPedidos", error)
+            return res.status(500).send(msgErrorDefault)
+        }
+
+        if (id_sales) {
+            /* Retorna os produtos do pedido */
+            app.db("sales_products").where({ id_sale: id_sales })
+                .then((products) => res.json(products))
+                .catch((error) => {
+                    utility_console("cart.getPedidos.id_sales", error)
+                    return res.status(500).send(msgErrorDefault)
+                })
+        } else {
+            try {
+                const { totals } = await app
+                    .db("sales_header")
+                    .count({ totals: "*" })
+                    .where({ id_user: id_user })
+                    .first();
+
+                const pedidos = await app
+                    .db("sales_header")
+                    .select("id", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "vlr_frete", "vlr_pago", "pgt_metodo", "pgt_forma", "cobrar_frete", "vlr_pagar_products", "created_at")
+                    .whereRaw(` 
+                        id_user = ${id_user}
+                        ${orderBy("id", "DESC")}
+                        ${LimitOFFSET(page, limit)}
+                    `)
+
+                res.json({ dt_pedidos: pedidos, totals })
+            } catch (error) {
+                utility_console("cart.getPedidos", error)
+                return res.status(500).send(msgErrorDefault)
+            }
+        }
+
+    }
+
+    return { getCartTemp, saveIncrementer, savePedido, getPedidos, getPixDetail };
 };
