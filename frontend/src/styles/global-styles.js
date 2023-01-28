@@ -32,8 +32,8 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
   body{
-    /* background: #EAEDED; */
-    background: #fff;
+    background: #FFFFFF;
+    /* background: #fff; */
     min-height: 100vh;
   }
   

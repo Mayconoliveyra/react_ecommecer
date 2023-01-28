@@ -103,7 +103,7 @@ const NumberOrder = ({ id }) => {
             <div>
                 <strong>
                     {Number(id).toLocaleString('en-US', {
-                        minimumIntegerDigits: 7,
+                        minimumIntegerDigits: 6,
                         useGrouping: false
                     })}
                 </strong>

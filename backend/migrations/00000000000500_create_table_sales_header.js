@@ -44,8 +44,7 @@ exports.up = function (knex) {
             table.text("pix_qrcode")
             table.text("pix_img_qrcode")
 
-            table.boolean("confirmado", 1).notNull().defaultTo(0)
-            table.timestamp("data_confirmado").nullable();
+            table.enu("status", ["Aguardando Pagamento", "Aguardando Retirada na Loja", "Processando Entrega", "Saiu para Entrega", "Concluído", "Cancelado"])
 
             table.boolean("entrega", 1).notNull().defaultTo(0)
             table.timestamp("data_entrega").nullable();

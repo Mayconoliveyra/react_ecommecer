@@ -1,10 +1,11 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
-import { ChevronDown } from "react-bootstrap-icons";
+import { ChevronLeft } from "react-bootstrap-icons";
 
-import { Content, ContentWhite, Header } from "../../../components/conta/components"
-import { Pedido } from "../../../components/conta/meuspedidos/components"
+import { ContentHeader, Content, ContentWhite } from "../../../components/containe"
+import { Pedido } from "../../../components/conta/components"
 
 import { getPedidos } from "../../api/cart"
 import { useState } from 'react';
@@ -53,8 +54,15 @@ export default function Requests({ dt_pedidos, totals, session }) {
             <Head>
                 <title>Meus pedidos</title>
             </Head>
-            <Content>
-                <Header title="MEUS PEDIDOS" />
+            <Content maxwidth="40rem">
+                <ContentHeader padding="1.3rem">
+                    <Link href="/">
+                        <ChevronLeft data="icon-left" />
+                        <h2 data="h2-title">
+                            Meus pedidos
+                        </h2>
+                    </Link>
+                </ContentHeader>
                 {pedidos && pedidos.map((pedido) => {
                     return (
                         <ContentWhite key={pedido.id} margin="0 0 0.5rem 0;" padding="1rem;">

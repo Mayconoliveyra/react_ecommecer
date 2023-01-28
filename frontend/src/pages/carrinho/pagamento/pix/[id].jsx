@@ -1,6 +1,9 @@
 import { getSession } from "next-auth/react"
 import Image from "next/image";
 import moment from "moment"
+import moment from "moment"
+import 'moment/locale/pt-br'
+moment.locale('pt-br')
 import Head from 'next/head';
 import styled from "styled-components"
 import { ButtonSC } from "../../../../components/button";
