@@ -2,15 +2,14 @@ const userAuth = require("./userAuth")
 module.exports = (app) => {
   app.route("/store")
     .all(app.config.passport.authenticate())
-    .get(app.api.store.get) /* no auth */
-
+    .get(app.api.store.get)
 
   app.route("/signin-next-auth")
     .all(app.config.passport.authenticate())
-    .post(app.api.auth.signinNextAuth) /* no auth */
+    .post(app.api.auth.signinNextAuth)
   app.route("/signin")
     .all(app.config.passport.authenticate())
-    .post(app.api.auth.signin) /* no auth */
+    .post(app.api.auth.signin)
 
 
   app.route("/user")
@@ -22,26 +21,24 @@ module.exports = (app) => {
 
   app.route("/user/password")
     .all(app.config.passport.authenticate())
-    .post(app.api.auth.newPassword) /* no auth */
+    .post(app.api.auth.newPassword)
   app.route("/user/password/:id")
     .all(app.config.passport.authenticate())
-    .put(app.api.auth.newPassword) /* no auth */
-
+    .put(app.api.auth.newPassword)
 
   app.route("/products")
     .all(app.config.passport.authenticate())
-    .get(app.api.products.get) /* no auth */
+    .get(app.api.products.get)
   app.route("/products/:id")
     .all(app.config.passport.authenticate())
-    .get(app.api.products.get) /* no auth */
-
+    .get(app.api.products.get)
 
   app.route("/cart")
     .all(app.config.passport.authenticate())
-    .post(app.api.cart.saveIncrementer) /* no auth */
+    .post(app.api.cart.saveIncrementer)
   app.route("/cart/:id")
     .all(app.config.passport.authenticate())
-    .get(app.api.cart.getCartTemp) /* no auth */
+    .get(app.api.cart.getCartTemp)
 
   app.route("/cart/usuario/:id")
     .all(app.config.passport.authenticate())
