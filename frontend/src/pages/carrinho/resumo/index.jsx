@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 import { Content, ContentBorder } from "../../../components/containe"
 import { CardPayment } from "../../../components/card/cardPayment"
-import { ButtonSC, ButtonYellow } from '../../../components/button';
+import { ButtonYellow } from '../../../components/button';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp, storePedido } from '../../api/cart';

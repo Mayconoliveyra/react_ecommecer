@@ -2,7 +2,7 @@ import Link from "next/link"
 import styled from "styled-components"
 import { CheckCircleFill } from "react-bootstrap-icons";
 
-import { ButtonSC } from "../button";
+import { ButtonYellow, ButtonYellowBord } from "../button";
 
 const HeaderSC = styled.div`
     [data="icone-msg"]{
@@ -71,12 +71,6 @@ const MsgNotificationSC = styled.div`
         color: #0066c0;
     }
 `
-const BtnsSC = styled.div`
-    [data='btn-confirm-bord-laran'],
-    [data='btn-confirm-noborder'] {
-        padding: 0.5rem 0;
-    }
-`
 const Header = ({ title = "Pedido realizado com sucesso!", sub = "Estamos processando seu pedido." }) => {
     return (
         <HeaderSC>
@@ -122,22 +116,18 @@ const MsgNotification = () => {
 }
 const Btns = () => {
     return (
-        <BtnsSC>
-            <ButtonSC>
-                <div data='btn-confirm-noborder'>
-                    <Link href="/">
-                        Continuar comprando
-                    </Link>
-                </div>
-            </ButtonSC>
-            <ButtonSC>
-                <div data='btn-confirm-bord-laran'>
-                    <Link href="/conta/meuspedidos">
-                        Ver meus pedidos
-                    </Link>
-                </div>
-            </ButtonSC>
-        </BtnsSC>
+        <>
+            <ButtonYellow margin="1.7rem 0 0 0">
+                <Link href="/">
+                    Continuar comprando
+                </Link>
+            </ButtonYellow>
+            <ButtonYellowBord margin="1.2rem 0 0.5rem 0">
+                <Link href="/conta/meuspedidos">
+                    Ver meus pedidos
+                </Link>
+            </ButtonYellowBord>
+        </>
     )
 }
 

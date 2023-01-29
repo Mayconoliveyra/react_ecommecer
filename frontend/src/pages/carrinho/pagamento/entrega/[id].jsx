@@ -1,33 +1,24 @@
 import { parseCookies } from "nookies";
 import { getSession } from "next-auth/react"
 import Head from 'next/head';
-import styled from "styled-components"
 
+import { Content } from "../../../../components/containe";
 import { Header, NumberOrder, MsgNotification, Btns } from "../../../../components/pagamento/components"
 
 import { userIsAuth } from "../../../api/auth";
 
-const MainSC = styled.div`
-    max-width: ${({ theme }) => theme.width.medium};
-    margin: 0 auto;
-    display:  flex;
-    flex-direction: column;
-    padding: 1rem;
-`
 export default function PaymentDelivery({ id }) {
     return (
         <>
             <Head>
                 <title>Conclusão de compra</title>
             </Head>
-            <div>
-                <MainSC>
-                    <Header title="Pedido realizado com sucesso!" sub="Estamos processando seu pedido." />
-                    <NumberOrder id={id} />
-                    <MsgNotification />
-                    <Btns />
-                </MainSC>
-            </div >
+            <Content bgWhite maxwidth="40rem" padding="1rem">
+                <Header title="Pedido realizado com sucesso!" sub="Estamos processando seu pedido." />
+                <NumberOrder id={id} />
+                <MsgNotification />
+                <Btns />
+            </Content>
         </>
     )
 }

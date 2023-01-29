@@ -6,7 +6,9 @@ import 'moment/locale/pt-br'
 moment.locale('pt-br')
 import Head from 'next/head';
 import styled from "styled-components"
-import { ButtonSC } from "../../../../components/button";
+import { ButtonWhite } from "../../../../components/button";
+
+import { Content } from "../../../../components/containe";
 
 import { Header, NumberOrder, MsgNotification, Btns } from "../../../../components/pagamento/components"
 
@@ -15,13 +17,6 @@ import { storePixPgt } from "../../../api/cart";
 import { moneyMask } from "../../../../../masks";
 import { useState } from "react";
 
-const MainSC = styled.div`
-    max-width: ${({ theme }) => theme.width.medium};
-    margin: 0 auto;
-    display:  flex;
-    flex-direction: column;
-    padding: 1rem;
-`
 const PixSC = styled.div`
     margin-top: 1rem;
     border-radius: 0.6rem;
@@ -109,69 +104,65 @@ export default function PixPayment({ id, payment }) {
             <Head>
                 <title>Conclusão de compra</title>
             </Head>
-            <div>
-                <MainSC>
-                    <Header title="Seu pedido foi reservado." sub="Pague em até 30 minutos para processarmos seu pedido." />
-                    <PixSC>
-                        <div data="pix">
-                            <div data="header">
-                                <div>
-                                    <p>Vencimento</p>
-                                    <span>{dataFormat(payment.pix_expiracao)}</span>
-                                </div>
-                                <div>
-                                    <p>Valor do pedido</p>
-                                    <span>{moneyMask(payment.vlr_pago)}</span>
-                                </div>
+            <Content bgWhite maxwidth="40rem" padding="1rem">
+                <Header title="Seu pedido foi reservado." sub="Pague em até 30 minutos para processarmos seu pedido." />
+                <PixSC>
+                    <div data="pix">
+                        <div data="header">
+                            <div>
+                                <p>Vencimento</p>
+                                <span>{dataFormat(payment.pix_expiracao)}</span>
                             </div>
-                            <div data="img-qrcode">
-                                <Image src={payment.pix_img_qrcode} width={300} height={300} alt="qr-code" quality={100} priority={true} />
-                            </div>
-                            <div data="pix-chave">
-                                <div>
-                                    <div data="chave-copia">
-                                        <p>Em caso de erro copie o Código abaixo:</p>
-                                        <span>{payment.pix_qrcode}</span>
-                                    </div>
-                                    <ButtonSC>
-                                        <div data='btn-confirm-white'>
-                                            <button onClick={() => copiarQrcode()}>
-                                                {textCopia}
-                                            </button>
-                                        </div>
-                                    </ButtonSC>
-                                    <p>
-                                        Informações importantes sobre o pagamento
-                                    </p>
-                                    <span>
-                                        Você pode consultar o QR code e o Código em Seus Pedidos durante esse período.
-                                    </span>
-                                    <p></p>
-                                    <span>
-                                        Após finalizar o pedido, realize o pagamento em até 30 minutos. Caso contrário, o pedido será cancelado e um novo deverá ser feito. Lembre-se que Ofertas podem ter expirado após esse período.
-                                    </span>
-                                </div>
-                                <div>
-                                    <p>
-                                        Como pagar com Pix
-                                    </p>
-                                    <ol>
-                                        <li>
-                                            1. <span>Entre no aplicativo da sua instituição financeira e acesse o ambiente Pix;</span>
-                                        </li>
-                                        <li>2. Escolha a opção de Copiar e Colar o código Pix;</li>
-                                        <li>3. Cole o código Pix;</li>
-                                        <li>4. Confirme as informações e confirme o pagamento.</li>
-                                    </ol>
-                                </div>
+                            <div>
+                                <p>Valor do pedido</p>
+                                <span>{moneyMask(payment.vlr_pago)}</span>
                             </div>
                         </div>
-                    </PixSC>
-                    <NumberOrder id={id} />
-                    <MsgNotification />
-                    <Btns />
-                </MainSC>
-            </div>
+                        <div data="img-qrcode">
+                            <Image src={payment.pix_img_qrcode} width={300} height={300} alt="qr-code" quality={100} priority={true} />
+                        </div>
+                        <div data="pix-chave">
+                            <div>
+                                <div data="chave-copia">
+                                    <p>Em caso de erro copie o Código abaixo:</p>
+                                    <span>{payment.pix_qrcode}</span>
+                                </div>
+                                <ButtonWhite>
+                                    <button onClick={() => copiarQrcode()}>
+                                        {textCopia}
+                                    </button>
+                                </ButtonWhite>
+                                <p>
+                                    Informações importantes sobre o pagamento
+                                </p>
+                                <span>
+                                    Você pode consultar o QR code e o Código em Seus Pedidos durante esse período.
+                                </span>
+                                <p></p>
+                                <span>
+                                    Após finalizar o pedido, realize o pagamento em até 30 minutos. Caso contrário, o pedido será cancelado e um novo deverá ser feito. Lembre-se que Ofertas podem ter expirado após esse período.
+                                </span>
+                            </div>
+                            <div>
+                                <p>
+                                    Como pagar com Pix
+                                </p>
+                                <ol>
+                                    <li>
+                                        1. <span>Entre no aplicativo da sua instituição financeira e acesse o ambiente Pix;</span>
+                                    </li>
+                                    <li>2. Escolha a opção de Copiar e Colar o código Pix;</li>
+                                    <li>3. Cole o código Pix;</li>
+                                    <li>4. Confirme as informações e confirme o pagamento.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </PixSC>
+                <NumberOrder id={id} />
+                <MsgNotification />
+                <Btns />
+            </Content>
         </>
     )
 }
