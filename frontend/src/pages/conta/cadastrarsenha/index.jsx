@@ -12,33 +12,12 @@ import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
 import { Content, ContentHeader } from "../../../components/containe"
+import { ButtonYellow } from "../../../components/button"
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
 import { storePassword } from '../../api/auth';
 
-const BtnConfirmSC = styled.div`
-    [data='button-submit']{
-        padding: 0.7rem 1rem;
-        display: flex;
-        button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.2rem;
-            flex: 1;
-            background: #FFD814;
-            border-color: #FCD200;
-            border-radius: 0.45rem;
-            color: #0F1111;
-
-            &:disabled{
-                cursor: default;
-            }
-        }
-    }
-`
 const GroupSC = styled.div`
   display:flex;
   flex-direction: column;
@@ -208,13 +187,11 @@ export default function NewPassword({ data }) {
                                     maxLength={55}
                                 />
 
-                                <BtnConfirmSC>
-                                    <div data='button-submit'>
-                                        <button disabled={!dirty} type="submit">
-                                            Cadastrar
-                                        </button>
-                                    </div>
-                                </BtnConfirmSC>
+                                <ButtonYellow margin="1.5rem 0">
+                                    <button disabled={!dirty} type="submit">
+                                        Cadastrar
+                                    </button>
+                                </ButtonYellow>
                             </Form>
                         )}
                     </Formik>

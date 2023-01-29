@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ChevronLeft } from "react-bootstrap-icons";
 const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
-import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
 import { Formik, Form } from 'formik';
@@ -12,33 +11,11 @@ import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
 import { Content, ContentHeader } from "../../../components/containe"
+import { ButtonYellow } from "../../../components/button"
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
 import { storePassword } from '../../api/auth';
-
-const BtnConfirmSC = styled.div`
-    [data='button-submit']{
-        padding: 0.7rem 1rem;
-        display: flex;
-        button{   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 0;
-            font-size: 1.2rem;
-            flex: 1;
-            background: #FFD814;
-            border-color: #FCD200;
-            border-radius: 0.45rem;
-            color: #0F1111;
-
-            &:disabled{
-                cursor: default;
-            }
-        }
-    }
-`
 
 export default function Recover() {
     const scheme = Yup.object().shape({
@@ -107,13 +84,11 @@ export default function Recover() {
                                 <p data="p-info">
                                     Se você não usa mais o endereço de e-mail associado à sua conta, entre em contato. <a href="#attendance">Atendimento ao cliente</a> para ajudar a restaurar o acesso à sua conta.
                                 </p>
-                                <BtnConfirmSC>
-                                    <div data='button-submit'>
-                                        <button disabled={!dirty} type="submit">
-                                            Continuar
-                                        </button>
-                                    </div>
-                                </BtnConfirmSC>
+                                <ButtonYellow margin="1.5rem 0">
+                                    <button disabled={!dirty} type="submit">
+                                        Continuar
+                                    </button>
+                                </ButtonYellow>
                             </Form>
                         )}
                     </Formik>

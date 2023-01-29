@@ -189,6 +189,7 @@ const ButtonYellowBord = ({ margin, padding, maxwidth, children }) => {
         </ButtonYellowBordSC>
     )
 }
+
 const ButtonWhite = ({ margin, padding, maxwidth, children }) => {
     return (
         <ButtonWhiteSC margin={margin} padding={padding} maxwidth={maxwidth}  >
