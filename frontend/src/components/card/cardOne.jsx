@@ -13,7 +13,8 @@ const CardOneSC = styled.div`
         width: 100%;
         align-items: center;
         max-height: 15rem;
-        background-color:#F7F9FA;
+        background-color: #F7F9FA;
+        /* background-color:#F7F9FA; */
         border: 1px solid #f5f5f5;
         [data='a-card']{
             width: 100%;

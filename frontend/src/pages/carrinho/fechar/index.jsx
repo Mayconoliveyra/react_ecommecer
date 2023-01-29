@@ -6,7 +6,8 @@ import styled from "styled-components"
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useContext } from "react";
 
-import { ButtonSC } from '../../../components/button';
+import { Content, ContentBorder } from "../../../components/containe"
+import { ButtonYellow } from '../../../components/button';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp } from "../../api/cart";
@@ -14,113 +15,21 @@ import { userIsAuth } from "../../api/auth";
 
 import StoreContext from "../../../context/store"
 
-const CloseOrderSC = styled.div`
-    margin: 1rem 0;
-    padding: 0 0.7rem;
-    >div{
-        color: #565959;
-        [data="resume"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0.8rem 0.8rem 0 0;
-            padding: 0.8rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 1.2rem;
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="table-values"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 1.1rem 1.5rem;
-            table{
-                width: 100%;
-                border-collapse: collapse;
-                tr{
-                    td{
-                        padding: 0.2rem 0.4rem;
-                        font-size:1.1rem;
-                        font-family: ${({ theme }) => theme.font.family.medium};
-                    }
-                    [data="td-value"]{
-                        font-family: ${({ theme }) => theme.font.family.regular};
-                        text-align:right;
-                    }
-                    [data="total-td"]{
-                        padding-top: 0.4rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #0F1111;
-                        font-size: 1.2rem;
-                    }
-                    [data="td-value-total"]{
-                        padding-top: 0.4rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #B12704;
-                        text-align:right;
-                        font-size: 1.2rem;
-                    }
-                }
-            }
-        }
-    }
-`
-const MetodoEntegraSC = styled.div`
-    margin: 1rem 0;
-    padding: 0 0.7rem;
-    >div{
-        color: #0F1111;
-        border:${({ error }) => error && "solid 1px #d00"};
-        box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset;"};
-        [data="metodo-entrega"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0.3rem 0.3rem 0 0;
-            padding: 0.8rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 1.2rem;
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="ul-li"]{
-            ul{
-                li{
-                    display: flex;
-                    align-items: center;
-                    padding:1.2rem;
-                    border: 1px #D5D9D9 solid;
-                }
-            }
-        }
-        [data="error"]{
-            text-align: center;
-            font-size: 1.3rem;
-            color: #e72626;
-            margin-top: 0.0rem;
-            padding: 0.6rem;
-            small{
-                padding: 0px;
-                margin: 0px;
-            }
-        }
-    }
-`
 const GroupSC = styled.li`
     display: flex;
     align-items: center;
     padding: 0 1.2rem !important;
-    border: 1px #D5D9D9 solid;
-        input{
-            width:2rem;
-            height:2rem;
-            margin-right: 1rem;
-        }
-        label{
-            font-size: 1.2rem;
-            flex:1;
-            padding:1.2rem;
-        }
+    border-bottom: 1px #D5D9D9 solid;
+    input{
+        width:2rem;
+        height:2rem;
+        margin-right: 1rem;
+    }
+    label{
+        font-size: 1.2rem;
+        flex:1;
+        padding:1.2rem;
+    }
 `
 
 export default function CloseOrder({ totals }) {
@@ -150,78 +59,80 @@ export default function CloseOrder({ totals }) {
                 <title>Método de Entrega e Pagamento</title>
             </Head>
 
-            {store && store.nome &&
-                <Formik
-                    initialValues={initialValues}
-                    onSubmit={(values, setValues) => {
-                        if (values.pgt_metodo == "Retirada na loja" && values.pgt_forma == "Pagar na entrega") {
-                            setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
-                            return
-                        }
-                        if (values.pgt_metodo == "Receber em casa" && values.pgt_forma == "Pagar na loja") {
-                            setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
-                            return
-                        }
+            <Content padding="0 1rem">
+                {store && store.nome &&
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={(values, setValues) => {
+                            if (values.pgt_metodo == "Retirada na loja" && values.pgt_forma == "Pagar na entrega") {
+                                setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
+                                return
+                            }
+                            if (values.pgt_metodo == "Receber em casa" && values.pgt_forma == "Pagar na loja") {
+                                setValues.setErrors({ pgt_forma: "Preencha a forma de pagamento." })
+                                return
+                            }
 
-                        setCookie(null, "myCartPayment", JSON.stringify(values), {
-                            maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
-                            path: "/"
-                        });
-                        router.push("/carrinho/resumo")
+                            setCookie(null, "myCartPayment", JSON.stringify(values), {
+                                maxAge: 60 * 1, /* EXPIRA EM 1MIN. "seg * min * hrs * dias" */
+                                path: "/"
+                            });
+                            router.push("/carrinho/resumo")
 
-                    }}
-                >
-                    {({ values, errors }) => (
-                        <Form data="form" action="">
-                            <ButtonSC>
-                                <div data='btn-confirm'>
+                        }}
+                    >
+                        {({ values, errors }) => (
+                            <Form data="form" action="">
+                                <ButtonYellow margin="1rem 0 0 0">
                                     <button type="submit" disabled={!values.pgt_forma || !values.pgt_metodo}>
                                         Continuar
                                     </button >
-                                </div>
-                            </ButtonSC>
-                            <CloseOrderSC>
-                                <div>
-                                    <div data="resume">
-                                        <h4>Resumo</h4>
-                                    </div>
-                                    <div data="table-values">
-                                        <table>
+                                </ButtonYellow>
+
+                                <section>
+                                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                                        <div data="title">
+                                            <h3>Resumo</h3>
+                                        </div>
+                                    </ContentBorder>
+                                    <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.7rem 0.7rem" >
+                                        <table data="table-1">
                                             <tbody>
                                                 <tr>
-                                                    <td>Quantidade:</td>
+                                                    <td>Quantidade de itens:</td>
                                                     <td data="td-value">{totals && totals.qtd_products}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td data="total-td">Total dos produtos:</td>
-                                                    <td data="td-value-total">{moneyMask(totals && totals.vlr_pagar_products)}</td>
+                                                    <td data="td-bold">Total dos produtos:</td>
+                                                    <td data="td-red">{moneyMask(totals && totals.vlr_pagar_products)}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td data="total-td">Valor de Frete:</td>
+                                                    <td data="td-bold">Valor de Frete:</td>
                                                     {!store.cobrar_frete ?
-                                                        <td data="td-value-total">Frete Grátis</td>
+                                                        <td data="td-red">Frete Grátis</td>
                                                         :
                                                         <>
                                                             {values.pgt_metodo == "Receber em casa" ?
-                                                                <td data="td-value-total">{moneyMask(totals.vlr_frete)}</td>
+                                                                <td data="td-red">{moneyMask(totals.vlr_frete)}</td>
                                                                 :
-                                                                <td data="td-value-total">{moneyMask(0.00)}</td>
+                                                                <td data="td-red">{moneyMask(0.00)}</td>
                                                             }
                                                         </>
                                                     }
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-                            </CloseOrderSC>
-                            <MetodoEntegraSC>
-                                <div>
-                                    <div data="metodo-entrega">
-                                        <h4>Método de entrega</h4>
-                                    </div>
-                                    <div data="ul-li" role="group-method">
-                                        <ul>
+                                    </ContentBorder>
+                                </section>
+
+                                <section>
+                                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                                        <div data="title">
+                                            <h3>Método de entrega</h3>
+                                        </div>
+                                    </ContentBorder>
+                                    <ContentBorder padding="0" borderRadius="0" >
+                                        <ul role="group-method">
                                             {!!store.entrega_frete &&
                                                 <GroupSC>
                                                     <Field name="pgt_metodo" type="radio" id="frete" value="Receber em casa" />
@@ -235,17 +146,17 @@ export default function CloseOrder({ totals }) {
                                                 </GroupSC>
                                             }
                                         </ul>
-                                    </div>
-                                </div>
-                            </MetodoEntegraSC>
+                                    </ContentBorder>
+                                </section>
 
-                            <MetodoEntegraSC error={!!errors.pgt_forma}>
-                                <div>
-                                    <div data="metodo-entrega">
-                                        <h4>Forma de pagamento</h4>
-                                    </div>
-                                    <div data="ul-li" role="group-payment">
-                                        <ul>
+                                <section>
+                                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                                        <div data="title">
+                                            <h3>Forma de pagamento</h3>
+                                        </div>
+                                    </ContentBorder>
+                                    <ContentBorder padding="0" borderRadius="0" >
+                                        <ul role="group-payment">
                                             {!!store.pgt_pix &&
                                                 <GroupSC>
                                                     <Field name="pgt_forma" type="radio" id="pix" value="PIX" />
@@ -279,26 +190,26 @@ export default function CloseOrder({ totals }) {
                                                 </>
                                             }
                                         </ul>
-                                    </div>
-                                    <div data="error">
-                                        <small>
-                                            <ErrorMessage name="pgt_forma" />
-                                        </small>
-                                    </div>
-                                </div>
-                            </MetodoEntegraSC>
+                                        {errors.pgt_forma &&
+                                            <div data="error">
+                                                <small>
+                                                    <ErrorMessage name="pgt_forma" />
+                                                </small>
+                                            </div>
+                                        }
+                                    </ContentBorder>
+                                </section>
 
-                            <ButtonSC>
-                                <div data='btn-confirm-noborder'>
+                                <ButtonYellow margin="1rem 0">
                                     <button type="submit" disabled={!values.pgt_forma || !values.pgt_metodo}>
                                         Continuar
                                     </button >
-                                </div>
-                            </ButtonSC>
-                        </Form>
-                    )}
-                </Formik>
-            }
+                                </ButtonYellow>
+                            </Form>
+                        )}
+                    </Formik>
+                }
+            </Content>
         </>
     )
 }

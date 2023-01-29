@@ -3,8 +3,9 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
+import { Content } from "../../components/containe"
 import { CardOne } from "../../components/card/cardOne"
-import { ButtonSC } from '../../components/button';
+import { ButtonYellow } from '../../components/button';
 
 import { moneyMask } from '../../../masks';
 
@@ -31,7 +32,6 @@ const SubTotal = styled.div`
     }          
 `
 const SectionProductSC = styled.div`
-    padding:0.6rem;
     [data-div="cads"]{
         display: grid;
         grid-template-columns: repeat(1fr);
@@ -60,18 +60,18 @@ export default function Cart() {
             <Head>
                 <title>Carrinho de compras</title>
             </Head>
-            <div>
+            <Content bgWhite padding="0 0.5rem 0.5rem 0.5rem" >
                 {products && products.length > 0 && (
-                    <ButtonSC>
+                    <>
                         <SubTotal>
                             Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
                         </SubTotal>
-                        <div data='btn-confirm'>
+                        <ButtonYellow margin="0 0 1.5rem 0">
                             <Link href="carrinho/fechar">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
-                        </div>
-                    </ButtonSC>
+                        </ButtonYellow>
+                    </>
                 )}
 
                 <SectionProductSC>
@@ -96,15 +96,13 @@ export default function Cart() {
                 </SectionProductSC>
 
                 {products && products.length > 5 && (
-                    <ButtonSC>
-                        <div data='btn-confirm-noborder'>
-                            <Link href="carrinho/fechar">
-                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
-                            </Link>
-                        </div>
-                    </ButtonSC>
+                    <ButtonYellow margin="1.5rem 0 1rem 0">
+                        <Link href="carrinho/fechar">
+                            Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                        </Link>
+                    </ButtonYellow>
                 )}
-            </div>
+            </Content>
         </>
     )
 }

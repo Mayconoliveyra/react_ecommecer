@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 import { Content, ContentBorder } from "../../../components/containe"
 import { CardPayment } from "../../../components/card/cardPayment"
-import { ButtonSC } from '../../../components/button';
+import { ButtonSC, ButtonYellow } from '../../../components/button';
 
 import { moneyMask } from '../../../../masks';
 import { getCartTemp, storePedido } from '../../api/cart';
@@ -19,7 +19,8 @@ import StoreContext from "../../../context/store"
 import MyCartContext from "../../../context/myCart"
 
 const SectionProductSC = styled.section`
-    padding: 0 0.6rem;
+    padding: 0;
+    margin-top: 1rem;
     [data-div="cads"]{
         display: grid;
         grid-template-columns: repeat(1fr);
@@ -73,13 +74,11 @@ export default function Resume({ session, products, totals, payment }) {
                 <title>Confirmar pedido</title>
             </Head>
             <Content>
-                <ButtonSC>
-                    <div data='btn-confirm-noborder'>
-                        <button type="button" onClick={() => handleFinalizar()}>
-                            Confirmar pedido
-                        </button >
-                    </div>
-                </ButtonSC>
+                <ButtonYellow margin="0.5rem 0 0 0">
+                    <button type="button" onClick={() => handleFinalizar()}>
+                        Confirmar pedido
+                    </button >
+                </ButtonYellow>
 
                 <section>
                     <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
@@ -224,13 +223,11 @@ export default function Resume({ session, products, totals, payment }) {
                     }
                 </SectionProductSC>
 
-                <ButtonSC>
-                    <div data='btn-confirm-noborder'>
-                        <button type="button" onClick={() => handleFinalizar()}>
-                            Confirmar pedido
-                        </button >
-                    </div>
-                </ButtonSC>
+                <ButtonYellow margin="1rem 0 0.5rem 0">
+                    <button type="button" onClick={() => handleFinalizar()}>
+                        Confirmar pedido
+                    </button >
+                </ButtonYellow>
             </Content>
         </>
 

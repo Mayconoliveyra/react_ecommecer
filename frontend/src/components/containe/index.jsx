@@ -96,7 +96,6 @@ const ContentBorderSC = styled.div`
             }
         }
     }
-    
     [data="font-1.2"]{
         font-size: 1.2rem;
     }
@@ -108,6 +107,17 @@ const ContentBorderSC = styled.div`
         color: #0066c0;
         font-family:${({ theme }) => theme.font.family.medium};
         font-size: 0.9rem !important;
+        }
+    }
+    [data="error"]{
+        text-align: center;
+        font-size: 1.4rem;
+        color: #e72626;
+        margin-top: 0.0rem;
+        padding: 1rem 0.5rem;
+        small{
+            padding: 0px;
+            margin: 0px;
         }
     }
 `

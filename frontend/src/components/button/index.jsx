@@ -1,7 +1,8 @@
 import styled from "styled-components"
 const ButtonSC = styled.div`
     [data='btn-confirm']{
-        padding: 0.7rem 1rem;
+        margin: 1rem 0;
+        padding: 0.7rem 0rem;
         border-top: 0.1rem solid #e7e7e7;
         border-bottom: 0.1rem solid #e7e7e7;
         display: flex;
@@ -22,8 +23,8 @@ const ButtonSC = styled.div`
         }
     }
     [data='btn-confirm-noborder']{
-        margin-top: 1rem;
-        padding: 0.7rem 1rem;
+        margin: 1rem 0;
+        padding: 0.7rem 0rem;
         display: flex;
         a, button{   
             display: flex;
@@ -42,7 +43,8 @@ const ButtonSC = styled.div`
         }
     }
     [data='btn-confirm-bord-laran']{
-        padding: 0.7rem 1rem;
+        margin: 1rem 0;
+        padding: 0.7rem 0rem;
         display: flex;
         a, button{   
             display: flex;
@@ -61,7 +63,8 @@ const ButtonSC = styled.div`
         }
     }
     [data='btn-confirm-white']{
-        padding: 0.7rem 1rem;
+        margin: 1rem 0;
+        padding: 0.7rem 0rem;
         display: flex;
         a, button{   
             display: flex;
@@ -80,5 +83,59 @@ const ButtonSC = styled.div`
             }
         }
     }
+    [data='btn-yellow']{
+        /* margin: 1rem 0;
+        padding: 0.7rem 0rem; */
+        display: flex;
+        max-width:${({ maxwidth }) => maxwidth};
+        margin:${({ margin }) => margin ? margin : "0 auto;"};
+        padding:${({ padding }) => padding ? padding : "0.5rem;"};
+        a, button{   
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            flex: 1;
+            background: #FFD814;
+            border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+
+            &:disabled{
+                cursor: default;
+            }
+        }
+    }
 `
-export { ButtonSC }
+const ButtonYellowSC = styled.div`
+    a, button{   
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 1rem 0;
+            font-size: 1.15rem;
+            background: #FFD814;
+            border:solid 2px #FCD200;
+            border-radius: 0.45rem;
+            width: 100%;
+
+            max-width:${({ maxwidth }) => maxwidth};
+            margin:${({ margin }) => margin ? margin : "0 auto;"};
+            padding:${({ padding }) => padding};
+            &:disabled{
+                cursor: default;
+            }
+    }
+`
+
+const ButtonYellow = ({ margin, padding, maxwidth, children }) => {
+    return (
+        <ButtonYellowSC margin={margin} padding={padding} maxwidth={maxwidth}  >
+            {children}
+        </ButtonYellowSC>
+    )
+}
+
+export { ButtonYellow, ButtonSC }
