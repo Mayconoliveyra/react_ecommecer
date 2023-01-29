@@ -9,39 +9,12 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { Content, ContentBorder } from "../../../components/containe"
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
 import { storePassword } from '../../api/auth';
 
-const MyDataSC = styled.div`
-    max-width: 35rem;
-    margin: 0 auto;
-`
-const SeusDadosSC = styled.div`
-    margin: 0.5rem 0;
-    padding: 0 0.3rem;
-    >div{
-        color: #0F1111;
-        [data="h4-title"]{
-            border-radius: 0.3rem 0.3rem 0 0;
-            border: 1px #D5D9D9 solid;
-            padding: 0.6rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 2rem;
-                font-family:${({ theme }) => theme.font.family.bold};
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="form"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 0.3rem 0.7rem;
-        }
-    }
-`
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
@@ -135,114 +108,114 @@ export default function NewPassword({ data }) {
                     <title>Criar senha</title>
                 }
             </Head>
-            <MyDataSC>
-                <SeusDadosSC>
-                    <div>
-                        <div data="h4-title">
-                            {data.email_auth ?
-                                <h4>Recuperar senha</h4>
-                                :
-                                <h4>Criar senha</h4>
-                            }
-                        </div>
-                        <Formik
-                            validationSchema={scheme}
-                            initialValues={{ senha: '', confirsenha: '', show_password: true, ...data }}
-                            onSubmit={async (values, setValues) => {
-                                /* Os dados sera convetido em jwt antes de enviar para o backend */
-                                const modelo = jwt.encode(values, SECRET_KEY_AUTH)
-                                await storePassword({ userJWT: modelo }, data.id)
-                                    .then((data) => {
-                                        /* Redireciona para tela inicial passando a mensagem(msg) */
+            <Content maxwidth="35rem" padding="0.5rem">
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
+                    <div data="title">
+                        {data.email_auth ?
+                            <h3>Recuperar senha</h3>
+                            :
+                            <h3>Criar senha</h3>
+                        }
+                    </div>
+                </ContentBorder>
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+                    <Formik
+                        validationSchema={scheme}
+                        initialValues={{ senha: '', confirsenha: '', show_password: true, ...data }}
+                        onSubmit={async (values, setValues) => {
+                            /* Os dados sera convetido em jwt antes de enviar para o backend */
+                            const modelo = jwt.encode(values, SECRET_KEY_AUTH)
+                            await storePassword({ userJWT: modelo }, data.id)
+                                .then((data) => {
+                                    /* Redireciona para tela inicial passando a mensagem(msg) */
+                                    router.push({
+                                        pathname: "/login",
+                                        query: {
+                                            msg: JSON.stringify(data) /* mensagem sucesso */
+                                        }
+                                    })
+                                })
+                                .catch((res) => {
+                                    if (res && res.response && res.response.status == 400) {
                                         router.push({
                                             pathname: "/login",
                                             query: {
-                                                msg: JSON.stringify(data) /* mensagem sucesso */
+                                                msg: JSON.stringify(res.response.data)
                                             }
                                         })
-                                    })
-                                    .catch((res) => {
-                                        if (res && res.response && res.response.status == 400) {
-                                            router.push({
-                                                pathname: "/login",
-                                                query: {
-                                                    msg: JSON.stringify(res.response.data)
-                                                }
-                                            })
-                                        } else {
-                                            router.push("/login")
-                                        }
-                                    })
-                            }}
-                        >
-                            {({ values, errors, touched, dirty }) => (
-                                <Form data="form" action="">
-                                    <ShowMessage error={errors} />
-                                    <Group
-                                        label="E-mail"
-                                        name="email"
-                                        disabled
-                                    />
-                                    {data.email_auth ?
-                                        <GroupSC error={!!errors.senha && touched.senha}>
-                                            <div data="label">
-                                                <label htmlFor="senha">Crie sua nova senha</label>
-                                            </div>
-                                            <div data="input">
-                                                <Field name="senha" type="password" autoComplete='off' maxLength="55" />
-                                                {values.show_password && values.senha && (
-                                                    <div data="show-password">
-                                                        <span name="senha" value>{values.senha}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div data="error">
-                                                <small>
-                                                    <ErrorMessage name="senha" />
-                                                </small>
-                                            </div>
-                                        </GroupSC>
-                                        :
-                                        <GroupSC error={!!errors.senha && touched.senha}>
-                                            <div data="label">
-                                                <label htmlFor="senha">Crie sua senha</label>
-                                            </div>
-                                            <div data="input">
-                                                <Field name="senha" type="password" autoComplete='off' maxLength="55" />
-                                                {values.show_password && values.senha && (
-                                                    <div data="show-password">
-                                                        <span name="senha" value>{values.senha}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div data="error">
-                                                <small>
-                                                    <ErrorMessage name="senha" />
-                                                </small>
-                                            </div>
-                                        </GroupSC>
+                                    } else {
+                                        router.push("/login")
                                     }
-                                    <Group
-                                        error={!!errors.confirsenha && touched.confirsenha}
-                                        label="Confirme sua senha"
-                                        name="confirsenha"
-                                        type="password"
-                                        maxLength={55}
-                                    />
-
-                                    <BtnConfirmSC>
-                                        <div data='button-submit'>
-                                            <button disabled={!dirty} type="submit">
-                                                Cadastrar
-                                            </button>
+                                })
+                        }}
+                    >
+                        {({ values, errors, touched, dirty }) => (
+                            <Form data="form" action="">
+                                <ShowMessage error={errors} />
+                                <Group
+                                    label="E-mail"
+                                    name="email"
+                                    disabled
+                                />
+                                {data.email_auth ?
+                                    <GroupSC error={!!errors.senha && touched.senha}>
+                                        <div data="label">
+                                            <label htmlFor="senha">Crie sua nova senha</label>
                                         </div>
-                                    </BtnConfirmSC>
-                                </Form>
-                            )}
-                        </Formik>
-                    </div>
-                </SeusDadosSC>
-            </MyDataSC>
+                                        <div data="input">
+                                            <Field name="senha" type="password" autoComplete='off' maxLength="55" />
+                                            {values.show_password && values.senha && (
+                                                <div data="show-password">
+                                                    <span name="senha" value>{values.senha}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div data="error">
+                                            <small>
+                                                <ErrorMessage name="senha" />
+                                            </small>
+                                        </div>
+                                    </GroupSC>
+                                    :
+                                    <GroupSC error={!!errors.senha && touched.senha}>
+                                        <div data="label">
+                                            <label htmlFor="senha">Crie sua senha</label>
+                                        </div>
+                                        <div data="input">
+                                            <Field name="senha" type="password" autoComplete='off' maxLength="55" />
+                                            {values.show_password && values.senha && (
+                                                <div data="show-password">
+                                                    <span name="senha" value>{values.senha}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div data="error">
+                                            <small>
+                                                <ErrorMessage name="senha" />
+                                            </small>
+                                        </div>
+                                    </GroupSC>
+                                }
+                                <Group
+                                    error={!!errors.confirsenha && touched.confirsenha}
+                                    label="Confirme sua senha"
+                                    name="confirsenha"
+                                    type="password"
+                                    maxLength={55}
+                                />
+
+                                <BtnConfirmSC>
+                                    <div data='button-submit'>
+                                        <button disabled={!dirty} type="submit">
+                                            Cadastrar
+                                        </button>
+                                    </div>
+                                </BtnConfirmSC>
+                            </Form>
+                        )}
+                    </Formik>
+                </ContentBorder>
+            </Content>
         </>
     )
 }

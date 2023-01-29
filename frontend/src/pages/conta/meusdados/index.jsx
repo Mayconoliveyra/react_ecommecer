@@ -10,6 +10,7 @@ Yup.setLocale(pt);
 
 import { Group } from '../../../components/input';
 
+import { Content, ContentBorder } from "../../../components/containe"
 import { proneMask, cepMask, cpfMask } from '../../../../masks';
 import { store as saveUser } from '../../api/auth';
 
@@ -90,90 +91,90 @@ export default function MyData({ session }) {
             <Head>
                 <title>Seus dados</title>
             </Head>
-            <MyDataSC>
-                <SeusDadosSC>
-                    <div>
-                        <div data="h4-title">
-                            <h4>Seus dados</h4>
-                        </div>
-                        <Formik
-                            validationSchema={scheme}
-                            initialValues={session}
-                            onSubmit={async (values, setValues) => {
-                                await saveUser(values, session)
-                                    .then(() => {
-                                        router.reload()
-                                    })
-                                    .catch((res) => {
-                                        /* Se for erro 400, significa que a exibição foi tratada */
-                                        if (res && res.response && res.response.status == 400) {
-                                            if (res.response.data[400]) {
-                                                toast.error(res.response.data[400])
-                                            }
-                                            setValues.setErrors(res.response.data)
-                                            return
-                                        }
-                                        toast.error(
-                                            "Ops... Não possível realizar a operação. Por favor, tente novamente."
-                                        )
-                                    })
-                            }}
-                        >
-                            {({ errors, touched, dirty }) => (
-                                <Form data="form" action="">
-                                    <p>
-                                        O preechimento de todas as informações é obrigatório. Entre em contato conosco se tiver dúvidas. <a href="#attendance">Atendimento ao cliente</a>
-                                    </p>
-                                    <Group
-                                        error={!!errors.nome && touched.nome}
-                                        label="Nome completo"
-                                        name="nome"
-                                        placeholder="Exemplo: Jhon Doe"
-                                        maxLength={55}
-                                    />
-                                    <Group
-                                        error={!!errors.cpf && touched.cpf}
-                                        label="CPF"
-                                        name="cpf"
-                                        placeholder="Exemplo: 999.999.999-99"
-                                        autocomplete="on"
-                                        mask={cpfMask}
-                                    />
-                                    <Group
-                                        label="E-mail"
-                                        name="email"
-                                        disabled
-                                    />
-                                    <Group
-                                        error={!!errors.contato && touched.contato}
-                                        label="Contato"
-                                        name="contato"
-                                        placeholder="Exemplo: (99) 99999-9999"
-                                        autocomplete="on"
-                                        mask={proneMask}
-                                    />
-                                    <Group
-                                        error={!!errors.cep && touched.cep}
-                                        label="CEP"
-                                        name="cep"
-                                        placeholder="Exemplo: 99999-999"
-                                        autocomplete="on"
-                                        mask={cepMask}
-                                    />
-
-                                    <BtnConfirmSC>
-                                        <div data='button-submit'>
-                                            <button disabled={!dirty} type="submit">
-                                                Atualizar
-                                            </button>
-                                        </div>
-                                    </BtnConfirmSC>
-                                </Form>
-                            )}
-                        </Formik>
+            <Content maxwidth="35rem" padding="0.5rem">
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
+                    <div data="title">
+                        <h3>Seus dados</h3>
                     </div>
-                </SeusDadosSC>
-            </MyDataSC>
+                </ContentBorder>
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+                    <Formik
+                        validationSchema={scheme}
+                        initialValues={session}
+                        onSubmit={async (values, setValues) => {
+                            await saveUser(values, session)
+                                .then(() => {
+                                    router.reload()
+                                })
+                                .catch((res) => {
+                                    /* Se for erro 400, significa que a exibição foi tratada */
+                                    if (res && res.response && res.response.status == 400) {
+                                        if (res.response.data[400]) {
+                                            toast.error(res.response.data[400])
+                                        }
+                                        setValues.setErrors(res.response.data)
+                                        return
+                                    }
+                                    toast.error(
+                                        "Ops... Não possível realizar a operação. Por favor, tente novamente."
+                                    )
+                                })
+                        }}
+                    >
+                        {({ errors, touched, dirty }) => (
+                            <Form data="form" action="">
+                                <p data="p-info">
+                                    O preechimento de todas as informações é obrigatório. Entre em contato conosco se tiver dúvidas. <a href="#attendance">Atendimento ao cliente</a>
+                                </p>
+                                <Group
+                                    error={!!errors.nome && touched.nome}
+                                    label="Nome completo"
+                                    name="nome"
+                                    placeholder="Exemplo: Jhon Doe"
+                                    maxLength={55}
+                                />
+                                <Group
+                                    error={!!errors.cpf && touched.cpf}
+                                    label="CPF"
+                                    name="cpf"
+                                    placeholder="Exemplo: 999.999.999-99"
+                                    autocomplete="on"
+                                    mask={cpfMask}
+                                />
+                                <Group
+                                    label="E-mail"
+                                    name="email"
+                                    disabled
+                                />
+                                <Group
+                                    error={!!errors.contato && touched.contato}
+                                    label="Contato"
+                                    name="contato"
+                                    placeholder="Exemplo: (99) 99999-9999"
+                                    autocomplete="on"
+                                    mask={proneMask}
+                                />
+                                <Group
+                                    error={!!errors.cep && touched.cep}
+                                    label="CEP"
+                                    name="cep"
+                                    placeholder="Exemplo: 99999-999"
+                                    autocomplete="on"
+                                    mask={cepMask}
+                                />
+
+                                <BtnConfirmSC>
+                                    <div data='button-submit'>
+                                        <button disabled={!dirty} type="submit">
+                                            Atualizar
+                                        </button>
+                                    </div>
+                                </BtnConfirmSC>
+                            </Form>
+                        )}
+                    </Formik>
+                </ContentBorder>
+            </Content>
         </>
     )
 }

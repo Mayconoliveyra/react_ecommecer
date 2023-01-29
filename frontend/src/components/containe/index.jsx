@@ -61,6 +61,16 @@ const ContentBorderSC = styled.div`
     [data="font-1.2"]{
         font-size: 1.2rem;
     }
+    [data="p-info"]{
+        margin: 0.5rem;
+        font-size: 1rem !important;
+        a{
+        text-decoration: underline;
+        color: #0066c0;
+        font-family:${({ theme }) => theme.font.family.medium};
+        font-size: 0.9rem !important;
+        }
+    }
 `
 const ContentHeaderSC = styled.div`
     color: #0F1111;
