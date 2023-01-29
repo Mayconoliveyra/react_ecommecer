@@ -53,7 +53,7 @@ export default function MyData({ session }) {
             <Head>
                 <title>Seus dados</title>
             </Head>
-            <Content maxwidth="35rem" padding="0" bgWhite>
+            <Content maxwidth="40rem" padding="0" bgWhite>
                 <ContentHeader bgGray padding="1.3rem 0.5rem">
                     <Link href="/">
                         <ChevronLeft data="icon-left" />

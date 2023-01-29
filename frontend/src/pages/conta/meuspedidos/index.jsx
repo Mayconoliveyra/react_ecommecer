@@ -24,6 +24,7 @@ const VerMais = styled.div`
         font-size: 1.2rem;
         padding: 1rem 0;
         margin: 0.5rem;
+        margin-bottom: 1rem;
     }
 `
 

@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { Content } from "../../components/containe"
 import { ShowMessage } from "../../components/showMessage";
 
 import { storeAuth } from "../api/auth/index"
@@ -18,9 +19,9 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 
 const LoginSC = styled.div`
-  padding: 1rem 1.3rem;
+  padding: 0 1.3rem;
   [data='exibir']{
-    max-width:${({ theme }) => theme.width.medium};
+    max-width: 40rem;
     margin:0 auto;
 
     [data="form"]{
@@ -246,111 +247,113 @@ export default function Login({ error }) {
       <Head>
         <title>{store.nome ? `${store.nome} : Acessar` : 'Carregando...'}</title>
       </Head>
-      <LoginSC>
-        <div data='exibir'>
-          <Formik
-            validationSchema={scheme}
-            initialValues={initialValues}
-            onSubmit={async (values, setValues) => {
-              await storeAuth(values)
-                .then(async (userToken) => {
-                  /* userToken tem as informações do usuario criptografada */
-                  const res = await signIn("credentials", {
-                    redirect: false,
-                    email: values.email,
-                    password: values.senha,
-                    session: userToken,
-                  });
-                  /* Se o token for valido o usario e autenticado e redireciona para pagina home */
-                  if (!res.error) {
-                    router.push("/")
-                  } else {
-                    /* se der error atualiza a pagina */
-                    router.reload()
-                  }
-                })
-                .catch((res) => {
-                  /* Se status 400, significa que o erro foi tratado. */
-                  if (res && res.response && res.response.status == 400) {
-                    /* Se data.erro=500, será exibido no toast */
-                    if (res.response.data && res.response.data[500]) {
-                      toast.error(res.response.data[500])
+      <Content maxwidth="47rem" padding="2rem 0" bgWhite>
+        <LoginSC>
+          <div data='exibir'>
+            <Formik
+              validationSchema={scheme}
+              initialValues={initialValues}
+              onSubmit={async (values, setValues) => {
+                await storeAuth(values)
+                  .then(async (userToken) => {
+                    /* userToken tem as informações do usuario criptografada */
+                    const res = await signIn("credentials", {
+                      redirect: false,
+                      email: values.email,
+                      password: values.senha,
+                      session: userToken,
+                    });
+                    /* Se o token for valido o usario e autenticado e redireciona para pagina home */
+                    if (!res.error) {
+                      router.push("/")
                     } else {
-                      setValues.setErrors(res.response.data)
+                      /* se der error atualiza a pagina */
+                      router.reload()
                     }
-                  } else {
-                    /* Mensagem padrão */
-                    toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
-                  }
-                })
-            }}
-          >
-            {({ setFieldValue, values, errors, touched, dirty }) => (
-              <Form data="form" action="">
-                <h1>FAZER LOGIN</h1>
-                <ShowMessage error={dirty ? errors : error} />
-                <GroupSC error={!!errors.email && touched.email}>
-                  <div data="label">
-                    <label htmlFor="email">Email</label>
-                  </div>
-                  <div data="input">
-                    <Field name="email" type="email" maxLength="120" />
-                  </div>
-                  <div data="error">
-                    <small>
-                      <ErrorMessage name="email" />
-                    </small>
-                  </div>
-                </GroupSC>
-                <GroupSC error={!!errors.senha && touched.senha}>
-                  <div data="label">
-                    <label htmlFor="senha">Senha</label>
-                  </div>
-                  <div data="input">
-                    <Field name="senha" type="password" autoComplete='off' maxLength="255" />
-                    {values.show_password && values.senha && (
-                      <div data="show-password">
-                        <span name="senha" value>{values.senha}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div data="error">
-                    <small>
-                      <ErrorMessage name="senha" />
-                    </small>
-                  </div>
-                </GroupSC>
+                  })
+                  .catch((res) => {
+                    /* Se status 400, significa que o erro foi tratado. */
+                    if (res && res.response && res.response.status == 400) {
+                      /* Se data.erro=500, será exibido no toast */
+                      if (res.response.data && res.response.data[500]) {
+                        toast.error(res.response.data[500])
+                      } else {
+                        setValues.setErrors(res.response.data)
+                      }
+                    } else {
+                      /* Mensagem padrão */
+                      toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                    }
+                  })
+              }}
+            >
+              {({ setFieldValue, values, errors, touched, dirty }) => (
+                <Form data="form" action="">
+                  <h1>FAZER LOGIN</h1>
+                  <ShowMessage error={dirty ? errors : error} />
+                  <GroupSC error={!!errors.email && touched.email}>
+                    <div data="label">
+                      <label htmlFor="email">Email</label>
+                    </div>
+                    <div data="input">
+                      <Field name="email" type="email" maxLength="120" />
+                    </div>
+                    <div data="error">
+                      <small>
+                        <ErrorMessage name="email" />
+                      </small>
+                    </div>
+                  </GroupSC>
+                  <GroupSC error={!!errors.senha && touched.senha}>
+                    <div data="label">
+                      <label htmlFor="senha">Senha</label>
+                    </div>
+                    <div data="input">
+                      <Field name="senha" type="password" autoComplete='off' maxLength="255" />
+                      {values.show_password && values.senha && (
+                        <div data="show-password">
+                          <span name="senha" value>{values.senha}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div data="error">
+                      <small>
+                        <ErrorMessage name="senha" />
+                      </small>
+                    </div>
+                  </GroupSC>
 
-                <div data="recover">
-                  <label htmlFor="show_password" onClick={() => setFieldValue("show_password", !values.show_password)}>
-                    <Field name="show_password" type="checkbox" /><span>Mostrar senha</span>
-                  </label>
-                  <Link href="/conta/recuperar">Esqueceu a senha?</Link>
-                </div>
+                  <div data="recover">
+                    <label htmlFor="show_password" onClick={() => setFieldValue("show_password", !values.show_password)}>
+                      <Field name="show_password" type="checkbox" /><span>Mostrar senha</span>
+                    </label>
+                    <Link href="/conta/recuperar">Esqueceu a senha?</Link>
+                  </div>
 
-                <div data="btn-entrar">
-                  <button type="submit"><DoorOpen /><b>ENTRAR</b></button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-          <div data="social-media">
-            <span data='span-social'>Quero acessar com minhas redes sociais</span>
-            <div>
-              <button data="btn-facebook" onClick={() => signIn('facebook')}><Facebook /><b>Facebook</b></button>
-              <button data="btn-google" onClick={() => signIn('google')}><Google /><b>Google</b></button>
+                  <div data="btn-entrar">
+                    <button type="submit"><DoorOpen /><b>ENTRAR</b></button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+            <div data="social-media">
+              <span data='span-social'>Quero acessar com minhas redes sociais</span>
+              <div>
+                <button data="btn-facebook" onClick={() => signIn('facebook')}><Facebook /><b>Facebook</b></button>
+                <button data="btn-google" onClick={() => signIn('google')}><Google /><b>Google</b></button>
+              </div>
+            </div>
+            <div data="new">
+              <div data="h5-acessando">
+                <h5>Acessando pela primeira vez?</h5>
+              </div>
+              <div data="new-cadastro">
+                <Link href="/conta/cadastro">Criar seu cadastro</Link>
+              </div>
             </div>
           </div>
-          <div data="new">
-            <div data="h5-acessando">
-              <h5>Acessando pela primeira vez?</h5>
-            </div>
-            <div data="new-cadastro">
-              <Link href="/conta/cadastro">Criar seu cadastro</Link>
-            </div>
-          </div>
-        </div>
-      </LoginSC>
+        </LoginSC>
+      </Content>
     </>
   )
 }

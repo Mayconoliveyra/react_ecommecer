@@ -27,19 +27,31 @@ const ContentSC = styled.div`
         }
     }
 `
-const ContentWhiteSC = styled.div`
-    background: #fff;
+const ContentHeaderSC = styled.div`
+    color: #0F1111;
+    display: flex;
+    align-items: center;
     margin:${({ margin }) => margin};
     padding:${({ padding }) => padding};
-   [data="p-info"]{
-        margin: 0.5rem;
-        font-size: 1rem !important;
-        a{
-        text-decoration: underline;
-        color: #0066c0;
-        font-family:${({ theme }) => theme.font.family.medium};
-        font-size: 0.9rem !important;
-        }
+    background:${({ bgGray }) => bgGray && "#EAEDED;"};
+    a{
+        flex:1;
+        display: flex;
+        align-items: center;
+    }
+    [data="icon-left"]{
+        font-size: 1rem;
+        margin-right: 0.5rem;
+        
+    }  
+    [data="h1-title"]{
+        color: #0F1111;
+        font-size: ${({ theme }) => theme.font.sizes.large};
+        font-family: ${({ theme }) => theme.font.family.bold};
+    }
+    [data="h2-title"]{
+            font-size: 1.3rem;
+            font-family:${({ theme }) => theme.font.family.bold};
     }
 `
 const ContentBorderSC = styled.div`
@@ -99,46 +111,12 @@ const ContentBorderSC = styled.div`
         }
     }
 `
-const ContentHeaderSC = styled.div`
-    color: #0F1111;
-    display: flex;
-    align-items: center;
-    margin:${({ margin }) => margin};
-    padding:${({ padding }) => padding};
-    background:${({ bgGray }) => bgGray && "#EAEDED;"};
-    a{
-        flex:1;
-        display: flex;
-        align-items: center;
-    }
-    [data="icon-left"]{
-        font-size: 1rem;
-        margin-right: 0.5rem;
-        
-    }  
-    [data="h1-title"]{
-        color: #0F1111;
-        font-size: ${({ theme }) => theme.font.sizes.large};
-        font-family: ${({ theme }) => theme.font.family.bold};
-    }
-    [data="h2-title"]{
-            font-size: 1.3rem;
-            font-family:${({ theme }) => theme.font.family.bold};
-    }
-`
 /* DIV principal a ser exibido na tela, fica dentro da Main. */
 const Content = ({ maxwidth, margin, padding, bgWhite, noShadow, noFlex1, children }) => {
     return (
         <ContentSC maxwidth={maxwidth} margin={margin} padding={padding} bgWhite={bgWhite} noShadow={noShadow} noFlex1={noFlex1} >
             {children}
         </ContentSC>
-    )
-}
-const ContentWhite = ({ children, margin, padding }) => {
-    return (
-        <ContentWhiteSC margin={margin} padding={padding}>
-            {children}
-        </ContentWhiteSC>
     )
 }
 const ContentBorder = ({ children, margin, padding, borderRadius }) => {
@@ -156,4 +134,4 @@ const ContentHeader = ({ children, margin, bgGray, padding }) => {
     )
 }
 
-export { Content, ContentWhite, ContentBorder, ContentHeader }
+export { Content, ContentHeader, ContentBorder }
