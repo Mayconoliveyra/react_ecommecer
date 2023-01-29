@@ -105,7 +105,6 @@ export default function MenuLogin() {
                 </div>
                 <ul data="ul-li">
                     <li><Link href="/conta/meusdados">Meus dados</Link></li>
-                    <li><Link href="/conta/trocarsenha">Trocar senha</Link></li>
                     <li><Link href="/conta/endereco">Endereço de entrega</Link></li>
                     <li data="barra"></li>
                     <li>
