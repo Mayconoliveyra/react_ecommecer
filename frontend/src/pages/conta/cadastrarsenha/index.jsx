@@ -1,6 +1,8 @@
 import jwt from "jwt-simple"
 const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
+import Link from 'next/link';
+import { ChevronLeft } from "react-bootstrap-icons";
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
@@ -9,7 +11,7 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
-import { Content, ContentBorder } from "../../../components/containe"
+import { Content, ContentHeader } from "../../../components/containe"
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
@@ -18,7 +20,6 @@ import { storePassword } from '../../api/auth';
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
         display: flex;
         button{   
             display: flex;
@@ -108,17 +109,20 @@ export default function NewPassword({ data }) {
                     <title>Criar senha</title>
                 }
             </Head>
-            <Content maxwidth="35rem" padding="0.5rem">
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
-                    <div data="title">
-                        {data.email_auth ?
-                            <h3>Recuperar senha</h3>
-                            :
-                            <h3>Criar senha</h3>
-                        }
-                    </div>
-                </ContentBorder>
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+            <Content maxwidth="35rem" padding="0" bgWhite>
+                <ContentHeader bgGray padding="1.3rem 0.5rem">
+                    <Link href="/">
+                        <ChevronLeft data="icon-left" />
+                        <h1 data="h1-title">
+                            {data.email_auth ?
+                                <>Recuperar senha</>
+                                :
+                                <>Criar senha</>
+                            }
+                        </h1>
+                    </Link>
+                </ContentHeader>
+                <Content padding="0.5rem 1rem" noShadow>
                     <Formik
                         validationSchema={scheme}
                         initialValues={{ senha: '', confirsenha: '', show_password: true, ...data }}
@@ -214,7 +218,7 @@ export default function NewPassword({ data }) {
                             </Form>
                         )}
                     </Formik>
-                </ContentBorder>
+                </Content>
             </Content>
         </>
     )
@@ -222,7 +226,6 @@ export default function NewPassword({ data }) {
 
 export async function getServerSideProps({ req, query }) {
     const session = await getSession({ req })
-    /* Se já tiver logado redireciona para o home */
     if (session && session.id) {
         return {
             redirect: {

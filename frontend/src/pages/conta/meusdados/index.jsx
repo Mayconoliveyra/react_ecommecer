@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import Link from 'next/link';
+import { ChevronLeft } from "react-bootstrap-icons";
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
@@ -8,55 +10,15 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { Content, ContentHeader } from "../../../components/containe"
 import { Group } from '../../../components/input';
 
-import { Content, ContentBorder } from "../../../components/containe"
 import { proneMask, cepMask, cpfMask } from '../../../../masks';
 import { store as saveUser } from '../../api/auth';
 
-const MyDataSC = styled.div`
-    max-width: 35rem;
-    margin: 0 auto;
-`
-const SeusDadosSC = styled.div`
-    margin: 0.5rem 0;
-    padding: 0 0.3rem;
-    >div{
-        color: #0F1111;
-        [data="h4-title"]{
-            border-radius: 0.3rem 0.3rem 0 0;
-            border: 1px #D5D9D9 solid;
-            padding: 0.6rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 2rem;
-                font-family:${({ theme }) => theme.font.family.bold};
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="form"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 0.3rem 0.7rem;
-
-            p{
-               margin: 0.5rem;
-               font-size: 1rem !important;
-               a{
-                text-decoration: underline;
-                color: #0066c0;
-                font-family:${({ theme }) => theme.font.family.medium};
-                font-size: 0.9rem !important;
-               }
-            }
-        }
-    }
-`
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
         display: flex;
         button{   
             display: flex;
@@ -91,13 +53,16 @@ export default function MyData({ session }) {
             <Head>
                 <title>Seus dados</title>
             </Head>
-            <Content maxwidth="35rem" padding="0.5rem">
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
-                    <div data="title">
-                        <h3>Seus dados</h3>
-                    </div>
-                </ContentBorder>
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+            <Content maxwidth="35rem" padding="0" bgWhite>
+                <ContentHeader bgGray padding="1.3rem 0.5rem">
+                    <Link href="/">
+                        <ChevronLeft data="icon-left" />
+                        <h1 data="h1-title">
+                            Meus dados
+                        </h1>
+                    </Link>
+                </ContentHeader>
+                <Content padding="0.5rem 1rem" noShadow>
                     <Formik
                         validationSchema={scheme}
                         initialValues={session}
@@ -123,9 +88,6 @@ export default function MyData({ session }) {
                     >
                         {({ errors, touched, dirty }) => (
                             <Form data="form" action="">
-                                <p data="p-info">
-                                    O preechimento de todas as informações é obrigatório. Entre em contato conosco se tiver dúvidas. <a href="#attendance">Atendimento ao cliente</a>
-                                </p>
                                 <Group
                                     error={!!errors.nome && touched.nome}
                                     label="Nome completo"
@@ -173,7 +135,7 @@ export default function MyData({ session }) {
                             </Form>
                         )}
                     </Formik>
-                </ContentBorder>
+                </Content>
             </Content>
         </>
     )
@@ -181,8 +143,6 @@ export default function MyData({ session }) {
 
 export async function getServerSideProps({ req }) {
     const session = await getSession({ req })
-
-    /* se session ou session.id não existir, redirecionada para tela de login */
     if (!session || !session.id) {
         return {
             redirect: {

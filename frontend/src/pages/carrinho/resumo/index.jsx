@@ -72,9 +72,9 @@ export default function Resume({ session, products, totals, payment }) {
             <Head>
                 <title>Confirmar pedido</title>
             </Head>
-            <Content padding="0.5rem">
+            <Content>
                 <ButtonSC>
-                    <div data='btn-confirm'>
+                    <div data='btn-confirm-noborder'>
                         <button type="button" onClick={() => handleFinalizar()}>
                             Confirmar pedido
                         </button >

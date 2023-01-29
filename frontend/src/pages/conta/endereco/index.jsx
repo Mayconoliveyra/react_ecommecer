@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import Link from 'next/link';
+import { ChevronLeft } from "react-bootstrap-icons";
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import { Formik, Form } from 'formik';
@@ -8,7 +10,7 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
-import { Content, ContentBorder } from "../../../components/containe"
+import { Content, ContentHeader } from "../../../components/containe"
 import { Group } from '../../../components/input';
 
 import { proneMask, cepMask } from '../../../../masks';
@@ -17,7 +19,6 @@ import { store as saveUser } from '../../api/auth';
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
         display: flex;
         button{   
             display: flex;
@@ -51,13 +52,16 @@ export default function Address({ session }) {
             <Head>
                 <title>Endereço de entrega</title>
             </Head>
-            <Content maxwidth="35rem" padding="0.5rem">
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
-                    <div data="title">
-                        <h3>Seu endereço</h3>
-                    </div>
-                </ContentBorder>
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+            <Content maxwidth="35rem" padding="0" bgWhite>
+                <ContentHeader bgGray padding="1.3rem 0.5rem">
+                    <Link href="/">
+                        <ChevronLeft data="icon-left" />
+                        <h2 data="h1-title">
+                            Meu endereço
+                        </h2>
+                    </Link>
+                </ContentHeader>
+                <Content padding="0.5rem 1rem" noShadow>
                     <Formik
                         validationSchema={scheme}
                         initialValues={session}
@@ -81,9 +85,6 @@ export default function Address({ session }) {
                     >
                         {({ errors, touched, dirty, initialValues, values }) => (
                             <Form data="form" action="">
-                                <p data="p-info">
-                                    O preechimento de todas as informações é obrigatório. Entre em contato conosco se tiver dúvidas. <a href="#attendance">Atendimento ao cliente</a>
-                                </p>
                                 <Group
                                     error={!!errors.contato && touched.contato}
                                     label="Contato"
@@ -143,7 +144,7 @@ export default function Address({ session }) {
                             </Form>
                         )}
                     </Formik>
-                </ContentBorder>
+                </Content>
             </Content>
         </>
     )
@@ -151,8 +152,6 @@ export default function Address({ session }) {
 
 export async function getServerSideProps({ req }) {
     const session = await getSession({ req })
-
-    /* se session ou session.id não existir, redirecionada para tela de login */
     if (!session || !session.id) {
         return {
             redirect: {

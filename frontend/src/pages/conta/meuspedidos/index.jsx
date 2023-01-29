@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import { ChevronLeft } from "react-bootstrap-icons";
 
-import { ContentHeader, Content, ContentWhite } from "../../../components/containe"
+import { ContentHeader, Content } from "../../../components/containe"
 import { Pedido } from "../../../components/conta/components"
 
 import { getPedidos } from "../../api/cart"
@@ -19,12 +19,11 @@ const VerMais = styled.div`
     button{
         background-color: #fff;
         border: thin solid #d5d9d9;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.15);
         border-radius: 2px;
         width: 100%;
         font-size: 1.2rem;
         padding: 1rem 0;
-        margin: 0 1.3rem;
+        margin: 0.5rem;
     }
 `
 
@@ -54,20 +53,20 @@ export default function Requests({ dt_pedidos, totals, session }) {
             <Head>
                 <title>Meus pedidos</title>
             </Head>
-            <Content maxwidth="40rem">
+            <Content padding="0">
                 <ContentHeader padding="1.3rem">
                     <Link href="/">
                         <ChevronLeft data="icon-left" />
-                        <h2 data="h2-title">
+                        <h2 data="h1-title">
                             Meus pedidos
                         </h2>
                     </Link>
                 </ContentHeader>
                 {pedidos && pedidos.map((pedido) => {
                     return (
-                        <ContentWhite key={pedido.id} margin="0 0 0.5rem 0;" padding="1rem;">
+                        <Content bgWhite noShadow noFlex1 key={pedido.id} margin="0 0 0.5rem 0;" padding="1rem;">
                             <Pedido pedido={pedido} session={session} />
-                        </ContentWhite>
+                        </Content>
                     )
                 })}
                 {parseFloat(totals / limitPage) > nextPage &&
@@ -82,8 +81,6 @@ export default function Requests({ dt_pedidos, totals, session }) {
 
 export async function getServerSideProps({ req }) {
     const session = await getSession({ req })
-
-    /* se session ou session.id não existir, redirecionada para tela de login */
     if (!session || !session.id) {
         return {
             redirect: {

@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import Link from 'next/link';
+import { ChevronLeft } from "react-bootstrap-icons";
 import styled from "styled-components"
 import { getSession } from "next-auth/react";
 import router from "next/router"
@@ -8,7 +10,7 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
-import { Content, ContentBorder } from "../../../components/containe"
+import { Content, ContentHeader } from "../../../components/containe"
 
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
@@ -19,7 +21,6 @@ import { store as saveUser } from '../../api/auth';
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
-        border-top: 0.1rem solid #e7e7e7;
         display: flex;
         button{   
             display: flex;
@@ -53,13 +54,16 @@ export default function NewAccount() {
             <Head>
                 <title>Criar conta</title>
             </Head>
-            <Content maxwidth="35rem" padding="0.5rem">
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
-                    <div data="title">
-                        <h3>Criar conta</h3>
-                    </div>
-                </ContentBorder>
-                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+            <Content maxwidth="35rem" padding="0" bgWhite>
+                <ContentHeader bgGray padding="1.3rem 0.5rem">
+                    <Link href="/">
+                        <ChevronLeft data="icon-left" />
+                        <h1 data="h1-title">
+                            Criar conta
+                        </h1>
+                    </Link>
+                </ContentHeader>
+                <Content padding="0.5rem 1rem" noShadow>
                     <Formik
                         validationSchema={scheme}
                         initialValues={{ nome: '', cpf: '', email: '', contato: "", cep: '' }}
@@ -141,7 +145,7 @@ export default function NewAccount() {
                             </Form>
                         )}
                     </Formik>
-                </ContentBorder>
+                </Content>
             </Content>
         </>
     )
