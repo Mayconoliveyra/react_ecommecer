@@ -5,6 +5,7 @@ import styled from "styled-components"
 import router from "next/router"
 import { useContext } from "react";
 
+import { Content, ContentBorder } from "../../../components/containe"
 import { CardPayment } from "../../../components/card/cardPayment"
 import { ButtonSC } from '../../../components/button';
 
@@ -17,143 +18,7 @@ import TemplateContext from "../../../context/template"
 import StoreContext from "../../../context/store"
 import MyCartContext from "../../../context/myCart"
 
-const PaymentValueSC = styled.div`
-    /* border:solid 1px red; */
-    margin: 1rem 0;
-    padding: 0 0.7rem;
-    >div{
-        color: #565959;
-        [data="resume"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0.8rem 0.8rem 0 0;
-            padding: 0.8rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 1.2rem;
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="table-values"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 1.1rem 1.5rem;
-            table{
-                width: 100%;
-                border-collapse: collapse;
-                tr{
-                    td{
-                        padding: 0.2rem 0.4rem;
-                        font-size:1.1rem;
-                        font-family: ${({ theme }) => theme.font.family.medium};
-                    }
-                    [data="td-value"]{
-                        font-family: ${({ theme }) => theme.font.family.regular};
-                        text-align:right;
-                    }
-                    [data="total-td"]{
-                        padding-top: 0.4rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #0F1111;
-                        font-size: 1.2rem;
-                    }
-                    [data="td-value-total"]{
-                        padding-top: 0.4rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #B12704;
-                        text-align:right;
-                        font-size: 1.2rem;
-                    }
-                }
-            }
-        }
-    }
-`
-const DeliveryAddresSC = styled.div`
-    margin: 1rem 0;
-    padding: 0 0.7rem;
-    >div{
-        color: #0F1111;
-        [data="resume"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0.3rem 0.3rem 0 0;
-            padding: 0.8rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 1.2rem;
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="table-values"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 1rem 1.2rem;
-            table{
-                width: 100%;
-                border-collapse: collapse;
-                tr{
-                    color: #0F1111;
-                    td{
-                        width: 100%;
-                        padding: 0.1rem;
-                        font-size:1.2rem;
-                        font-family: ${({ theme }) => theme.font.family.regular};
-                    }
-                    [data="name-user"]{
-                        font-size:1.3rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #0F1111;
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
-`
-const PaymentInfoSC = styled.div`
-    margin: 1rem 0;
-    padding: 0 0.7rem;
-    >div{
-        color: #0F1111;
-        [data="resume"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0.3rem 0.3rem 0 0;
-            padding: 0.8rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 1.2rem;
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="table-values"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 1rem 1.2rem;
-            table{
-                width: 100%;
-                border-collapse: collapse;
-                tr{
-                    color: #0F1111;
-                    td{
-                        width: 100%;
-                        padding: 0.1rem;
-                        font-size:1.2rem;
-                        font-family: ${({ theme }) => theme.font.family.regular};
-                    }
-                    [data="name-user"]{
-                        font-size:1.3rem;
-                        font-family: ${({ theme }) => theme.font.family.bold};
-                        color: #0F1111;
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
-`
-const SectionProductSC = styled.div`
+const SectionProductSC = styled.section`
     padding: 0 0.6rem;
     [data-div="cads"]{
         display: grid;
@@ -207,7 +72,7 @@ export default function Resume({ session, products, totals, payment }) {
             <Head>
                 <title>Confirmar pedido</title>
             </Head>
-            <div>
+            <Content padding="0.5rem">
                 <ButtonSC>
                     <div data='btn-confirm'>
                         <button type="button" onClick={() => handleFinalizar()}>
@@ -215,127 +80,128 @@ export default function Resume({ session, products, totals, payment }) {
                         </button >
                     </div>
                 </ButtonSC>
-                <PaymentValueSC>
-                    <div>
-                        <div data="resume">
-                            <h4>Resumo</h4>
-                        </div>
-                        <div data="table-values">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>Itens:</td>
-                                        <td data="td-value">{moneyMask(totals.vlr_pagar_products)}</td>
-                                    </tr>
-                                    {payment.pgt_metodo == "Receber em casa" ?
-                                        <>
-                                            <tr>
-                                                <td>Frete:</td>
-                                                {!store.cobrar_frete ?
-                                                    <td data="td-value">Frete Grátis</td>
-                                                    :
-                                                    <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
-                                                }
-                                            </tr>
-                                            <tr>
-                                                <td data="total-td">Total do pedido:</td>
-                                                <td data="td-value-total">{moneyMask(totals.vlr_pagar_com_frete)}</td>
-                                            </tr>
-                                        </>
-                                        :
-                                        <>
-                                            <tr>
-                                                <td>Frete:</td>
-                                                {!store.cobrar_frete ?
-                                                    <td data="td-value">Frete Grátis</td>
-                                                    :
-                                                    <td data="td-value">{moneyMask(0.00)}</td>
-                                                }
-                                            </tr>
-                                            <tr>
-                                                <td data="total-td">Total do pedido:</td>
-                                                <td data="td-value-total">{moneyMask(totals.vlr_pagar_sem_frete)}</td>
-                                            </tr>
-                                        </>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </PaymentValueSC>
-                <DeliveryAddresSC>
-                    <div>
-                        <div data="resume">
-                            <h4>Endereço de entrega</h4>
-                        </div>
-                        <div data="table-values">
-                            <table>
-                                <tbody>
-                                    {payment.pgt_metodo == "Receber em casa" ?
-                                        <>
-                                            <tr>
-                                                <td data="name-user">{session.nome}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    {session.logradouro}
-                                                </td>
-                                            </tr>
-                                            {session.numero &&
-                                                <tr>
-                                                    <td>
-                                                        {session.numero}
-                                                    </td>
-                                                </tr>
-                                            }
-                                            {session.complemento &&
-                                                <tr>
-                                                    <td>
-                                                        {session.complemento}
-                                                    </td>
-                                                </tr>
-                                            }
-                                            <tr>
-                                                <td>
-                                                    {session.localidade}, {session.uf}, {session.cep}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Contato: {session.contato}
-                                                </td>
-                                            </tr>
-                                        </>
-                                        :
-                                        <tr>
-                                            <td>{payment.pgt_metodo}</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </DeliveryAddresSC>
-                <PaymentInfoSC>
-                    <div>
-                        <div data="resume">
-                            <h4>Informações de pagamento</h4>
-                        </div>
-                        <div data="table-values">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td data="name-user">Forma de pagamento</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{payment.pgt_forma}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
 
+                <section>
+                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                        <div data="title">
+                            <h3>Resumo</h3>
                         </div>
-                    </div>
-                </PaymentInfoSC>
+                    </ContentBorder>
+                    <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.7rem 0.7rem" >
+                        <table data="table-1">
+                            <tbody>
+                                <tr>
+                                    <td>Itens:</td>
+                                    <td data="td-value">{moneyMask(totals.vlr_pagar_products)}</td>
+                                </tr>
+                                {payment.pgt_metodo == "Receber em casa" ?
+                                    <>
+                                        <tr>
+                                            <td>Frete:</td>
+                                            {!store.cobrar_frete ?
+                                                <td data="td-value">Frete Grátis</td>
+                                                :
+                                                <td data="td-value">{moneyMask(totals.vlr_frete)}</td>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            <td data="td-bold">Total do pedido:</td>
+                                            <td data="td-red">{moneyMask(totals.vlr_pagar_com_frete)}</td>
+                                        </tr>
+                                    </>
+                                    :
+                                    <>
+                                        <tr>
+                                            <td>Frete:</td>
+                                            {!store.cobrar_frete ?
+                                                <td data="td-value">Frete Grátis</td>
+                                                :
+                                                <td data="td-value">{moneyMask(0.00)}</td>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            <td data="td-bold">Total do pedido:</td>
+                                            <td data="td-red">{moneyMask(totals.vlr_pagar_sem_frete)}</td>
+                                        </tr>
+                                    </>
+                                }
+                            </tbody>
+                        </table>
+                    </ContentBorder>
+                </section>
+
+                <section>
+                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                        <div data="title">
+                            <h3>Endereço de entrega</h3>
+                        </div>
+                    </ContentBorder>
+                    <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.7rem 0.7rem" >
+                        <table data="table-1">
+                            <tbody>
+                                {payment.pgt_metodo == "Receber em casa" ?
+                                    <>
+                                        <tr>
+                                            <td data="td-bold">{session.nome}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {session.logradouro}
+                                            </td>
+                                        </tr>
+                                        {session.numero &&
+                                            <tr>
+                                                <td>
+                                                    {session.numero}
+                                                </td>
+                                            </tr>
+                                        }
+                                        {session.complemento &&
+                                            <tr>
+                                                <td>
+                                                    {session.complemento}
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td>
+                                                {session.localidade}, {session.uf}, {session.cep}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Contato: {session.contato}
+                                            </td>
+                                        </tr>
+                                    </>
+                                    :
+                                    <tr>
+                                        <td>{payment.pgt_metodo}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </ContentBorder>
+                </section>
+                <section>
+                    <ContentBorder padding="1rem 1.2rem" margin="1rem 0 0 0" borderRadius="0.7rem 0.7rem 0 0">
+                        <div data="title">
+                            <h3>Informações de pagamento</h3>
+                        </div>
+                    </ContentBorder>
+                    <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.7rem 0.7rem" >
+                        <table data="table-1">
+                            <tbody>
+                                <tr>
+                                    <td data="td-bold">Forma de pagamento</td>
+                                </tr>
+                                <tr>
+                                    <td>{payment.pgt_forma}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </ContentBorder>
+                </section>
 
                 <SectionProductSC>
                     {products && products.length > 0 ?
@@ -365,7 +231,7 @@ export default function Resume({ session, products, totals, payment }) {
                         </button >
                     </div>
                 </ButtonSC>
-            </div>
+            </Content>
         </>
 
     )

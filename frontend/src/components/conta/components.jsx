@@ -146,13 +146,20 @@ const Pedido = ({ pedido, session }) => {
                     <section>
                         <ContentBorder padding="1rem 1.2rem" borderRadius="0.7rem 0.7rem 0 0">
                             <div data="title">
-                                <h3>Forma de pagamento</h3>
+                                <h3>Informações de pagamento</h3>
                             </div>
                         </ContentBorder>
                         <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.7rem 0.7rem" >
-                            <div data="font-1.2">
-                                {pedido.pgt_forma}
-                            </div>
+                            <table data="table-1">
+                                <tbody>
+                                    <tr>
+                                        <td data="td-bold">Forma de pagamento</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{pedido.pgt_forma}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </ContentBorder>
                     </section>
                     <section>
@@ -184,6 +191,11 @@ const Pedido = ({ pedido, session }) => {
                                         <tr>
                                             <td>{pedido.localidade}, {pedido.uf}, {pedido.cep}</td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                Contato: {pedido.contato}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 :
@@ -194,12 +206,6 @@ const Pedido = ({ pedido, session }) => {
                         </ContentBorder>
                     </section>
                     <section>
-                        {/* <ContentBorder padding="1rem 1.2rem" borderRadius="0.7rem 0.7rem 0 0">
-                            <div data="title">
-                                <h3>Produtos</h3>
-                            </div>
-                        </ContentBorder> */}
-
                         <table data="table-1">
                             <tbody>
                                 {products.map((product) => {

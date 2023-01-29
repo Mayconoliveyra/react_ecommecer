@@ -411,7 +411,7 @@ module.exports = (app) => {
 
                 const pedidos = await app
                     .db("sales_header")
-                    .select("id", "nome", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "vlr_frete", "vlr_pago", "pgt_metodo", "pgt_forma", "vlr_pagar_products", "qtd_products", "created_at", "status")
+                    .select("id", "nome", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "vlr_frete", "vlr_pago", "pgt_metodo", "pgt_forma", "vlr_pagar_products", "qtd_products", "created_at", "status")
                     .whereRaw(` 
                         id_user = ${id_user}
                         ${orderBy("id", "DESC")}
