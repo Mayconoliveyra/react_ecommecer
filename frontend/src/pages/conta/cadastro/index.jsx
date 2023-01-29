@@ -8,40 +8,14 @@ import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
 
+import { Content, ContentBorder } from "../../../components/containe"
+
 import { ShowMessage } from "../../../components/showMessage"
 import { Group } from '../../../components/input';
 
 import { proneMask, cepMask, cpfMask } from '../../../../masks';
 import { store as saveUser } from '../../api/auth';
 
-const MyDataSC = styled.div`
-    max-width: 35rem;
-    margin: 0 auto;
-`
-const SeusDadosSC = styled.div`
-    margin: 0.5rem 0;
-    padding: 0 0.3rem;
-    >div{
-        color: #0F1111;
-        [data="h4-title"]{
-            border-radius: 0.3rem 0.3rem 0 0;
-            border: 1px #D5D9D9 solid;
-            padding: 0.6rem 1.5rem;
-            h4{
-                color: #0F1111;
-                font-size: 2rem;
-                font-family:${({ theme }) => theme.font.family.bold};
-                margin: 0px;
-                padding: 0px;
-            }
-        }
-        [data="form"]{
-            border: 1px #D5D9D9 solid;
-            border-radius: 0 0 0.8rem 0.8rem;
-            padding: 0.3rem 0.7rem;
-        }
-    }
-`
 const BtnConfirmSC = styled.div`
     [data='button-submit']{
         padding: 0.7rem 1rem;
@@ -65,7 +39,6 @@ const BtnConfirmSC = styled.div`
         }
     }
 `
-
 export default function NewAccount() {
     const scheme = Yup.object().shape({
         nome: Yup.string().nullable().label("Nome").required(),
@@ -80,96 +53,96 @@ export default function NewAccount() {
             <Head>
                 <title>Criar conta</title>
             </Head>
-            <MyDataSC>
-                <SeusDadosSC>
-                    <div>
-                        <div data="h4-title">
-                            <h4>Criar conta</h4>
-                        </div>
-                        <Formik
-                            validationSchema={scheme}
-                            initialValues={{ nome: '', cpf: '', email: '', contato: "", cep: '' }}
-                            onSubmit={async (values, setValues) => {
-                                await saveUser(values)
-                                    .then((data) => {
-                                        /* Redireciona para tela inicial passando a mensagem(msg) */
-                                        router.push({
-                                            pathname: "/login",
-                                            query: {
-                                                msg: JSON.stringify(data)
-                                            }
-                                        })
-                                    })
-                                    .catch((res) => {
-                                        /* Se status 400, significa que o erro foi tratado. */
-                                        if (res && res.response && res.response.status == 400) {
-                                            /* Se data.erro=500, será exibido no toast */
-                                            if (res.response.data && res.response.data[500]) {
-                                                toast.error(res.response.data[500])
-                                            } else {
-                                                setValues.setErrors(res.response.data)
-                                            }
-                                        } else {
-                                            /* Mensagem padrão */
-                                            toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+            <Content maxwidth="35rem" padding="0.5rem">
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0.3rem 0.3rem 0 0">
+                    <div data="title">
+                        <h3>Criar conta</h3>
+                    </div>
+                </ContentBorder>
+                <ContentBorder padding="1rem 1.2rem" borderRadius="0 0 0.3rem 0.3rem">
+                    <Formik
+                        validationSchema={scheme}
+                        initialValues={{ nome: '', cpf: '', email: '', contato: "", cep: '' }}
+                        onSubmit={async (values, setValues) => {
+                            await saveUser(values)
+                                .then((data) => {
+                                    /* Redireciona para tela inicial passando a mensagem(msg) */
+                                    router.push({
+                                        pathname: "/login",
+                                        query: {
+                                            msg: JSON.stringify(data)
                                         }
                                     })
-                            }}
-                        >
-                            {({ errors, touched, dirty }) => (
-                                <Form data="form" action="">
-                                    <ShowMessage error={errors} />
-                                    <Group
-                                        error={!!errors.nome && touched.nome}
-                                        label="Nome completo"
-                                        name="nome"
-                                        placeholder="Exemplo: Jhon Doe"
-                                        maxLength={55}
-                                    />
-                                    <Group
-                                        error={!!errors.cpf && touched.cpf}
-                                        label="CPF"
-                                        name="cpf"
-                                        placeholder="Exemplo: 999.999.999-99"
-                                        autocomplete="on"
-                                        mask={cpfMask}
-                                    />
-                                    <Group
-                                        error={!!errors.email && touched.email}
-                                        label="E-mail"
-                                        name="email"
-                                        autocomplete="on"
-                                    />
-                                    <Group
-                                        error={!!errors.contato && touched.contato}
-                                        label="Contato"
-                                        name="contato"
-                                        placeholder="Exemplo: (99) 99999-9999"
-                                        autocomplete="on"
-                                        mask={proneMask}
-                                    />
-                                    <Group
-                                        error={!!errors.cep && touched.cep}
-                                        label="CEP"
-                                        name="cep"
-                                        placeholder="Exemplo: 99999-999"
-                                        autocomplete="on"
-                                        mask={cepMask}
-                                    />
+                                })
+                                .catch((res) => {
+                                    /* Se status 400, significa que o erro foi tratado. */
+                                    if (res && res.response && res.response.status == 400) {
+                                        /* Se data.erro=500, será exibido no toast */
+                                        if (res.response.data && res.response.data[500]) {
+                                            toast.error(res.response.data[500])
+                                        } else {
+                                            setValues.setErrors(res.response.data)
+                                        }
+                                    } else {
+                                        /* Mensagem padrão */
+                                        toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                                    }
+                                })
+                        }}
+                    >
+                        {({ errors, touched, dirty }) => (
+                            <Form data="form" action="">
+                                <ShowMessage error={errors} />
+                                <Group
+                                    error={!!errors.nome && touched.nome}
+                                    label="Nome completo"
+                                    name="nome"
+                                    placeholder="Exemplo: Jhon Doe"
+                                    maxLength={55}
+                                />
+                                <Group
+                                    error={!!errors.cpf && touched.cpf}
+                                    label="CPF"
+                                    name="cpf"
+                                    placeholder="Exemplo: 999.999.999-99"
+                                    autocomplete="on"
+                                    mask={cpfMask}
+                                />
+                                <Group
+                                    error={!!errors.email && touched.email}
+                                    label="E-mail"
+                                    name="email"
+                                    autocomplete="on"
+                                />
+                                <Group
+                                    error={!!errors.contato && touched.contato}
+                                    label="Contato"
+                                    name="contato"
+                                    placeholder="Exemplo: (99) 99999-9999"
+                                    autocomplete="on"
+                                    mask={proneMask}
+                                />
+                                <Group
+                                    error={!!errors.cep && touched.cep}
+                                    label="CEP"
+                                    name="cep"
+                                    placeholder="Exemplo: 99999-999"
+                                    autocomplete="on"
+                                    mask={cepMask}
+                                />
 
-                                    <BtnConfirmSC>
-                                        <div data='button-submit'>
-                                            <button disabled={!dirty} type="submit">
-                                                Cadastrar
-                                            </button>
-                                        </div>
-                                    </BtnConfirmSC>
-                                </Form>
-                            )}
-                        </Formik>
-                    </div>
-                </SeusDadosSC>
-            </MyDataSC>
+                                <BtnConfirmSC>
+                                    <div data='button-submit'>
+                                        <button disabled={!dirty} type="submit">
+                                            Cadastrar
+                                        </button>
+                                    </div>
+                                </BtnConfirmSC>
+                            </Form>
+                        )}
+                    </Formik>
+                </ContentBorder>
+            </Content>
         </>
     )
 }
