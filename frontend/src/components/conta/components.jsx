@@ -61,7 +61,6 @@ const Pedido = ({ pedido, session }) => {
         if (products.length == 0)
             await getPedidos({ id_sales: pedido.id, session })
                 .then(async (products) => {
-                    console.log(products)
                     setProducts(products)
                 })
     }
