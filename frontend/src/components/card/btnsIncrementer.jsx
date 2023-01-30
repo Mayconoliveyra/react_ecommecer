@@ -89,12 +89,12 @@ export const BtnsIncrementer = ({ product }) => {
     const handleRemoveProduct = async (id) => {
         /* Para remover o produto do carrinho basta enviar o id com a quantiade 0 */
         await storeQuantity(id, 0, myCartId)
-        await setMyCart(await getCartTemp(myCartId))
+        await setMyCart(await getCartTemp({ id_storage: myCartId }))
     }
 
     const handleAddMyCart = async (id, quantity) => {
         await storeQuantity(id, quantity, myCartId)
-        await setMyCart(await getCartTemp(myCartId))
+        await setMyCart(await getCartTemp({ id_storage: myCartId }))
     }
 
     return (

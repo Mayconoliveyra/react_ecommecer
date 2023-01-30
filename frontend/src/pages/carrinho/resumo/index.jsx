@@ -279,7 +279,7 @@ export async function getServerSideProps(context) {
         }
     }
 
-    const data = await getCartTemp(myCartId, session.id, session)
+    const data = await getCartTemp({ id_storage: myCartId, id_user: session.id, session: session })
 
     /* Se não tiver setado redireciona para tela home*/
     if (!data || !data.totals || !data.products) {

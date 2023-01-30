@@ -1,7 +1,7 @@
 import { api } from "../axios";
 const prefix = "/cart";
 
-const getCartTemp = async (id_storage, id_user, session) => {
+const getCartTemp = async ({ id_storage, id_user, session }) => {
   const axios = await api(session);
   if (!id_storage) return console.log("[id_storage] NÃO FOI INFORMADO!!")
 

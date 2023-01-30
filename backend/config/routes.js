@@ -35,11 +35,11 @@ module.exports = (app) => {
   app.route("/cart")
     .all(app.config.passport.authenticate())
     .post(app.api.cart.saveIncrementer)
-  app.route("/cart/:id")
+  app.route("/cart/:id") /* id= myCartId(string) */
     .all(app.config.passport.authenticate())
     .get(app.api.cart.getCartTemp)
 
-  app.route("/cart/usuario/:id")
+  app.route("/cart/usuario/:id") /* id= myCartId(string) */
     .all(app.config.passport.authenticate())
     .get(userAuth(app.api.cart.getCartTemp))
 

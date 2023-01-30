@@ -157,7 +157,7 @@ export default function Product({ data }) {
 
     const handleAddMyCart = async (id, quantity) => {
         await storeQuantity(id, quantity, myCartId)
-        await setMyCart(await getCartTemp(myCartId))
+        await setMyCart(await getCartTemp({ id_storage: myCartId }))
         router.push("/")
     }
 

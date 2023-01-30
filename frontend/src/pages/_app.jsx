@@ -90,7 +90,7 @@ export default function MyApp({ Component, pageProps }) {
         maxAge: 60 * 60 * 24 * 30 * 365, /* 1 ano */
         path: "/"
       });
-      setMyCart(await getCartTemp(myCartId))
+      setMyCart(await getCartTemp({ id_storage: myCartId }))
     }
   }
 
