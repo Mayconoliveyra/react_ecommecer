@@ -7,6 +7,7 @@ module.exports = middleware => {
                         const body = jwt.decode(req.headers.userauth, SECRET_KEY_AUTH);
                         if (!body.id) throw "error"
                         console.log("auth " + body.exp)
+                        req.userAuth = body
                         middleware(req, res, next)
                 } catch (error) {
                         res.status(401).send("Usuário não está autenticado")

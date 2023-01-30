@@ -39,7 +39,7 @@ export default function Requests({ dt_pedidos, totals, session }) {
         const next = nextPage + 1;
 
         if (loading)
-            await getPedidos({ id: session.id, page: next, limi: limitPage, session: session })
+            await getPedidos({ page: next, limi: limitPage, session: session })
                 .then(async ({ dt_pedidos }) => {
                     setNextPage(next);
                     setPedidos([...pedidos, ...dt_pedidos]);
@@ -91,7 +91,7 @@ export async function getServerSideProps({ req }) {
         }
     }
 
-    const { dt_pedidos, totals } = await getPedidos({ id: session.id, page: 1, limi: 10, session: session })
+    const { dt_pedidos, totals } = await getPedidos({ page: 1, limi: 10, session: session })
 
     return {
         props: { dt_pedidos, totals, session },

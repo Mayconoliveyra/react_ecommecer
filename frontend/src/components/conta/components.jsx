@@ -133,7 +133,7 @@ const Pedido = ({ pedido, session }) => {
                                     </tr>
                                     <tr>
                                         <td>Frete:</td>
-                                        <td data="td-value">{moneyMask(pedido.frete)}</td>
+                                        <td data="td-value">{moneyMask(pedido.vlr_frete)}</td>
                                     </tr>
                                     <tr>
                                         <td data="td-bold">Total do pedido</td>

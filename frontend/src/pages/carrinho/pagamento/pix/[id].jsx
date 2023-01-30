@@ -1,7 +1,6 @@
 import { getSession } from "next-auth/react"
 import Image from "next/image";
 import moment from "moment"
-import moment from "moment"
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 import Head from 'next/head';
@@ -104,7 +103,7 @@ export default function PixPayment({ id, payment }) {
             <Head>
                 <title>Conclusão de compra</title>
             </Head>
-            <Content bgWhite maxwidth="40rem" padding="1rem">
+            <Content bgWhite maxwidth="45rem" padding="1rem">
                 <Header title="Seu pedido foi reservado." sub="Pague em até 30 minutos para processarmos seu pedido." />
                 <PixSC>
                     <div data="pix">
@@ -192,7 +191,7 @@ export async function getServerSideProps(context) {
 
     try {
         const { id } = context.params; /* id do pedido; */
-        const payment = await storePixPgt(id, session.id, session)
+        const payment = await storePixPgt(id, session)
         /* Se id ou pagamento tiver nulo, redireciona para home. */
         if (!id || !payment) {
             return {

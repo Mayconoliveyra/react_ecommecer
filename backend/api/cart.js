@@ -66,7 +66,7 @@ module.exports = (app) => {
     /* AS 2 TEM INFORMAÇÕES QUE PRECISAM ESTÁ EM IGUAL EM AMBAS, SE FOR ALTERAR ALGO ANALISAR SE PRECISA ALTERAR A OUTRA TAMBEM. */
     const getCartTemp = async (req, res) => {
         const id = req.params.id; /*!! ESSE ID É UMA STRING !!*/
-        const id_user = Number(req.query.id_user); /* ID do usuario. */
+        const id_user = req.userAuth && req.userAuth.id /* ID do usuario. */
 
         try {
             existOrError(id, "[id] id_storage não pode ser nulo.")
@@ -351,8 +351,8 @@ module.exports = (app) => {
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
 
     const getPixDetail = async (req, res) => {
-        const id = Number(req.params.id); /* id do pedido */
-        const id_user = Number(req.query.id_user); /* ID do usuario. */
+        const id = Number(req.params.id_sale); /* id do pedido */
+        const id_user = req.userAuth.id /* ID do usuario. */
 
         try {
             existOrError(id, "[id] não pode ser nulo.")
@@ -377,8 +377,8 @@ module.exports = (app) => {
     };
 
     const getPedidos = async (req, res) => {
-        const id_user = req.params.id
-        const id_sales = Number(req.query.id_sales); /* id_sales= id do pedido. utilizado para retornar os produtos do pedido "sales_products"*/
+        const id_user = req.userAuth.id
+        const id_sales = Number(req.params.id_sale); /* id_sale= id do pedido. utilizado para retornar os produtos do pedido "sales_products"*/
         const page = Number(req.query._page);
         const limit = Number(req.query._limit);
 
