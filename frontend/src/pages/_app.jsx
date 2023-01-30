@@ -23,7 +23,7 @@ import MyCartContext from "../context/myCart"
 
 export default function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter()
-  const defaultTemplate = { loading: false, showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false }
+  const defaultTemplate = { loading: false, showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false, showEndereco: true }
   const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])

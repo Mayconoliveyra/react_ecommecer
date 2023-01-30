@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { List, Cart3, Person } from "react-bootstrap-icons";
+import { List, Cart3, Person, GeoAlt } from "react-bootstrap-icons";
 import TemplateContext from "../../../context/template";
 import MyCartContext from "../../../context/myCart";
 
@@ -104,6 +104,22 @@ const HeaderSC = styled.header`
                 box-shadow: 0 1px 0 0 rgb(255 255 255 / 50%), inset 0 1px 0 0 rgb(0 0 0 / 7%);
             }
         }
+        [data="cont-3"]{
+            a{
+                display: flex;
+                align-items:center ;
+                padding: 1rem;
+                background-color: #37475A;
+
+                color: #FFF;
+                font-family:${({ theme }) => theme.font.family.medium};
+                font-size: 0.8rem;
+                svg{
+                    margin-right: 0.5rem;
+                    font-size: 1.2rem;
+                }
+            }
+        }
     }
 `
 export default function Header() {
@@ -165,6 +181,13 @@ export default function Header() {
                 {template.showHeaderSearch && (
                     <div data="cont-2">
                         <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
+                    </div>
+                )}
+                {template.showEndereco && session && session.localidade && session.cep && (
+                    <div data="cont-3">
+                        <Link href="/conta/endereco">
+                            <GeoAlt />Enviar para: {session.localidade} - {session.cep}
+                        </Link>
                     </div>
                 )}
             </div>

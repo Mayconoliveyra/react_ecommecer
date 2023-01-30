@@ -7,9 +7,7 @@ import TemplateContext from "../../../context/template";
 import StoreContext from "../../../context/store"
 
 const NavSC = styled.footer`
-    /* margin-top:4rem; */
     background-color: ${({ theme }) => theme.colors.secondaryColor};
-    /* padding-bottom: 4rem; */
     color: ${({ theme }) => theme.colors.primaryColor};
     [data-div='return-top']{
         display: flex;

@@ -16,7 +16,7 @@ export default function Home({ camas, brinquedos, cozinhas }) {
       <Head>
         <title>{store.nome ? store.nome : 'Carregando...'}</title>
       </Head>
-      <CategoriesNav />
+      {/* <CategoriesNav /> */}
       <CardsNav name={"Camas"}>
         {camas.map((item) => {
           return <CardHome key={item.id} {...item} />
