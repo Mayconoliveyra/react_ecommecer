@@ -30,7 +30,31 @@ const HeaderSC = styled.header`
                     }
                 }
                 [data="nav-logo"]{
-                }  
+                    margin-right: 1rem;
+                }
+                [data="endereco"]{
+                    display: flex;
+                    align-items: center;
+                    color: #FFF;
+                    display: flex;
+                    svg{
+                        margin-right: 0.4rem;
+                        font-size: 1.3rem;
+                    }
+                    @media (max-width: 720px){
+                        display: none;
+                    }
+                    div{
+                        span:nth-child(1){
+                            color: #ccc;
+                            font-size: 0.8rem;
+                        }
+                        font-family:${({ theme }) => theme.font.family.medium};
+                        font-size: 0.9rem;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
             }
             [data="user-cart"]{
                 display: flex;
@@ -104,20 +128,25 @@ const HeaderSC = styled.header`
                 box-shadow: 0 1px 0 0 rgb(255 255 255 / 50%), inset 0 1px 0 0 rgb(0 0 0 / 7%);
             }
         }
-        [data="cont-3"]{
-            a{
-                display: flex;
-                align-items:center ;
-                padding: 1rem;
-                background-color: #37475A;
-
-                color: #FFF;
-                font-family:${({ theme }) => theme.font.family.medium};
-                font-size: 0.8rem;
-                svg{
-                    margin-right: 0.5rem;
-                    font-size: 1.2rem;
-                }
+    }
+    [data="endereco2"]{
+        @media (min-width: 720px){
+             display: none;
+        }
+        background-color: #37475A;
+        a{
+            max-width: 1120px;
+            margin: 0px auto;
+            display: flex;
+            align-items:center ;
+            padding: 1rem;
+        
+            color: #FFF;
+            font-family:${({ theme }) => theme.font.family.medium};
+            font-size: 0.8rem;
+            svg{
+                margin-right: 0.5rem;
+                font-size: 1.2rem;
             }
         }
     }
@@ -152,6 +181,16 @@ export default function Header() {
                             <Image src={'/assets/images/logo.png'} width={130} height={30} alt="logo" quality={100} priority={true} />
                         </Link>
 
+                        {template.showEndereco && session && session.localidade && session.cep && (
+                            <Link href="/conta/endereco" data="endereco">
+                                <GeoAlt />
+                                <div>
+                                    <span>Enviar para</span>
+                                    <span>{session.localidade} - {session.cep}</span>
+                                </div>
+                            </Link>)
+                        }
+
                     </div>
 
                     <div data="user-cart">
@@ -183,14 +222,14 @@ export default function Header() {
                         <input type="Search" value={inputSearch} placeholder="O que você procura?" onKeyUp={handleSubmit} onChange={(e) => setInputSearch(e.target.value)} />
                     </div>
                 )}
-                {template.showEndereco && session && session.localidade && session.cep && (
-                    <div data="cont-3">
-                        <Link href="/conta/endereco">
-                            <GeoAlt />Enviar para: {session.localidade} - {session.cep}
-                        </Link>
-                    </div>
-                )}
             </div>
+            {template.showEndereco && session && session.localidade && session.cep && (
+                <div data="endereco2">
+                    <Link href="/conta/endereco">
+                        <GeoAlt />Enviar para: {session.localidade} - {session.cep}
+                    </Link>
+                </div>
+            )}
         </HeaderSC >
     )
 }
