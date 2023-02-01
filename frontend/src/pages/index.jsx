@@ -2,8 +2,11 @@ import Head from "next/head";
 import { useContext } from "react";
 
 import CategoriesNav from "../components/categoriesNav";
-import CardsNav from "../components/cardsNav";
-import { CardHome } from "../components/card/cardHome"
+
+import { Content } from "../components/containe"
+import { CardsNav } from "../components/home/components"
+/* import CardsNav from "../components/cardsNav"; */
+import { CardOne } from "../components/card/cardOne"
 
 import StoreContext from "../context/store";
 
@@ -17,12 +20,24 @@ export default function Home({ camas, brinquedos, cozinhas }) {
         <title>{store.nome ? store.nome : 'Carregando...'}</title>
       </Head>
       {/* <CategoriesNav /> */}
-      <CardsNav name={"Camas"}>
-        {camas.map((item) => {
-          return <CardHome key={item.id} {...item} />
-        })}
-      </CardsNav>
-      <CardsNav name={"Brinquedos"}>
+      <Content padding="0">
+        {/*  <Content bgWhite noShadow noFlex1> */}
+        <CardsNav name={"Mais procurados"}>
+          {camas.map((item) => {
+            return <CardOne key={item.id} product={item} />
+          })}
+        </CardsNav>
+        {/*  </Content> */}
+        {/*  <Content bgWhite noShadow noFlex1 margin="1rem 0">
+          <CardsNav name={"Camas"}>
+            {camas.map((item) => {
+              return <CardHome key={item.id} {...item} />
+            })}
+          </CardsNav>
+        </Content> */}
+      </Content>
+
+      {/* <CardsNav name={"Brinquedos"}>
         {brinquedos.map((item) => {
           return <CardHome key={item.id} {...item} />
         })}
@@ -31,7 +46,7 @@ export default function Home({ camas, brinquedos, cozinhas }) {
         {cozinhas && cozinhas.map((item) => {
           return <CardHome key={item.id} {...item} />
         })}
-      </CardsNav>
+      </CardsNav> */}
     </>
   );
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { CartPlusFill } from "react-bootstrap-icons"
-import { moneyMask } from "../../../masks"
+import { moneyMask } from "../../../../masks"
 import Link from "next/link"
 
 const CardHomeSC = styled(Link)`

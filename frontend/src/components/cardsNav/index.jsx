@@ -3,8 +3,9 @@ import styled from "styled-components"
 const SectionSC = styled.section`
     display: flex;
     flex-direction: column;
+    margin: 1rem 0;
     margin-left: 15px;
-    margin-top: 12px;
+    /* margin-top: 12px; */
     max-width: calc(100vw - 15px);
     overflow: hidden;
     [data-div="name"] {

@@ -1,4 +1,9 @@
 module.exports = (app) => {
+    const getTeste = async (req, res) => {
+        console.log("GET TESTE!!")
+        return res.status(204).send()
+    }
+
     const get = async (req, res) => {
         const store = app.store
         const modelo = {
@@ -36,5 +41,5 @@ module.exports = (app) => {
         return res.json(modelo)
     };
 
-    return { get };
+    return { getTeste, get };
 };
