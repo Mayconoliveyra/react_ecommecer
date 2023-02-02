@@ -12,7 +12,7 @@ consign()
     .then("./api")
     .then("./config/routes.js")
     .into(app)
-
+ 
 app.listen(3030, () => {
     console.log("Backend executando...")
-})
+}) 
