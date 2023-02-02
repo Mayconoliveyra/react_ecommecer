@@ -42,7 +42,7 @@ const validateStore = (store) => {
                 if (!store.url_site) throw "Store[url_site] não pode ser nulo."
                 if (!store.client_database) throw "Store[client_database] não pode ser nulo."
                 if (store.gt_ativo) {
-                        if (!store.gt_client_id) throw "Store[gt_client_id] não pode ser nulo."
+                        if (!store.gt_) throw "Store[gt_client_id] não pode ser nulo."
                         if (!store.gt_client_secret) throw "Store[gt_client_secret] não pode ser nulo."
                 }
                 if (store.pgt_pix || store.pgt_cartao) {

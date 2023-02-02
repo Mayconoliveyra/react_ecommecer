@@ -1,5 +1,4 @@
 import jwt from "jwt-simple"
-const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
 import Link from 'next/link';
 import { ChevronLeft } from "react-bootstrap-icons";
@@ -107,7 +106,7 @@ export default function NewPassword({ data }) {
                         initialValues={{ senha: '', confirsenha: '', show_password: true, ...data }}
                         onSubmit={async (values, setValues) => {
                             /* Os dados sera convetido em jwt antes de enviar para o backend */
-                            const modelo = jwt.encode(values, SECRET_KEY_AUTH)
+                            const modelo = jwt.encode(values, process.env.SECRET_KEY_AUTH)
                             await storePassword({ userJWT: modelo }, data.id)
                                 .then((data) => {
                                     /* Redireciona para tela inicial passando a mensagem(msg) */
@@ -214,10 +213,9 @@ export async function getServerSideProps({ req, query }) {
 
     if (query && query.authlogin)
         try {
-            const { SECRET_KEY_AUTH } = require("../../../../.env");
             const jwt = require("jwt-simple")
 
-            const decoded = jwt.decode(query.authlogin, SECRET_KEY_AUTH);
+            const decoded = jwt.decode(query.authlogin, process.env.SECRET_KEY_AUTH);
             const userBody = {
                 id: decoded.id,
                 email: decoded.email,

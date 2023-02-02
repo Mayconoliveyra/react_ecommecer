@@ -1,4 +1,3 @@
-const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, SECRET_KEY_AUTH } = require("../../../../.env");
 import NextAuth from "next-auth"
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -9,19 +8,19 @@ const jwt = require("jwt-simple")
 export const authOptions = {
     providers: [
         FacebookProvider({
-            clientId: FACEBOOK_CLIENT_ID,
-            clientSecret: FACEBOOK_CLIENT_SECRET,
+            clientId: process.env.FACEBOOK_CLIENT_ID,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
         }),
         GoogleProvider({
-            clientId: GOOGLE_CLIENT_ID,
-            clientSecret: GOOGLE_CLIENT_SECRET
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
         }),
         CredentialsProvider({
             name: "Credentials",
             async authorize(credentials) {
                 if (credentials && credentials.session) {
                     try {
-                        const userDecoded = jwt.decode(credentials.session, SECRET_KEY_AUTH);
+                        const userDecoded = jwt.decode(credentials.session, process.env.SECRET_KEY_AUTH);
                         if (userDecoded) {
                             return userDecoded
                         }
@@ -40,7 +39,7 @@ export const authOptions = {
                     email: session.user.email,
                 }
                 const user = await storeNextAuth(modelo)
-                const userDecoded = jwt.decode(user, SECRET_KEY_AUTH);
+                const userDecoded = jwt.decode(user, process.env.SECRET_KEY_AUTH);
                 if (userDecoded)
                     return {
                         ...userDecoded
@@ -72,6 +71,6 @@ export const authOptions = {
             }
         }
     },
-    secret: NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
 }
 export default (req, res) => NextAuth(req, res, authOptions)

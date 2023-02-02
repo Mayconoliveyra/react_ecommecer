@@ -213,9 +213,10 @@ const Pedido = ({ pedido, session }) => {
                             <tbody>
                                 {products.map((product) => {
                                     return (
-                                        <tr>
+                                        <tr key={product.id}>
                                             <td>
-                                                <CardPayment key={product.id} product={{ ...product, quantity: product.p_quantity, amount: product.p_amount, amount_promotion: product.p_amount_promotion }} />
+                                                {product.id}
+                                                <CardPayment product={{ ...product, quantity: product.p_quantity, amount: product.p_amount, amount_promotion: product.p_amount_promotion }} />
                                             </td>
                                         </tr>
                                     )

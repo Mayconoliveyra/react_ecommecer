@@ -13,6 +13,6 @@ consign()
     .then("./config/routes.js")
     .into(app)
 
-app.listen(1998, () => {
+app.listen(3030, () => {
     console.log("Backend executando...")
 })

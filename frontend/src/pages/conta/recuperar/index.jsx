@@ -1,7 +1,6 @@
 import jwt from "jwt-simple"
 import Link from 'next/link';
 import { ChevronLeft } from "react-bootstrap-icons";
-const { SECRET_KEY_AUTH } = require("../../../../.env");
 import Head from 'next/head';
 import { getSession } from "next-auth/react";
 import router from "next/router"
@@ -42,7 +41,7 @@ export default function Recover() {
                         initialValues={{ email: "" }}
                         onSubmit={async (values) => {
                             /* Os dados sera convetido em jwt antes de enviar para o backend */
-                            const modelo = jwt.encode(values, SECRET_KEY_AUTH)
+                            const modelo = jwt.encode(values, process.env.SECRET_KEY_AUTH)
                             await storePassword({ userJWT: modelo })
                                 .then((data) => {
                                     /* Redireciona para tela inicial passando a mensagem(msg) */
