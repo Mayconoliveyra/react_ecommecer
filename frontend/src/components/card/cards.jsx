@@ -157,18 +157,23 @@ const CardPaymentSC = styled.div`
             border-bottom: transparent;
         } 
 `
-
 const CardHomeOne = ({ product }) => {
     return (
         <Card margin="2px 1px">
-            <Image padding="5px 0 0 0" height="170px" product={product} />
-            <Description width="100%" product={product} />
+            <Image height="170px" product={product} />
+            <Description product={product} />
             <Promotion product={product} />
             <Price product={product} />
         </Card>
     )
 }
-
+const CardHomeTwo = ({ product }) => {
+    return (
+        <Card nobackground margin="2px 1px">
+            <Image padding="0" height="170px" product={product} />
+        </Card>
+    )
+}
 const CardCarRow = ({ product }) => {
     const { setMyCart } = useContext(MyCartContext)
     const refQuantity = useRef();
@@ -225,7 +230,6 @@ const CardCarRow = ({ product }) => {
         </CardCarRowSC>
     )
 }
-
 const CardPayment = ({ product }) => {
     return (
         <CardPaymentSC>
@@ -269,4 +273,4 @@ const CardPayment = ({ product }) => {
     )
 }
 
-export { CardHomeOne, CardCarRow, CardPayment }
+export { CardHomeOne, CardHomeTwo, CardCarRow, CardPayment }

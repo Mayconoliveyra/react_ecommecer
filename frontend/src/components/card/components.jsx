@@ -14,9 +14,8 @@ const CardSC = styled.div`
     max-height: ${({ maxheight }) => maxheight};
     margin:${({ margin }) => margin};
     padding:${({ padding }) => padding};
-
     @media (max-width: 720px){
-        background-color: #f8f8f8;
+        background-color:${({ nobackground }) => nobackground ? "" : "#f8f8f8"}; ;
         border-radius: 4px;
     }
 `
@@ -117,14 +116,14 @@ const PromotionSC = styled.div`
     padding:${({ padding }) => padding};
 `
 
-const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, background }) => {
+const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, background, nobackground }) => {
     return (
-        <CardSC height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
+        <CardSC height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background} nobackground={nobackground}>
             {children}
         </CardSC>
     )
 }
-const Image = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
+const Image = ({ product, height, width, maxwidth, maxheight, margin, padding, background, nobackground }) => {
     return (
         <ImageSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
             <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />

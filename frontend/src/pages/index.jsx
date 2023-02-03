@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 import { Content } from "../components/containe"
 import { CardsNavOne } from "../components/home/components"
-import { CardHomeOne } from "../components/card/cards"
+import { CardHomeOne, CardHomeTwo } from "../components/card/cards"
 
 import StoreContext from "../context/store";
 
@@ -22,11 +22,16 @@ export default function Home({ camas, brinquedos, cozinhas }) {
             return <CardHomeOne key={item.id} product={item} />
           })}
         </CardsNavOne>
-       {/*  <CardsNavOne name="Produtos em ofertas">
+        <CardsNavOne name="Produtos para Casa">
+          {camas.map((item) => {
+            return <CardHomeTwo key={item.id} product={item} />
+          })}
+        </CardsNavOne>
+        <CardsNavOne name="Produtos em ofertas">
           {camas.map((item) => {
             return <CardHomeOne key={item.id} product={item} />
           })}
-        </CardsNavOne> */}
+        </CardsNavOne>
       </Content>
     </>
   );
