@@ -3,9 +3,10 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import styled from "styled-components"
 
+
 import { Content } from "../../components/containe"
-import { CardOne } from "../../components/card/cardOne"
 import { ButtonYellow } from '../../components/button';
+import { CardCarRow } from "../../components/card/cards"
 
 import { moneyMask } from '../../../masks';
 
@@ -80,7 +81,7 @@ export default function Cart() {
                             <div data-div="cads">
                                 {products.map((product) => {
                                     return (
-                                        <CardOne btnsIncrementer={true} key={product.id} product={product} />
+                                        <CardCarRow key={product.id} product={product} />
                                     )
                                 })}
                             </div>

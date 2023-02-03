@@ -1,15 +1,18 @@
 import styled from "styled-components"
 
-const CardsNavSC = styled.section`
+const CardsNavOneSC = styled.section`
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    padding: 1.5rem;
     margin-top: 1.5rem;
-    border: solid 1px red;
+    padding: 1rem;
+    @media (max-width: 720px){
+        padding: 0.5rem 0.5rem;
+        margin-top: 0;
+        margin-bottom: 3px;
+    }
     [data-div="name-card"] {
-        border: solid 1px red;
-        margin-bottom: 1rem;
+        padding: 0.5rem;
         h2 {
             color: #0F1111;
             font-size: 1.4rem;
@@ -18,20 +21,34 @@ const CardsNavSC = styled.section`
     }
     [data-div="session-cards"] {
         display: grid;
-        grid-template-columns: repeat(5, auto);
+        justify-content: space-between;
+        grid-template-columns: repeat(1,auto);
+        margin-top: 5px;
+        @media (min-width: 350px){
+            grid-template-columns: repeat(2,auto);
+        }
+        @media (min-width: 525px){
+            grid-template-columns: repeat(3,auto);
+        }
+        @media (min-width: 700px){
+            grid-template-columns: repeat(4,auto);
+        }
+        @media (min-width: 900px){
+            grid-template-columns: repeat(5,auto);
+        }
     }
 `
-const CardsNav = ({ children, name }) => {
+const CardsNavOne = ({ children, name }) => {
     return (
-        <CardsNavSC>
+        <CardsNavOneSC>
             <div data-div="name-card">
                 <h2>{name}</h2>
             </div>
             <div data-div="session-cards">
                 {children}
             </div>
-        </CardsNavSC>
+        </CardsNavOneSC>
     )
 }
 
-export { CardsNav }
+export { CardsNavOne }

@@ -6,7 +6,7 @@ import router from "next/router"
 import { useContext } from "react";
 
 import { Content, ContentBorder } from "../../../components/containe"
-import { CardPayment } from "../../../components/card/cardPayment"
+import { CardPayment } from "../../../components/card/cards"
 import { ButtonYellow } from '../../../components/button';
 
 import { moneyMask } from '../../../../masks';

@@ -6,7 +6,7 @@ import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
 import { ContentBorder } from "../containe"
-import { CardPayment } from "../card/cardPayment";
+import { CardPayment } from "../card/cards";
 
 import { getPedidos } from "../../pages/api/cart"
 import { moneyMask } from "../../../masks"
@@ -215,7 +215,6 @@ const Pedido = ({ pedido, session }) => {
                                     return (
                                         <tr key={product.id}>
                                             <td>
-                                                {product.id}
                                                 <CardPayment product={{ ...product, quantity: product.p_quantity, amount: product.p_amount, amount_promotion: product.p_amount_promotion }} />
                                             </td>
                                         </tr>

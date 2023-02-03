@@ -1,12 +1,9 @@
 import Head from "next/head";
 import { useContext } from "react";
 
-import CategoriesNav from "../components/categoriesNav";
-
 import { Content } from "../components/containe"
-import { CardsNav } from "../components/home/components"
-/* import CardsNav from "../components/cardsNav"; */
-import { CardOne } from "../components/card/cardOne"
+import { CardsNavOne } from "../components/home/components"
+import { CardHomeOne } from "../components/card/cards"
 
 import StoreContext from "../context/store";
 
@@ -19,34 +16,18 @@ export default function Home({ camas, brinquedos, cozinhas }) {
       <Head>
         <title>{store.nome ? store.nome : 'Carregando...'}</title>
       </Head>
-      {/* <CategoriesNav /> */}
-      <Content padding="0">
-        {/*  <Content bgWhite noShadow noFlex1> */}
-        <CardsNav name={"Mais procurados"}>
+      <Content padding="0" noShadow>
+        <CardsNavOne name="Produtos que talvez possa lhe interessar">
           {camas.map((item) => {
-            return <CardOne key={item.id} product={item} />
+            return <CardHomeOne key={item.id} product={item} />
           })}
-        </CardsNav>
-        {/*  </Content> */}
-        {/*  <Content bgWhite noShadow noFlex1 margin="1rem 0">
-          <CardsNav name={"Camas"}>
-            {camas.map((item) => {
-              return <CardHome key={item.id} {...item} />
-            })}
-          </CardsNav>
-        </Content> */}
+        </CardsNavOne>
+       {/*  <CardsNavOne name="Produtos em ofertas">
+          {camas.map((item) => {
+            return <CardHomeOne key={item.id} product={item} />
+          })}
+        </CardsNavOne> */}
       </Content>
-
-      {/* <CardsNav name={"Brinquedos"}>
-        {brinquedos.map((item) => {
-          return <CardHome key={item.id} {...item} />
-        })}
-      </CardsNav>
-      <CardsNav name={"Cozinhas"}>
-        {cozinhas && cozinhas.map((item) => {
-          return <CardHome key={item.id} {...item} />
-        })}
-      </CardsNav> */}
     </>
   );
 }
