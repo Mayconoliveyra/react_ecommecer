@@ -2,42 +2,42 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useContext } from "react";
 
-import { CardCarRow } from "../../components/card/cards"
+import { CardThree } from "../../components/card/cards"
+import { Content } from "../../components/containe"
 
 import StoreContext from "../../context/store";
 
 import { getSearch } from "../api/products";
 
-
-const SearchSC = styled.div`
-    [data-div="title"]{
-        >h1 {
-            font-size: 1.3rem;
-            margin: 0.5rem;
-            margin-left: 10px;
-            display:flex;
+const CardsNav = styled.section`
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    [data-div="name-card"] {
+        padding: 0.5rem;
+        padding-bottom: 0.6rem;
+        h2 {
+            color: #0F1111;
+            font-size: 1.4rem;
+            font-family: ${({ theme }) => theme.font.family.bold};
         }
     }
-    [data-div="cads"]{
+    [data-div="session-cards"] {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 0.6rem;
-        @media (min-width: 720px){
-            grid-template-columns: repeat(2, 1fr);
+        justify-content: space-between;
+        grid-template-columns: repeat(1,auto);
+        margin-top: 5px;
+        @media (min-width: 350px){
+            grid-template-columns: repeat(2,auto);
         }
-    }
-
-    [data-div='no-result']{
-        margin: 0.8rem 1rem;
-        h1 {
-            font-size: 1.1rem;
-            margin-left: 10px;
-            display:flex;
-            margin: 0px;
+        @media (min-width: 525px){
+            grid-template-columns: repeat(3,auto);
         }
-        p {
-            font-size: 1rem;
-            margin: 0px;
+        @media (min-width: 700px){
+            grid-template-columns: repeat(4,auto);
+        }
+        @media (min-width: 900px){
+            grid-template-columns: repeat(5,auto);
         }
     }
 `
@@ -49,15 +49,19 @@ export default function Search({ data, search }) {
             <Head>
                 <title>{store.nome ? `${store.nome} : ${search}` : 'Carregando...'}</title>
             </Head>
-            <SearchSC>
+            <Content bgWhite noShadow>
                 {data.length > 0 ?
                     <>
-                        <div data-div="title"><h1>RESULTADOS</h1></div>
-                        <div data-div="cads">
-                            {data.map((product) => {
-                                return <CardCarRow key={product.id} product={product} />
-                            })}
-                        </div>
+                        <CardsNav>
+                            <div data-div="name-card">
+                                <h2>RESULTADOS</h2>
+                            </div>
+                            <div data-div="session-cards">
+                                {data.map((product) => {
+                                    return <CardThree key={product.id} product={product} />
+                                })}
+                            </div>
+                        </CardsNav>
                     </>
                     :
                     <>
@@ -67,7 +71,7 @@ export default function Search({ data, search }) {
                         </div>
                     </>
                 }
-            </SearchSC>
+            </Content>
         </>
     );
 }

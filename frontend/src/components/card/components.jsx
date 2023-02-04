@@ -6,6 +6,7 @@ import { moneyMask } from "../../../masks"
 const CardSC = styled.div`
     display: flex;
     flex-direction: column;
+    border-radius: 4px;
     
     background-color:${({ background }) => background};
     width:${({ width }) => width};
@@ -14,10 +15,12 @@ const CardSC = styled.div`
     max-height: ${({ maxheight }) => maxheight};
     margin:${({ margin }) => margin};
     padding:${({ padding }) => padding};
+    border:${({ border }) => border};
     @media (max-width: 720px){
         background-color:${({ nobackground }) => nobackground ? "" : "#f8f8f8"}; ;
         border-radius: 4px;
     }
+    padding-bottom: 4px;
 `
 const ImageSC = styled(Link)`
     [data="img-img"]{
@@ -118,9 +121,9 @@ const PromotionSC = styled.div`
     padding:${({ padding }) => padding};
 `
 
-const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, background, nobackground }) => {
+const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, background, nobackground, border }) => {
     return (
-        <CardSC height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background} nobackground={nobackground}>
+        <CardSC height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background} nobackground={nobackground} border={border}>
             {children}
         </CardSC>
     )

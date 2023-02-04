@@ -158,7 +158,7 @@ const CardPaymentSC = styled.div`
             border-bottom: transparent;
         } 
 `
-const CardHomeOne = ({ product }) => {
+const CardOne = ({ product }) => {
     return (
         <Card margin="2px 1px">
             <Image height="170px" product={product} />
@@ -168,10 +168,20 @@ const CardHomeOne = ({ product }) => {
         </Card>
     )
 }
-const CardHomeTwo = ({ product }) => {
+const CardTwo = ({ product }) => {
     return (
         <Card nobackground margin="2px 1px">
             <Image padding="0" height="170px" product={product} />
+        </Card>
+    )
+}
+const CardThree = ({ product }) => {
+    return (
+        <Card nobackground border="1px solid #f5f5f5" margin="2px 2px">
+            <Image background="#F8F8F8" height="233px" product={product} />
+            <Description padding="7px 5px 0px 5px" product={product} />
+            <Promotion product={product} />
+            <Price product={product} />
         </Card>
     )
 }
@@ -274,4 +284,4 @@ const CardPayment = ({ product }) => {
     )
 }
 
-export { CardHomeOne, CardHomeTwo, CardCarRow, CardPayment }
+export { CardOne, CardTwo, CardThree, CardCarRow, CardPayment }
