@@ -2,18 +2,17 @@ exports.up = function (knex) {
     return knex.schema
         .createTable("products", (table) => {
             table.increments("id").primary();
-            /*  table.string("name", 120).notNull(); */
-            table.string("name").notNull();
-            table.string("url_img").notNull();
+            table.string("name", 120).notNull();
+            table.string("url_img", 120).notNull();
 
             table.integer("stock").notNull().defaultTo(0);
 
-            table.string("img_1")
-            table.string("img_2")
-            table.string("img_3")
-            table.string("img_4")
-            table.string("img_5")
-            table.string("img_6")
+            table.string("img_1", 120)
+            table.string("img_2", 120)
+            table.string("img_3", 120)
+            table.string("img_4", 120)
+            table.string("img_5", 120)
+            table.string("img_6", 120)
 
             table.float("price").notNull().defaultTo(0);
             table.float("price_promotion").notNull().defaultTo(0);
@@ -49,15 +48,15 @@ exports.up = function (knex) {
                 },
                 {
                     name: "CAMA ARTICULADA MOTORIZADA PILATI ZEUS - ESTRADO LIFE - CASAL, QUEEN E KING SIZE - SEM COLCHÃO",
-                    url_img: "https://images.tcdn.com.br/img/img_prod/600645/cama_articulada_motorizada_pilati_zeus_estrado_life_casal_queen_e_king_size_5613_1_20201021031303.png",
+                    url_img: "https://www.paisefilhos.ind.br/uploads/webp/e606d578f1b91c98c683a1888f33ed52.webp",
                     price: 295.9,
                     price_promotion: 266.31,
                     promotion: false,
                     id_category: 1
                 },
                 {
-                    name: "Fohu cama infantil de madeira de carvalho moderna, 3 unidades com cama com escadas cama de cobertura conjuntos de móveis para meninos e meninas",
-                    url_img: "https://ae01.alicdn.com/kf/H2567af728122444c8cb2b1797b4beec18/Fohu-cama-infantil-de-madeira-de-carvalho-moderna-3-unidades-com-cama-com-escadas-cama-de.jpg_Q90.jpg_.webp",
+                    name: "Fohu cama infantil de madeira de carvalho moderna, 3 unidades com cama com escadas cama de cobertura conjuntos de móveis",
+                    url_img: "https://www.paisefilhos.ind.br/uploads/webp/e606d578f1b91c98c683a1888f33ed52.webp",
                     price: 295.9,
                     price_promotion: 266.31,
                     promotion: false,
@@ -90,7 +89,7 @@ exports.up = function (knex) {
                 },
                 {
                     name: "JOGO AÇO INOX TRAMONTINA COZINHA E MESA 7PÇS 64310/080",
-                    url_img: "https://static3.tcdn.com.br/img/img_prod/587522/jogo_aco_inox_tramontina_cozinha_e_mesa_7pcs_64310_080_9385_1_20190207112535.png",
+                    url_img: "https://www.paisefilhos.ind.br/uploads/webp/e606d578f1b91c98c683a1888f33ed52.webp",
                     price: 295.9,
                     price_promotion: 266.31,
                     promotion: true,
@@ -226,7 +225,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg"
                 },
                 {
-                    name: "Mini Desktop PC Qcta-Core i9 9880H, Windows 11 Mini Computador, 16GB DDR4 RAM 512GB NVME SSD, UHD Gráficos 630,HDMI,DP,USB...",
+                    name: "Mini Desktop PC Qcta-Core i9 9880H, Windows 11 Mini Computador, 16GB DDR4 RAM 512GB NVME SSD, UHD Gráficos",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -352,7 +351,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg"
                 },
                 {
-                    name: "Mini Pc Beelink Gk35 128gb Ssd 8gb Ram Processador Intel Celeron J4205 Sistema Operacional Windows 10 Pro Conectividade Se...",
+                    name: "Mini Pc Beelink Gk35 128gb Ssd 8gb Ram Processador Intel Celeron J4205 Sistema Operacional Windows 10 Pro",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -394,7 +393,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg"
                 },
                 {
-                    name: "Pc Gamer Intel Core i5 10400F - 4.30 GHz, 16GB RAM Gamer DDR4, Nvidia 4GB, SSD 512GB, Fonte 500w, Gabinete com Led, Air Co...",
+                    name: "Pc Gamer Intel Core i5 10400F - 4.30 GHz, 16GB RAM Gamer DDR4, Nvidia 4GB, SSD 512GB, Fonte 500w, Gabinete",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -646,7 +645,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg"
                 },
                 {
-                    name: "Beelink Mini PC T4 Pro, Celeron N3350 até 2,4 GHz, mini computador desktop 4 GB DDR + 64 GB, PC pequeno suporta Dual HDMI,...",
+                    name: "Beelink Mini PC T4 Pro, Celeron N3350 até 2,4 GHz, mini computador desktop 4 GB DDR + 64 GB, PC pequeno suporta",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -730,7 +729,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg"
                 },
                 {
-                    name: "COMPUTADOR BUSINESS B100 - CELERON DUAL CORE J1800 2.41GHZ 4GB DDR3 SODIMM HD 500GB 2 SERIAL 1 PARALELA FONTE 200W - SKUL",
+                    name: "COMPUTADOR BUSINESS B100 - CELERON DUAL CORE J1800 2.41GHZ 4GB DDR3 SODIMM HD 500GB 2 SERIAL 1 PARALELA FONTE 200W",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -758,7 +757,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg"
                 },
                 {
-                    name: "Mini PC Stick Intel Celeron N4000 (até 2,6 GHz), Windows 10 Pro, Mini Stick de 4 GB DDR4 64 GB eMMC Micro Desktop Formato ...",
+                    name: "Mini PC Stick Intel Celeron N4000 (até 2,6 GHz), Windows 10 Pro, Mini Stick de 4 GB DDR4 64 GB eMMC Micro Desktop",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,
@@ -842,7 +841,7 @@ exports.up = function (knex) {
                     img_6: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg"
                 },
                 {
-                    name: "Mini PC para Windows 10 Home, Mini Computador 8GB LPDDR4 128GB M.2 2242 SSD para Celeron J4125 Quad Core, Suporte Ultra HD...",
+                    name: "Mini PC para Windows 10 Home, Mini Computador 8GB LPDDR4 128GB M.2 2242 SSD para Celeron J4125 Quad Core, Suporte",
                     price: 2,
                     price_promotion: 1,
                     promotion: false,

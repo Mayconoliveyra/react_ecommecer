@@ -132,7 +132,7 @@ exports.up = function (knex) {
                     gt_client_secret: "Client_Secret_85c8e14a80e7682564b88513045a22fb81118307",
 
                     url_site: "http://10.0.0.200:3000",
-                    client_database: "db_challenger",
+                    client_database: "db2_cazimi",
 
                     client_id: "H7eH2CuTNjdKUaHsc2aE93tXsNcT94",
                     client_secret: "JLT8LqVeKHHXxrJXiutm6pVxR3eyJS",

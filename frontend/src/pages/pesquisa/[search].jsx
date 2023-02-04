@@ -2,7 +2,7 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useContext } from "react";
 
-import { CardOne } from "../../components/card/cardOne"
+import { CardCarRow } from "../../components/card/cards"
 
 import StoreContext from "../../context/store";
 
@@ -55,7 +55,7 @@ export default function Search({ data, search }) {
                         <div data-div="title"><h1>RESULTADOS</h1></div>
                         <div data-div="cads">
                             {data.map((product) => {
-                                return <CardOne key={product.id} product={product} />
+                                return <CardCarRow key={product.id} product={product} />
                             })}
                         </div>
                     </>
@@ -76,7 +76,7 @@ export async function getServerSideProps(req) {
     const { search } = req.params
 
     const data = await getSearch(search)
-        
+
     if (!data) {
         return {
             notFound: true,

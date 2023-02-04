@@ -96,7 +96,8 @@ const CardPaymentSC = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0.3rem 0.8rem;
+            padding: 5px;
+            width: 120px;
             img {
                 max-width: 85px;
                 max-height: 85px;
