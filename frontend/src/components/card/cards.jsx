@@ -206,7 +206,7 @@ const CardCarRow = ({ product }) => {
     return (
         <CardCarRowSC>
             <div data="img-name-price">
-                <Image padding="0" height="170px" product={product} />
+                <Image padding="0" height="170px" width="170px" product={product} />
                 <div data="name-price">
                     <Description product={product} />
                     <Price product={product} />

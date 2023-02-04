@@ -20,22 +20,24 @@ const CardSC = styled.div`
     }
 `
 const ImageSC = styled(Link)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
+    [data="img-img"]{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
 
-    background-color:${({ background }) => background};
-    width:${({ width }) => width};
-    height:${({ height }) => height};
-    max-width: ${({ maxwidth }) => maxwidth};
-    max-height: ${({ maxheight }) => maxheight};
-    margin:${({ margin }) => margin};
-    padding:${({ padding }) => padding};
-    img {
-        margin: 5px;
-        max-width: 160px;
-        max-height: 160px;
+        background-color:${({ background }) => background};
+        width:${({ width }) => width};
+        height:${({ height }) => height};
+        max-width: ${({ maxwidth }) => maxwidth};
+        max-height: ${({ maxheight }) => maxheight};
+        margin:${({ margin }) => margin};
+        padding:${({ padding }) => padding};
+        img {
+            margin: 5px;
+            max-width: 160px;
+            max-height: 160px;
+        }
     }
 `
 const DescriptionSC = styled(Link)`
@@ -123,10 +125,12 @@ const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, b
         </CardSC>
     )
 }
-const Image = ({ product, height, width, maxwidth, maxheight, margin, padding, background, nobackground }) => {
+const Image = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
     return (
         <ImageSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
-            <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />
+            <div data="img-img">
+                <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />
+            </div>
         </ImageSC>
     )
 }
