@@ -1,5 +1,6 @@
 module.exports = {
   reactStrictMode: true,
+  images: { domains: ['m.media-amazon.com'], formats: ['image/avif', 'image/webp'], },
   env: {
     URL_SERVER: "http://10.0.0.200:3030",
     SECRET_KEY_SERVER: "EbGdmDALkB7x7ZLycSNinFCnUZWHjQH6NNe3rq2H",

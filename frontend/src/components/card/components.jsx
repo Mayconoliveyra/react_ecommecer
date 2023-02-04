@@ -128,11 +128,11 @@ const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, b
         </CardSC>
     )
 }
-const Image = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
+const Img = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
     return (
         <ImageSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
             <div data="img-img">
-                <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />
+                <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} title={product.name ? product.name : "Sem descrição"} alt={product.name ? product.name : "Sem descrição"} />
             </div>
         </ImageSC>
     )
@@ -175,4 +175,4 @@ const Promotion = ({ product, height, width, maxwidth, maxheight, margin, paddin
         )
 }
 
-export { Card, Image, Description, Price, Promotion }
+export { Card, Img, Description, Price, Promotion }

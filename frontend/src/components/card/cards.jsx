@@ -3,7 +3,7 @@ import { parseCookies } from "nookies";
 import { useContext, useRef, useState } from "react"
 import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
 
-import { Card, Image, Description, Price, Promotion } from "./components"
+import { Card, Img, Description, Price, Promotion } from "./components"
 
 import { getCartTemp, storeQuantity } from "../../pages/api/cart"
 import MyCartContext from "../../context/myCart"
@@ -161,7 +161,7 @@ const CardPaymentSC = styled.div`
 const CardOne = ({ product }) => {
     return (
         <Card margin="2px 1px">
-            <Image height="170px" product={product} />
+            <Img height="170px" product={product} />
             <Description product={product} />
             <Promotion product={product} />
             <Price product={product} />
@@ -171,14 +171,14 @@ const CardOne = ({ product }) => {
 const CardTwo = ({ product }) => {
     return (
         <Card nobackground margin="2px 1px">
-            <Image padding="0" height="170px" product={product} />
+            <Img padding="0" height="170px" product={product} />
         </Card>
     )
 }
 const CardThree = ({ product }) => {
     return (
         <Card nobackground border="1px solid #f5f5f5" margin="2px 2px">
-            <Image background="#F8F8F8" height="233px" product={product} />
+            <Img background="#F8F8F8" height="233px" product={product} />
             <Description padding="7px 5px 0px 5px" product={product} />
             <Promotion product={product} />
             <Price product={product} />
@@ -217,7 +217,7 @@ const CardCarRow = ({ product }) => {
     return (
         <CardCarRowSC>
             <div data="img-name-price">
-                <Image padding="0" height="170px" width="170px" product={product} />
+                <Img padding="0" height="170px" width="170px" product={product} />
                 <div data="name-price">
                     <Description product={product} />
                     <Price product={product} />
