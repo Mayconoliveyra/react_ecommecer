@@ -2,7 +2,7 @@ module.exports = {
   reactStrictMode: true,
   images: { domains: ['m.media-amazon.com'], formats: ['image/avif', 'image/webp'], },
   env: {
-    URL_SERVER: "http://10.0.0.200:3030",
+    URL_SERVER: "http://testedev.servehttp.com:3030",
     SECRET_KEY_SERVER: "EbGdmDALkB7x7ZLycSNinFCnUZWHjQH6NNe3rq2H",
     SECRET_KEY_AUTH: "QJwAh9mWwx2U6o5bBWet9JgJDfJo6pdfF3AXZF9S",
     NEXTAUTH_SECRET: "QmfLgAWu7DGjNuUBP02mTD47KP30y4",
