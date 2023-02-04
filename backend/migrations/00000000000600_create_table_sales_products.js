@@ -5,15 +5,15 @@ exports.up = function (knex) {
             table.integer('id_sale').unsigned().notNull().references('id').inTable('sales_header')
             table.integer('id_product').unsigned().notNull().references('id').inTable('products')
 
-            table.string("name").notNull();
-            table.string("url_img").notNull();
+            table.string("name", 120).notNull();
+            table.string("url_img", 120).notNull();
             table.integer("stock").notNull()
-            table.string("img_1")
-            table.string("img_2")
-            table.string("img_3")
-            table.string("img_4")
-            table.string("img_5")
-            table.string("img_6")
+            table.string("img_1", 120)
+            table.string("img_2", 120)
+            table.string("img_3", 120)
+            table.string("img_4", 120)
+            table.string("img_5", 120)
+            table.string("img_6", 120)
             table.float("price").notNull()
             table.float("price_promotion").notNull()
             table.boolean("promotion", 1).notNull()
