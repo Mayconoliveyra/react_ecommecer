@@ -87,7 +87,7 @@ exports.up = function (knex) {
                     email_pass: "Softconnect",
 
                     url_site: "Softconnect",
-                    client_database: "Softconnect",
+                    client_database: "softconnect",
 
                     client_id: "Softconnect",
                     client_secret: "Softconnect",
@@ -132,12 +132,69 @@ exports.up = function (knex) {
                     gt_client_secret: "Client_Secret_85c8e14a80e7682564b88513045a22fb81118307",
 
                     url_site: "http://10.0.0.200:3000",
-                    client_database: "db2_cazimi",
+                    client_database: "00002_site",
 
                     client_id: "H7eH2CuTNjdKUaHsc2aE93tXsNcT94",
                     client_secret: "JLT8LqVeKHHXxrJXiutm6pVxR3eyJS",
                 },
+                {
+                    id: 3,
+                    nome: "Loja3",
+                    url_logo: "Loja3",
+                    cpf: "116.751.744-07",
+                    cep: "58046-520",
+                    logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
+                    bairro: "Portal do Sol",
+                    localidade: "João Pessoa",
+                    uf: "PB",
+                    numero: "S/N",
 
+                    entrega_frete: false,
+                    entrega_retirada: false,
+
+                    pgt_pix: false,
+                    pgt_cartao: false,
+                    pgt_loja: false,
+                    pgt_entrega: false,
+
+                    email_user: "Loja3",
+                    email_pass: "Loja3",
+
+                    url_site: "Loja3",
+                    client_database: "00003_site",
+
+                    client_id: "Loja3",
+                    client_secret: "Loja3",
+                },
+                {
+                    id: 4,
+                    nome: "Loja4",
+                    url_logo: "Loja4",
+                    cpf: "116.751.744-07",
+                    cep: "58046-520",
+                    logradouro: "Rua Empresário Paulo Miranda d' Oliveira",
+                    bairro: "Portal do Sol",
+                    localidade: "João Pessoa",
+                    uf: "PB",
+                    numero: "S/N",
+
+                    entrega_frete: false,
+                    entrega_retirada: false,
+
+                    pgt_pix: false,
+                    pgt_cartao: false,
+                    pgt_loja: false,
+                    pgt_entrega: false,
+
+                    email_user: "Loja4",
+                    email_pass: "Loja4",
+
+                    url_site: "Loja4",
+                    client_database: "00004_site",
+
+                    client_id: "Loja4",
+                    client_secret: "Loja4",
+                },
             ]);
         });
 };

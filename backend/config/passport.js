@@ -53,7 +53,7 @@ const validateStore = (store) => {
         }
 }
 
-const softconnect = knex(config("db_softconnect"))
+const softconnect = knex(config("softconnect"))
 
 module.exports = app => {
         const params = {
