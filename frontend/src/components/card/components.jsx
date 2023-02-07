@@ -53,6 +53,13 @@ const DescriptionSC = styled(Link)`
         margin: 3px 0;
         font-size: 1rem;
         font-family:${({ theme }) => theme.font.family.medium};
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp:${({ height }) => height ? "1" : ''};
+        -webkit-box-orient: vertical;
     }
 
     background-color:${({ background }) => background};
@@ -120,6 +127,26 @@ const PromotionSC = styled.div`
     margin:${({ margin }) => margin};
     padding:${({ padding }) => padding};
 `
+const BtnAddSC = styled(Link)`
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    border-radius: 0.3rem;
+    padding: 0.7rem 1rem;
+    margin: 0 0.2rem;
+    margin-top:auto;
+
+    background: #FFD814;
+    border-color: #FCD200;  
+    
+    background-color:${({ background }) => background};
+    width:${({ width }) => width};
+    height:${({ height }) => height};
+    max-width: ${({ maxwidth }) => maxwidth};
+    max-height: ${({ maxheight }) => maxheight};
+    margin:${({ margin }) => margin};
+    padding:${({ padding }) => padding};
+`
 
 const Card = ({ children, height, width, maxwidth, maxheight, margin, padding, background, nobackground, border }) => {
     return (
@@ -174,5 +201,11 @@ const Promotion = ({ product, height, width, maxwidth, maxheight, margin, paddin
             </PromotionSC >
         )
 }
-
-export { Card, Img, Description, Price, Promotion }
+const BtnAdd = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
+    return (
+        <BtnAddSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
+            Adicionar
+        </BtnAddSC>
+    )
+}
+export { Card, Img, Description, Price, Promotion, BtnAdd }

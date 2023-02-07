@@ -1,47 +1,87 @@
 import styled from "styled-components"
+import { CardOne, CardTwo, CardSugOne } from "../card/cards"
 
-const SectionSC = styled.section`
+const CardsNavOneSC = styled.section`
     display: flex;
     flex-direction: column;
-    margin: 1rem 0;
-    margin-left: 15px;
-    /* margin-top: 12px; */
-    max-width: calc(100vw - 15px);
-    overflow: hidden;
-    [data-div="name"] {
+    background-color: #fff;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    @media (max-width: 720px){
+        padding: 0.5rem 0.5rem;
+        margin-top: 0;
+        margin-bottom: 3px;
+    }
+    [data-div="name-card"] {
+        padding: 0.5rem;
         h2 {
-            margin: 0px;
-            font-size: ${({ theme }) => theme.font.sizes.medium};
-            font-family: ${({ theme }) => theme.font.family.medium};
+            color: #0F1111;
+            font-size: 1.4rem;
+            font-family: ${({ theme }) => theme.font.family.bold};
         }
     }
     [data-div="session-cards"] {
-        display: flex;
-        margin-top: 10px;
-        overflow-x: scroll;
-        ::-webkit-scrollbar,             
-        ::-webkit-scrollbar-button,      
-        ::-webkit-scrollbar-track,        
-        ::-webkit-scrollbar-track-piece, 
-        ::-webkit-scrollbar-thumb,       
-        ::-webkit-scrollbar-corner {      
-             background-color:transparent;
-             height: 0px;
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: repeat(1,auto);
+        margin-top: 5px;
+        @media (min-width: 350px){
+            grid-template-columns: repeat(2,auto);
+        }
+        @media (min-width: 525px){
+            grid-template-columns: repeat(3,auto);
+        }
+        @media (min-width: 700px){
+            grid-template-columns: repeat(4,auto);
+        }
+        @media (min-width: 900px){
+            grid-template-columns: repeat(5,auto);
         }
     }
-    [data-div="session-cards"]:last-child{
-        margin-bottom: 10px;
-    }
 `
-export default function CardsNav({ children, name }) {
-    return (
-        <SectionSC>
-            <div data-div="name">
-                <h2>{name}</h2>
-            </div>
-            <div data-div="session-cards">
-                {children}
-            </div>
-        </SectionSC>
-    )
+const CardNavOne = ({ title, products }) => {
+    if (products && products.length > 0)
+        return (
+            <CardsNavOneSC>
+                <div data-div="name-card">
+                    <h2>{title}</h2>
+                </div>
+                <div data-div="session-cards">
+                    {products.map((item) => {
+                        return <CardOne key={item.id} product={item} />
+                    })}
+                </div>
+            </CardsNavOneSC>
+        )
 }
+const CardNavTwo = ({ title, products }) => {
+    if (products && products.length > 0)
+        return (
+            <CardsNavOneSC>
+                <div data-div="name-card">
+                    <h2>{title}</h2>
+                </div>
+                <div data-div="session-cards">
+                    {products.map((item) => {
+                        return <CardTwo key={item.id} product={item} />
+                    })}
+                </div>
+            </CardsNavOneSC>
+        )
+}
+const CardNavSugOne = ({ title, products }) => {
+    if (products && products.length > 0)
+        return (
+            <CardsNavOneSC>
+                <div data-div="name-card">
+                    <h2>{title}</h2>
+                </div>
+                <div data-div="session-cards">
+                    {products.map((item) => {
+                        return <CardSugOne key={item.id} product={item} />
+                    })}
+                </div>
+            </CardsNavOneSC>
+        )
+}
+export { CardNavOne, CardNavTwo, CardNavSugOne }

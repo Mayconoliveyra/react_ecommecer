@@ -3,7 +3,7 @@ import { parseCookies } from "nookies";
 import { useContext, useRef, useState } from "react"
 import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
 
-import { Card, Img, Description, Price, Promotion } from "./components"
+import { Card, Img, Description, Price, Promotion, BtnAdd } from "./components"
 
 import { getCartTemp, storeQuantity } from "../../pages/api/cart"
 import MyCartContext from "../../context/myCart"
@@ -283,5 +283,16 @@ const CardPayment = ({ product }) => {
         </CardPaymentSC>
     )
 }
+const CardSugOne = ({ product }) => {
+    return (
+        <Card margin="2px 1px">
+            <Img height="170px" product={product} />
+            <Description height="1.5rem" product={product} />
+            <Promotion product={product} />
+            <Price product={product} />
+            <BtnAdd product={product} />
+        </Card>
+    )
+}
 
-export { CardOne, CardTwo, CardThree, CardCarRow, CardPayment }
+export { CardOne, CardTwo, CardThree, CardCarRow, CardPayment, CardSugOne }

@@ -1,11 +1,13 @@
 import styled from "styled-components"
 import { ChevronDown, ChevronUp } from "react-bootstrap-icons";
+import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 import moment from "moment"
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-import { ContentBorder } from "../containe"
+import { ContentBorder, Content } from "../containe"
 import { CardPayment } from "../card/cards";
 
 import { getPedidos } from "../../pages/api/cart"
@@ -52,6 +54,24 @@ const StatusSC = styled.span`
     font-size: ${({ theme }) => theme.font.sizes.medium};
     font-family: ${({ theme }) => theme.font.family.medium};
 `
+const VazioSC = styled.div`
+    display: flex;
+    [data="text"]{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 1.1rem;
+
+        [data="recomendacoes"]{
+            margin: 0.7rem 0;
+            margin-left: 0.5rem;
+            a{
+                font-size: 1.2rem;
+                color: #007185;
+            }
+        }
+    }
+`;
 const Pedido = ({ pedido, session }) => {
     const [iconChevro, setIconChevro] = useState(true)
     const [products, setProducts] = useState([])
@@ -228,5 +248,23 @@ const Pedido = ({ pedido, session }) => {
         </PedidoSC >
     )
 }
-
-export { Pedido }
+const CartVazio = ({ title }) => {
+    return (
+        <Content noShadow bgWhite noFlex1 padding="1.5rem 0.3rem 1.5em 0">
+            <VazioSC>
+                <div data="gif">
+                    <Image src={'/assets/images/cart_vazio.gif'} width={160} height={160} alt="logo" quality={100} priority={true} />
+                </div>
+                <div data="text">
+                    <div>
+                        <span>{title}</span>
+                    </div>
+                    <div data="recomendacoes">
+                        <Link href="/">Veja as recomendações</Link>
+                    </div>
+                </div>
+            </VazioSC>
+        </Content>
+    )
+}
+export { Pedido, CartVazio }

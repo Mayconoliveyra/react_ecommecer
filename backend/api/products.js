@@ -40,7 +40,7 @@ module.exports = (app) => {
         }
 
         try {
-            const limitCat = 11
+            const limitCat = 10
             const whereRaw = 'p.disabled = False AND p.deleted_at IS NULL ORDER BY id DESC'
 
             const camas = await app.db({ p: table, c: 'categories' })

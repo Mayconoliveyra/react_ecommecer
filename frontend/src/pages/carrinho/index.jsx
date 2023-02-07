@@ -7,8 +7,11 @@ import styled from "styled-components"
 import { Content } from "../../components/containe"
 import { ButtonYellow } from '../../components/button';
 import { CardCarRow } from "../../components/card/cards"
+import { CartVazio } from '../../components/conta/components';
+import { CardNavSugOne } from '../../components/cardsNav';
 
 import { moneyMask } from '../../../masks';
+import { getAll } from '../api/products';
 
 import MyCartContext from "../../context/myCart"
 
@@ -38,22 +41,8 @@ const SectionProductSC = styled.div`
         grid-template-columns: repeat(1fr);
         gap: 0.4rem;
     }
-
-    [data-div='cart-vazio']{
-        margin: 0.8rem 1rem;
-        h1 {
-            font-size: 1.1rem;
-            margin-left: 10px;
-            display:flex;
-            margin: 0px;
-        }
-        p {
-            font-size: 1rem;
-            margin: 0px;
-        }
-    }
 `
-export default function Cart() {
+export default function Cart({ camas, brinquedos, cozinhas }) {
     const { myCart: { products, totals } } = useContext(MyCartContext)
 
     return (
@@ -61,49 +50,57 @@ export default function Cart() {
             <Head>
                 <title>Carrinho de compras</title>
             </Head>
-            <Content bgWhite padding="0 0.5rem 0.5rem 0.5rem" >
-                {products && products.length > 0 && (
-                    <>
-                        <SubTotal>
-                            Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
-                        </SubTotal>
-                        <ButtonYellow margin="0 0 1.5rem 0">
+
+            {products && products.length > 0 ?
+                <Content bgWhite noShadow padding="0 0.5rem 0.5rem 0.5rem" >
+                    {products && products.length > 0 && (
+                        <>
+                            <SubTotal>
+                                Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
+                            </SubTotal>
+                            <ButtonYellow margin="0 0 1.5rem 0">
+                                <Link href="carrinho/fechar">
+                                    Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                                </Link>
+                            </ButtonYellow>
+                        </>
+                    )}
+                    <SectionProductSC>
+                        <div data-div="cads">
+                            {products.map((product) => {
+                                return (
+                                    <CardCarRow key={product.id} product={product} />
+                                )
+                            })}
+                        </div>
+                    </SectionProductSC>
+
+                    {products && products.length > 5 && (
+                        <ButtonYellow margin="1.5rem 0 1rem 0">
                             <Link href="carrinho/fechar">
                                 Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
                             </Link>
                         </ButtonYellow>
-                    </>
-                )}
-
-                <SectionProductSC>
-                    {products && products.length > 0 ?
-                        <>
-                            <div data-div="cads">
-                                {products.map((product) => {
-                                    return (
-                                        <CardCarRow key={product.id} product={product} />
-                                    )
-                                })}
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div data-div='cart-vazio'>
-                                <h1>O seu carrinho está vazio :(</h1>
-                                <p>...</p>
-                            </div>
-                        </>
-                    }
-                </SectionProductSC>
-
-                {products && products.length > 5 && (
-                    <ButtonYellow margin="1.5rem 0 1rem 0">
-                        <Link href="carrinho/fechar">
-                            Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
-                        </Link>
-                    </ButtonYellow>
-                )}
+                    )}
+                </Content>
+                :
+                <Content noShadow padding="0">
+                    <CartVazio title="Seu carrinho está vazio" />
+                </Content>
+            }
+            <Content noShadow padding="0.5rem 0">
+                <CardNavSugOne title="Produtos mais vendidos" products={camas} />
+                <CardNavSugOne title="O que outros clientes estão comprando" products={brinquedos} />
+                <CardNavSugOne title="Produtos em ofertas" products={cozinhas} />
             </Content>
         </>
     )
+}
+
+export async function getServerSideProps() {
+    const data = await getAll()
+
+    return {
+        props: { ...data },
+    }
 }

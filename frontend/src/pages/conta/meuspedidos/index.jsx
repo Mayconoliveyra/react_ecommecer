@@ -5,9 +5,12 @@ import { getSession } from "next-auth/react";
 import { ChevronLeft } from "react-bootstrap-icons";
 
 import { ContentHeader, Content } from "../../../components/containe"
-import { Pedido } from "../../../components/conta/components"
+import { Pedido, CartVazio } from "../../../components/conta/components"
+import { CardNavSugOne } from '../../../components/cardsNav';
+
 
 import { getPedidos } from "../../api/cart"
+import { getAll } from "../../api/products"
 import { useState } from 'react';
 import { showError } from "../../../../global"
 
@@ -28,7 +31,7 @@ const VerMais = styled.div`
     }
 `
 
-export default function Requests({ dt_pedidos, totals, session }) {
+export default function Requests({ dt_pedidos, totals, session, camas, brinquedos, cozinhas }) {
     const [loading, setLoading] = useState(true);
     const [nextPage, setNextPage] = useState(1);
     const [limitPage] = useState(10);
@@ -54,7 +57,7 @@ export default function Requests({ dt_pedidos, totals, session }) {
             <Head>
                 <title>Meus pedidos</title>
             </Head>
-            <Content padding="0">
+            <Content noShadow padding="0">
                 <ContentHeader padding="1.3rem">
                     <Link href="/">
                         <ChevronLeft data="icon-left" />
@@ -63,13 +66,23 @@ export default function Requests({ dt_pedidos, totals, session }) {
                         </h2>
                     </Link>
                 </ContentHeader>
-                {pedidos && pedidos.map((pedido) => {
+                {pedidos && pedidos.length > 0 ? pedidos.map((pedido) => {
                     return (
                         <Content bgWhite noShadow noFlex1 key={pedido.id} margin="0 0 0.5rem 0;" padding="1rem;">
                             <Pedido pedido={pedido} session={session} />
                         </Content>
                     )
-                })}
+
+                }) :
+                    <>
+                        <CartVazio title="Seu histórico está vazio" />
+                        <Content noShadow padding="0.5rem 0">
+                            <CardNavSugOne title="Produtos mais vendidos" products={camas} />
+                            <CardNavSugOne title="O que outros clientes estão comprando" products={brinquedos} />
+                            <CardNavSugOne title="Produtos em ofertas" products={cozinhas} />
+                        </Content>
+                    </>
+                }
                 {parseFloat(totals / limitPage) > nextPage &&
                     <VerMais>
                         <button type='button' onClick={() => handlePage()}>Explorar mais</button>
@@ -91,9 +104,11 @@ export async function getServerSideProps({ req }) {
         }
     }
 
+    const data = await getAll()
+
     const { dt_pedidos, totals } = await getPedidos({ page: 1, limi: 10, session: session })
 
     return {
-        props: { dt_pedidos, totals, session },
+        props: { dt_pedidos, totals, session, ...data },
     }
 }
