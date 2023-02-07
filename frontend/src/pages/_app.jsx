@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }) {
 
   /* Ajusta o template de acordo com a rota que está sendo acessada (TemplateContext) */
   useEffect(() => {
-    console.log(pathname)
+    /* console.log(pathname) */
     switch (pathname) {
       case '/login':
       case '/carrinho':
