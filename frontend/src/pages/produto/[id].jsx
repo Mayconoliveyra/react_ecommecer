@@ -1,7 +1,7 @@
 import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { ButtonYellow } from "../../components/button"
@@ -97,12 +97,12 @@ const CardSC = styled.div`
         }
     }
 `
-export default function Product({ data, vendidos, semana, oferta }) {
-    const [product] = useState(data)
+export default function Product({ vendidos, semana, oferta }) {
+    const [product, setProduct] = useState({})
     const { setMyCart } = useContext(MyCartContext)
     const router = useRouter()
     const { myCartId } = parseCookies();
-    const [urlImg, setUrlImg] = useState(data.url_img)
+    const [urlImg, setUrlImg] = useState(null)
 
     const handleAddMyCart = async (id) => {
         await storeQuantity(id, 1, myCartId)
@@ -113,10 +113,24 @@ export default function Product({ data, vendidos, semana, oferta }) {
         setUrlImg(url)
     }
 
+    useEffect(() => {
+        getProduct()
+    }, [router])
+
+    const getProduct = async () => {
+        if (!router || !router.query || !router.query.id || !Number(router.query.id >= 1))
+            router.push("/")
+        const data = await getByID(router.query.id)
+        if (!data && !data.id)
+            router.push("/")
+        setUrlImg(data.url_img)
+        setProduct(data)
+    }
+
     return (
         <>
             <Head>
-                <title>{`${product.name}`}</title>
+                <title>{product.name ? product.name : 'Carregando...'}</title>
             </Head>
             <Content noShadow padding="0">
                 <Content maxwidth="40rem" bgWhite noShadow padding="1rem">
@@ -215,18 +229,10 @@ export default function Product({ data, vendidos, semana, oferta }) {
     );
 }
 
-export async function getServerSideProps(req) {
-    const { id } = req.params
-    const data = await getByID(id)
-    const data1 = await getAll()
-
-    if (!data) {
-        return {
-            notFound: true,
-        }
-    }
+export async function getServerSideProps() {
+    const data = await getAll()
 
     return {
-        props: { data, ...data1 },
+        props: { ...data },
     }
 }
