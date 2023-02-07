@@ -1,53 +1,53 @@
 import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
-import { Dash, Plus } from "react-bootstrap-icons"
 
+import { ButtonYellow } from "../../components/button"
 import { Content } from "../../components/containe"
+import { CardNavSugOne } from "../../components/cardsNav";
 
 import { moneyMask } from "../../../masks"
 import { getByID } from "../api/products"
 import { getCartTemp, storeQuantity } from "../api/cart";
+import { getAll } from "../api/products";
 
 import MyCartContext from "../../context/myCart";
 
 const CardSC = styled.div`
-    border: solid 1px red;
     [data="card-name"]{
         h1{
             font-size: 1.2rem;
         } 
     }
     [data="card-img"]{
-        padding: 1.5rem 0;
+        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border: solid 1px red;
         img{
             max-width: 100%;
-            max-height: 400px;
-            border: solid 1px red;
+            max-height: 300px;
         }
     }
     [data="nav-imgs"]{
         ul{
             display: flex;
             justify-content: center;
-            border: solid 1px red;
             li{
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 5px 7px;
-                width: 55px;
-                height: 55px;
-                border: 1px solid #0F1111;;
-                border-radius: 8px;
-                span{
+                button{
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 10px 4px;
+                    width: 60px;
+                    height: 60px;
+                    border: solid 1px #D5D9D9;
+                    border-radius: 8px;
+
+                    background-color: transparent;
                     img{
                         max-width: 50px;
                         max-height: 50px;
@@ -56,161 +56,61 @@ const CardSC = styled.div`
             }
         }
     }
-`
-const NameSC = styled.div`
-    h1{
-        font-size: 1.2rem;
-    }
-    border: solid 1px red;
-`
-
-const SectionSC = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    [data-div="product"]{
-        flex: 1;
-        padding: 1rem;
-        max-width: 630px;
-        width: 100%;
-
-        [data-div="img-main"] {
+    [data="price"]{
+        [data="oferta"]{
             display: flex;
-            justify-content: center;
-            border: solid 1px #EDEDED;
-           > div {
-                max-width: 613px;
-                max-height: 613px;
-                position:relative;
-                padding: 1rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                span {
-                    font-size: ${({ theme }) => theme.font.sizes.xsmall};
-                    color: #FFFFFF;
-                    position:absolute;
-                    background-color: #77D500;
-                    border-radius: 3px;
-                    border-top-left-radius: 0px;
-                    padding: 5px 10px;
-                    top: 0px;
-                    left: -1px;
-                }
-                img {
-                    width: 100%;
-                }
-            }  
-        }
-
-        [data-div="name"] {
-            margin-top: 1rem;
-
-            h2 {
-                font-size: ${({ theme }) => theme.font.sizes.large};
+            flex-direction: column;
+    
+            [data="oft-t"]{
+                color: #CC0C39;
+                font-size: 1.2rem;
                 font-family: ${({ theme }) => theme.font.family.medium};
-                color: ${({ theme }) => theme.colors.secondaryColor};
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: normal;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-            }   
-        }
-
-        [data-div="description"] {
-            p{
-                color: #565c69;
-                font-size: ${({ theme }) => theme.font.sizes.small};
-                margin: 0px;
-                padding: 0px;
+            }
+           
+            [data="p-r-v"]{
+                display: flex;
+                span{
+                    font-family: ${({ theme }) => theme.font.family.regular};
+                    font-size: 2.2rem;
+                }
+                [data="red"]{
+                    color: #CC0C39;
+                    letter-spacing: 1px;
+                    margin-right: 10px;
+                }
+                [data="rs"]{
+                    font-size: 1rem;
+                    padding-top: 0.4rem;
+                    font-family: ${({ theme }) => theme.font.family.medium};
+                }
+                [data="valor"]{
+                    font-family: ${({ theme }) => theme.font.family.medium};
+                }
+                [data="valor-old"]{
+                    margin-top: auto;
+                    margin-left: 7px;
+                    font-size: 1.2rem;
+                    text-decoration: line-through;
+                    color: #565959;
+                }
             }
         }
     }
 `
-const FootCardSC = styled.footer`
-    position:fixed;
-    bottom: 0px;
-    width: 100%;
-    border-top: solid 1px #EDEDED;
-    z-index: 999;
-    border-top: solid 1px #d6d6d6;
-    background-color: #FFFFFF;
-    div {
-        display: flex;
-        padding: 0.6rem;
-        max-width: 500px;
-        width:100%;
-        margin: 0px auto;
-    }
-
-    [data-div="input-div"] {
-        background-color: #FFFFFF;
-        border: solid 1px #DCDCDC;
-        border-radius: 4px;
-        display: flex;
-        max-width: 40%;
-        input {
-            font-size:${({ theme }) => theme.font.sizes.large};
-            width: 100%;
-            text-align:center;
-            padding: 0px;
-            margin: 0px;
-            border: none;
-        }
-        button {
-            font-size:${({ theme }) => theme.font.sizes.xlarge};
-            color: ${({ theme }) => theme.colors.secondaryColor};
-            font-family: ${({ theme }) => theme.font.family.bold};
-            background-color: transparent;
-            border: none;
-            padding: 0% 7%;
-            display: flex;
-            align-items: center;
-        }
-    }
-
-    [data-div="btn-div"] {
-        white-space: nowrap;
-        border-radius: 4px;
-        color: #FFFFFF;
-        background-color: ${({ theme }) => theme.colors.secondaryColor};
-        font-size:${({ theme }) => theme.font.sizes.small};
-        display: flex;
-        align-items: center;
-        padding:  0rem 1rem;
-        max-width: 50%;
-        width:100%;
-        margin-left: 10%;
-        span {
-            margin: 0px;
-            padding: 0px;
-            margin-left: auto;
-        }
-    }
-`
-export default function Product({ data }) {
+export default function Product({ data, vendidos, semana, oferta }) {
     const [product] = useState(data)
     const { setMyCart } = useContext(MyCartContext)
-    const refQuantity = useRef();
-    const [quantity, setQuantity] = useState(1)
     const router = useRouter()
     const { myCartId } = parseCookies();
+    const [urlImg, setUrlImg] = useState(data.url_img)
 
-    const handleQuantity = (newValue) => {
-        /* newValue é utilizado nos botoes + e - */
-        const value = newValue >= 0 ? newValue : refQuantity.current.value.replace(/[^0-9]/g, '')
-        if (value.toString().length > 4) return
-
-        setQuantity(value)
-    }
-
-    const handleAddMyCart = async (id, quantity) => {
-        await storeQuantity(id, quantity, myCartId)
+    const handleAddMyCart = async (id) => {
+        await storeQuantity(id, 1, myCartId)
         await setMyCart(await getCartTemp({ id_storage: myCartId }))
         router.push("/")
+    }
+    const setImage = (url) => {
+        setUrlImg(url)
     }
 
     return (
@@ -218,85 +118,98 @@ export default function Product({ data }) {
             <Head>
                 <title>{`${product.name}`}</title>
             </Head>
+            <Content noShadow padding="0">
+                <Content maxwidth="40rem" bgWhite noShadow padding="1rem">
+                    <CardSC>
+                        <div data="card-name">
+                            <h1>{product.name}</h1>
+                        </div>
+                        <div data="card-img">
+                            <img src={urlImg} alt={product.name} />
+                        </div>
+                        <div data="nav-imgs">
+                            <ul>
+                                {product.url_img &&
+                                    <li>
+                                        <button type="button" onClick={() => setImage(product.url_img)}>
+                                            <img src={product.url_img} alt="imagem" />
+                                        </button>
+                                    </li>
+                                }
+                                {product.img_1 &&
+                                    <li>
+                                        <button type="button" onClick={() => setImage(product.img_1)}>
+                                            <img src={product.img_1} alt="imagem 1" />
+                                        </button>
+                                    </li>
+                                }
+                                {product.img_2 &&
+                                    <li>
+                                        <button type="button" onClick={() => setImage(product.img_2)}>
+                                            <img src={product.img_2} alt="imagem 2" />
+                                        </button>
+                                    </li>
+                                }
+                                {product.img_3 &&
+                                    <li>
+                                        <button type="button" onClick={() => setImage(product.img_3)}>
+                                            <img src={product.img_3} alt="imagem 3" />
+                                        </button>
+                                    </li>
+                                }
+                                {product.img_4 &&
+                                    <li>
+                                        <button type="button" onClick={() => setImage(product.img_4)}>
+                                            <img src={product.img_4} alt="imagem 4" />
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div data="price">
+                            {!!product.promotion ?
+                                (
+                                    <>
+                                        <div data="oferta">
+                                            <div>
+                                                <span data="oft-t">Oferta</span>
+                                            </div>
+                                            <div data="p-r-v">
+                                                <span data="red">{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}%</span>
+                                                <span data="rs">R$</span>
+                                                <span data="valor">{moneyMask(product.price_promotion, false)}</span>
+                                                <span data="valor-old">{moneyMask(product.price)}</span>
+                                            </div>
+                                        </div>
+                                    </>
 
-            <Content bgWhite padding="0.5rem" noShadow>
-                <CardSC>
-                    <div data="card-name">
-                        <h1>{product.name}</h1>
-                    </div>
-                    <div data="card-img">
-                        <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.name} />
-                    </div>
-                    <div data="nav-imgs">
-                        <ul>
-                            {product.url_img &&
-                                <li>
-                                    <span>
-                                        <img src={product.url_img} alt="imagem" />
-                                    </span>
-                                </li>
+
+                                ) : (
+                                    <>
+                                        <div data="oferta">
+                                            <div data="p-r-v">
+                                                <span data="rs">R$</span>
+                                                <span data="valor">{moneyMask(product.price, false)}</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
                             }
-                            {product.img_1 &&
-                                <li>
-                                    <span>
-                                        <img src={product.img_1} alt="imagem 1" />
-                                    </span>
-                                </li>
-                            }
-                            {product.img_2 &&
-                                <li>
-                                    <span>
-                                        <img src={product.img_2} alt="imagem 2" />
-                                    </span>
-                                </li>
-                            }
-                            {product.img_3 &&
-                                <li>
-                                    <span>
-                                        <img src={product.img_3} alt="imagem 3" />
-                                    </span>
-                                </li>
-                            }
-                            {product.img_4 &&
-                                <li>
-                                    <span>
-                                        <img src={product.img_4} alt="imagem 4" />
-                                    </span>
-                                </li>
-                            }
-                        </ul>
-                        {/* <div>
-                            <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.name} />
-                        </div> */}
-                    </div>
-                    card
-                </CardSC>
-                {/* <div data-div="product">
-                    <div data-div="img-main">
-                        <div>
-                            {!!product.promotion && (<span>{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}% OFF</span>)}
-                            <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.name} />
                         </div>
-                    </div>
-                    <div data-div="name">
-                        <h2>{product.name}</h2>
-                    </div>
-                    <div data-div="description">
-                        <p>{product.description}</p>
-                    </div>
-                </div> */}
-                {/*  <FootCardSC>
-                    <div>
-                        <div data-div="input-div">
-                            <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) - 1))}><Dash /></button>
-                            <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
-                            <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) + 1))}><Plus /></button>
-                        </div>
-                        <button onClick={() => handleAddMyCart(product.id, quantity)} type="button" data-div="btn-div">
-                            Adicionar  <span>{!!product.promotion ? moneyMask(product.price_promotion) : moneyMask(product.price)} </span>
-                        </button>
-                    </div>
-                </FootCardSC> */}
+
+                        <ButtonYellow margin="1rem 0 0 0">
+                            <button type="button" onClick={() => handleAddMyCart(product.id)}>
+                                Adiconar ao carrinho
+                            </button>
+                        </ButtonYellow>
+                    </CardSC>
+                </Content>
+
+                <Content noShadow padding="0.5rem 0">
+                    <CardNavSugOne title="Produtos mais vendidos" products={vendidos} />
+                    <CardNavSugOne title="O que outros clientes estão comprando" products={semana} />
+                    <CardNavSugOne title="Produtos em ofertas" products={oferta} />
+                </Content>
             </Content>
         </>
     );
@@ -305,6 +218,7 @@ export default function Product({ data }) {
 export async function getServerSideProps(req) {
     const { id } = req.params
     const data = await getByID(id)
+    const data1 = await getAll()
 
     if (!data) {
         return {
@@ -313,6 +227,6 @@ export async function getServerSideProps(req) {
     }
 
     return {
-        props: { data },
+        props: { data, ...data1 },
     }
 }
