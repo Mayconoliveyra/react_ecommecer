@@ -12,8 +12,6 @@ exports.up = function (knex) {
             table.string("img_2", 120)
             table.string("img_3", 120)
             table.string("img_4", 120)
-            table.string("img_5", 120)
-            table.string("img_6", 120)
             table.float("price").notNull()
             table.float("price_promotion").notNull()
             table.boolean("promotion", 1).notNull()

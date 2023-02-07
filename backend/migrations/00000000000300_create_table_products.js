@@ -11,8 +11,6 @@ exports.up = function (knex) {
             table.string("img_2", 120)
             table.string("img_3", 120)
             table.string("img_4", 120)
-            table.string("img_5", 120)
-            table.string("img_6", 120)
 
             table.float("price").notNull().defaultTo(0);
             table.float("price_promotion").notNull().defaultTo(0);
@@ -123,8 +121,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg"
                 },
                 {
                     name: "Mouse Gamer Sem Fio Logitech, 6 Botões Programáveis, Compatível com Windows, macOS, iPadOS, iOS",
@@ -137,8 +133,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/31QcZNzTb-L._AC_UL320_.jpg"
                 },
                 {
                     name: "Teclado gamer para computador pc teclado semi mecanico Abnt2 com luz de led rgb para Ps4 Ps5 Xbox On...",
@@ -151,8 +145,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/81wbZbfXumL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/81wbZbfXumL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/81wbZbfXumL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/81wbZbfXumL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/81wbZbfXumL._AC_UL320_.jpg"
                 },
                 {
                     name: "Mouse Gamer S/ Fio Logitech LIGHTSPEED com 6 Botões Programáveis e Até 12.000 DPI - Lilás + Headset ...",
@@ -165,8 +157,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/31VLP4-usaL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/31VLP4-usaL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/31VLP4-usaL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/31VLP4-usaL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/31VLP4-usaL._AC_UL320_.jpg"
                 },
                 {
                     name: "KABEWUS Suporte para laptop para mesa suporte estável para suporte ergonômico alumínio para 12-17 po...",
@@ -179,8 +169,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61iqcAJbR1L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61iqcAJbR1L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61iqcAJbR1L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61iqcAJbR1L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61iqcAJbR1L._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming Core i5 10400F, GeForce GTX 1660 6GB, 16GB Ram, SSD 480GB, Gabinete Gamer",
@@ -193,8 +181,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61PCu089lXL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61PCu089lXL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61PCu089lXL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61PCu089lXL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61PCu089lXL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC GAMER AMD RYZEN 5 5600G 16GB (RADEON VEGA 7 INTEGRADO) SSD 480GB, 500W 80 PLUS, NEOLOGIC - NLI84302",
@@ -207,8 +193,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61vtqwiaSXL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61vtqwiaSXL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61vtqwiaSXL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61vtqwiaSXL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61vtqwiaSXL._AC_UL320_.jpg"
                 },
                 {
                     name: "Cpu I3 4gb SSD 240gb *10X MAIS RÁPIDO*",
@@ -221,8 +205,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61H19XmKXEL._AC_UL320_.jpg"
                 },
                 {
                     name: "Mini Desktop PC Qcta-Core i9 9880H, Windows 11 Mini Computador, 16GB DDR4 RAM 512GB NVME SSD, UHD Gráficos",
@@ -235,8 +217,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51WVx-9UuKL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51WVx-9UuKL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51WVx-9UuKL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51WVx-9UuKL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51WVx-9UuKL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer AMD A8-9600, 32GB RAM DDR4, SSD 480GB, Vídeo Radeon R7, Gabinete com LED + Mouse Gamer de Brinde",
@@ -249,8 +229,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/6116yZ36dJL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/6116yZ36dJL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/6116yZ36dJL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/6116yZ36dJL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/6116yZ36dJL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC CPU Intel Core I5, 8GB DE Memória ram, Ssd 240GB",
@@ -263,8 +241,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/512WCabCRyL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/512WCabCRyL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/512WCabCRyL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/512WCabCRyL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/512WCabCRyL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC INTEL I5 3470, 8GB DDR3, SSD 240GB LOL - FREEFIRE",
@@ -277,8 +253,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51+E4635GQS._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51+E4635GQS._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51+E4635GQS._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51+E4635GQS._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51+E4635GQS._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming Core i7 11700KF, GeForce RTX 3060 12GB, 16GB Ram, SSD M.2 NVMe 500GB, 11ª Geração",
@@ -291,8 +265,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61KPkz0EcWL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61KPkz0EcWL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61KPkz0EcWL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61KPkz0EcWL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61KPkz0EcWL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC GAMER RYZEN 5 3600 16GB (RTX 2060 6GB) SSD 240GB 500W, NEOLOGIC - NLI84372",
@@ -305,8 +277,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61hwANlzjzL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61hwANlzjzL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61hwANlzjzL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61hwANlzjzL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61hwANlzjzL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming Core i5 10400F, GeForce GTX 1650 4GB, 16GB Ram, SSD NVMe 500GB",
@@ -319,8 +289,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer Start Login AMD Athlon 3000G 3.5GHz SSD 240Gb Mem 8Gb DDR4 3200MHz Linux",
@@ -333,8 +301,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer ITX Arena, Core i5 10400F, GTX 1650 4GB, 16GB, SSD M.2 250GB, Gabinete Gamer",
@@ -347,8 +313,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61i-0HPiu7L._AC_UL320_.jpg"
                 },
                 {
                     name: "Mini Pc Beelink Gk35 128gb Ssd 8gb Ram Processador Intel Celeron J4205 Sistema Operacional Windows 10 Pro",
@@ -361,8 +325,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51B6I7w34fL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51B6I7w34fL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51B6I7w34fL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51B6I7w34fL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51B6I7w34fL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Cpu Gamer 4ª geração para Free Fire SSD + WIFI Novo c/NF",
@@ -375,8 +337,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/31lBG7HK4XL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/31lBG7HK4XL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/31lBG7HK4XL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/31lBG7HK4XL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/31lBG7HK4XL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Completo Intel Core i7 4 Núcleos Super Turbo 16GB SSD 256GB Monitor 19 Pc Hdmi Teclado e Mouse Strong Tech",
@@ -389,8 +349,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71LoUPTNEQL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer Intel Core i5 10400F - 4.30 GHz, 16GB RAM Gamer DDR4, Nvidia 4GB, SSD 512GB, Fonte 500w, Gabinete",
@@ -403,8 +361,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41LrpIzVIOL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41LrpIzVIOL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41LrpIzVIOL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41LrpIzVIOL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41LrpIzVIOL._AC_UL320_.jpg"
                 },
                 {
                     name: "HEYSTOP Switch Case Compatível com Nintendo Switch, 9 em 1 Switch Acessórios com 8 Bolsa de Transpor...",
@@ -417,8 +373,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/81fu1Gei7VL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/81fu1Gei7VL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/81fu1Gei7VL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/81fu1Gei7VL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/81fu1Gei7VL._AC_UL320_.jpg"
                 },
                 {
                     name: "HD Externo Portátil 1TB UnionSine Disco Rígido compatível Mac/Pc/Notebook/PS4 - USB 3.0-HD2510",
@@ -431,8 +385,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61b37oBFdoL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61b37oBFdoL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61b37oBFdoL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61b37oBFdoL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61b37oBFdoL._AC_UL320_.jpg"
                 },
                 {
                     name: "Headset Gamer Sem Fio Logitech G935 7.1 Dolby Surround, RGB LIGHTSYNC, Drivers de Áudio Avançado par...",
@@ -445,8 +397,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71FkbQzfOYL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71FkbQzfOYL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71FkbQzfOYL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71FkbQzfOYL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71FkbQzfOYL._AC_UL320_.jpg"
                 },
                 {
                     name: "WB Capa com Teclado Para Tablet Samsung Galaxy Tab S7 FE 12.4 Polegadas Couro Preto com duração de ...",
@@ -459,8 +409,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61pNE242-1L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61pNE242-1L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61pNE242-1L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61pNE242-1L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61pNE242-1L._AC_UL320_.jpg"
                 },
                 {
                     name: "PC CPU Mancer Home Office, Intel Core I5, 8GB DDR3, SSD 240GB",
@@ -473,8 +421,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51taC5D8jZL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51taC5D8jZL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51taC5D8jZL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51taC5D8jZL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51taC5D8jZL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer I7 3770+16gb Ram+hd 1tb+pl.vi 4g+f.500w+monitor 19",
@@ -487,8 +433,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61E7bL44ZDL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61E7bL44ZDL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61E7bL44ZDL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61E7bL44ZDL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61E7bL44ZDL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC CPU Mancer, AMD Ryzen 3 3200G, Vega 8, 8GB de Ram DDR4, SSD 240GB, Fonte 500W",
@@ -501,8 +445,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming Core i3 10100F, GeForce GTX 1050 Ti 4GB, 8GB Ram, SSD 240GB, Gabinete Gamer",
@@ -515,8 +457,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71zucbJyaVL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71zucbJyaVL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71zucbJyaVL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71zucbJyaVL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71zucbJyaVL._AC_UL320_.jpg"
                 },
                 {
                     name: "MINI PC ACCEPT 2K V3 INTEL CELERON QC J4105/ 4GB/ SSD 240GB/ VESA/LINUX",
@@ -529,8 +469,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41DzGAjpQxL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41DzGAjpQxL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41DzGAjpQxL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41DzGAjpQxL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41DzGAjpQxL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC CPU Mancer Home,Intel Core I7, 8GB DE RAM, HD 500GB + SSD 240GB",
@@ -543,8 +481,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Computador intel i3-10100, 8gb Ddr4, Ssd 120gb, 500w",
@@ -557,8 +493,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/512-eEqebFL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC CPU Mancer, ADM Ryzen 3 3200G, Vega 8, 16GB De Memória Ram DDR4, SSD 240GB, Fonte 500W",
@@ -571,8 +505,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61y1nUUpvkL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Completo Kit Gamer Pc Intel Core i3 4GB SSD 120GB Monitor 19 Cpu Hdmi Strong Tech",
@@ -585,8 +517,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71mgdOT40UL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71mgdOT40UL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71mgdOT40UL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71mgdOT40UL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71mgdOT40UL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer G-fire Htg-718 Amd Ryzen 5 5600g 8gb (radeon Graphics 2gb) M.2 Nvme 256gb 500w",
@@ -599,8 +529,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41djMPw3slL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41djMPw3slL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41djMPw3slL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41djMPw3slL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41djMPw3slL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Pc Completo Intel Core i3 8GB HD 500GB Wi-fi",
@@ -613,8 +541,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51vnJvGTOVL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51vnJvGTOVL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51vnJvGTOVL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51vnJvGTOVL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51vnJvGTOVL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer Login AMD Ryzen 5 5600G 3.9GHz SSD 512Gb 8Gb DDR4 3200MHz Linux",
@@ -627,8 +553,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41EB5IE-xbL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Computador CPU MINI Dual Core / 8GB Ram/SSD 240GB - LIQUIDAÇÃO",
@@ -641,8 +565,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41QR44s0sXL._AC_UL320_.jpg"
                 },
                 {
                     name: "Beelink Mini PC T4 Pro, Celeron N3350 até 2,4 GHz, mini computador desktop 4 GB DDR + 64 GB, PC pequeno suporta",
@@ -655,8 +577,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61DxiuVKN+L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61DxiuVKN+L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61DxiuVKN+L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61DxiuVKN+L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61DxiuVKN+L._AC_UL320_.jpg"
                 },
                 {
                     name: "PC HOME/I7 3770/H61/16GB DDR3/SSD 240GB/GABINETE ATX/200W/WIFI-LIDER 007",
@@ -669,8 +589,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51ktqmk-jzL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51ktqmk-jzL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51ktqmk-jzL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51ktqmk-jzL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51ktqmk-jzL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Intel Core i5 Com Hdmi 8GB HD 1TB Windows 10 Teclado Mouse Desktop Pc",
@@ -683,8 +601,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61l2D5a90-L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61l2D5a90-L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61l2D5a90-L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61l2D5a90-L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61l2D5a90-L._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Pc Completo i5 3° Geração 8gb Hd 500GB + Wi-fi",
@@ -697,8 +613,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41peWzcW9IL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41peWzcW9IL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41peWzcW9IL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41peWzcW9IL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41peWzcW9IL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC GAMER INTEL I5 16GB (RX 550 2GB) SSD 120GB 500W, SMART PC - SMT84326",
@@ -711,8 +625,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer Completo Hércules Intel i3 3º Ger. GT 730 8GB HD 500GB Wi-fi",
@@ -725,8 +637,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51rG8+ZUD9L._AC_UL320_.jpg"
                 },
                 {
                     name: "COMPUTADOR BUSINESS B100 - CELERON DUAL CORE J1800 2.41GHZ 4GB DDR3 SODIMM HD 500GB 2 SERIAL 1 PARALELA FONTE 200W",
@@ -739,8 +649,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71slGzoMT9L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71slGzoMT9L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71slGzoMT9L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71slGzoMT9L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71slGzoMT9L._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming AMD Ryzen 5 4650G, Radeon Graphics Vega 7, 16GB Ram, SSD 240GB, 500W",
@@ -753,8 +661,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71Cc5rM5LTL._AC_UL320_.jpg"
                 },
                 {
                     name: "Mini PC Stick Intel Celeron N4000 (até 2,6 GHz), Windows 10 Pro, Mini Stick de 4 GB DDR4 64 GB eMMC Micro Desktop",
@@ -767,8 +673,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61l8yh+AzgL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61l8yh+AzgL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61l8yh+AzgL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61l8yh+AzgL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61l8yh+AzgL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Intel Core i7 4 Núcleos Super Turbo 16GB SSD 256GB Pc Hdmi Strong Tech",
@@ -781,8 +685,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/719eCcq3hVL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/719eCcq3hVL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/719eCcq3hVL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/719eCcq3hVL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/719eCcq3hVL._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Pc Intel Core i7 4GB SSD 120GB Hdmi Cpu Desktop Strong Tech",
@@ -795,8 +697,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61PZfkb5sSL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61PZfkb5sSL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61PZfkb5sSL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61PZfkb5sSL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61PZfkb5sSL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC Gamer OnGaming Core i7 12700K, GeForce RTX 3070Ti 8GB, 32GB Ram, SSD M.2 NVMe 512GB, 12ª Geraçao",
@@ -809,8 +709,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/71RWzcC10oL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC GAMER MANCER (INTEL CORE I5, GTX 1650 4GB, 8GB DDR3, SSD 240GB, 500W)",
@@ -823,8 +721,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51kjY+v6k7L._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51kjY+v6k7L._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51kjY+v6k7L._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51kjY+v6k7L._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51kjY+v6k7L._AC_UL320_.jpg"
                 },
                 {
                     name: "Computador Pc Completo Intel i5 4°Geração 8gb SSD 240GB Wi-fi",
@@ -837,8 +733,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51Y4OVKTiWL._AC_UL320_.jpg"
                 },
                 {
                     name: "Mini PC para Windows 10 Home, Mini Computador 8GB LPDDR4 128GB M.2 2242 SSD para Celeron J4125 Quad Core, Suporte",
@@ -851,8 +745,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/614MiWBZjwL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/614MiWBZjwL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/614MiWBZjwL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/614MiWBZjwL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/614MiWBZjwL._AC_UL320_.jpg"
                 },
                 {
                     name: "PC GAMER INTEL I5 8GB (RX 550 2GB) SSD 240GB 500W, SMART PC - SMT84324",
@@ -865,8 +757,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51A1iOwc-pL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer Smart Pc SMT81284 Intel i5 8GB (GeForce GTX 1650 4GB) 1TB",
@@ -879,8 +769,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51mHQApnidL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51mHQApnidL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51mHQApnidL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51mHQApnidL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51mHQApnidL._AC_UL320_.jpg"
                 },
                 {
                     name: "Cpu I3 4gb SSD 240gb *20X MAIS RÁPIDO*",
@@ -893,8 +781,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/41Us-KCnFkL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/41Us-KCnFkL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/41Us-KCnFkL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/41Us-KCnFkL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/41Us-KCnFkL._AC_UL320_.jpg"
                 },
                 {
                     name: "Pc Gamer Intel Core i7, 16GB RAM, GT 1030 2GB, HD 1000GB, Fonte 500w, Gabinete com RGB",
@@ -907,8 +793,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51EOnkZKQSL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51EOnkZKQSL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51EOnkZKQSL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51EOnkZKQSL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51EOnkZKQSL._AC_UL320_.jpg"
                 },
                 {
                     name: "Microfone Condensador USB Blue Snowball iCE com Captação Cardióide, Suporte Ajustável, Conexão Plug ...",
@@ -921,8 +805,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61GwlnuqZQL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61GwlnuqZQL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61GwlnuqZQL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61GwlnuqZQL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61GwlnuqZQL._AC_UL320_.jpg"
                 },
                 {
                     name: "KABEWUS Expansor Hub Usb 3.0 PD carga rápida 5 em 1 Conector de conversão typec multi-porta doca de ...",
@@ -935,8 +817,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51gkMFiOKXL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51gkMFiOKXL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51gkMFiOKXL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51gkMFiOKXL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51gkMFiOKXL._AC_UL320_.jpg"
                 },
                 {
                     name: "Cockpit Simulador Suporte Para Volante X Retrátil V3 Preto Extreme Simracing",
@@ -949,8 +829,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/51snxQIKQfL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/51snxQIKQfL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/51snxQIKQfL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/51snxQIKQfL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/51snxQIKQfL._AC_UL320_.jpg"
                 },
                 {
                     name: "Teclado Mecânico Gamer Logitech G713 RGB LIGHTSYNC Com Switch GX Brown Tactile",
@@ -963,8 +841,6 @@ exports.up = function (knex) {
                     img_2: "https://m.media-amazon.com/images/I/61VWTUZPusL._AC_UL320_.jpg",
                     img_3: "https://m.media-amazon.com/images/I/61VWTUZPusL._AC_UL320_.jpg",
                     img_4: "https://m.media-amazon.com/images/I/61VWTUZPusL._AC_UL320_.jpg",
-                    img_5: "https://m.media-amazon.com/images/I/61VWTUZPusL._AC_UL320_.jpg",
-                    img_6: "https://m.media-amazon.com/images/I/61VWTUZPusL._AC_UL320_.jpg"
                 }
             ]);
         });

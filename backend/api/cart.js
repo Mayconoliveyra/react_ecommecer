@@ -290,8 +290,6 @@ module.exports = (app) => {
                 p.img_2, 
                 p.img_3, 
                 p.img_4, 
-                p.img_5, 
-                p.img_6, 
                 p.price, 
                 p.price_promotion, 
                 p.promotion, 
