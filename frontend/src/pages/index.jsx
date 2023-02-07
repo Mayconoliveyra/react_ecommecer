@@ -8,7 +8,7 @@ import StoreContext from "../context/store";
 
 import { getAll } from "./api/products"
 
-export default function Home({ camas, brinquedos, cozinhas }) {
+export default function Home({ vendidos, semana, oferta }) {
   const store = useContext(StoreContext)
   return (
     <>
@@ -16,9 +16,9 @@ export default function Home({ camas, brinquedos, cozinhas }) {
         <title>{store.nome ? store.nome : 'Carregando...'}</title>
       </Head>
       <Content padding="0.5rem 0" noShadow>
-        <CardNavOne title="Produtos que talvez possa lhe interessar" products={camas} />
-        <CardNavTwo title="Produtos para Casa" products={brinquedos} />
-        <CardNavOne title="Produtos em ofertas" products={cozinhas} />
+        <CardNavOne title="Produtos que talvez possa lhe interessar" products={vendidos} />
+        <CardNavTwo title="Produtos para Casa" products={semana} />
+        <CardNavOne title="Produtos em ofertas" products={oferta} />
       </Content>
     </>
   );

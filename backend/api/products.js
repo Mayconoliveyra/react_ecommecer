@@ -40,38 +40,86 @@ module.exports = (app) => {
         }
 
         try {
-            const limitCat = 10
-            const whereRaw = 'p.disabled = False AND p.deleted_at IS NULL ORDER BY id DESC'
+            const limit = 10
 
-            const camas = await app.db({ p: table, c: 'categories' })
-                .select("p.*", "c.name as id_category")
-                .limit(limitCat).offset(0)
-                .whereRaw('?? = ??', ['p.id_category', 'c.id'])
-                .where({ 'c.name': 'Camas' })
-                .whereRaw(whereRaw)
+            const vendidos = await app.db
+                .raw(`SELECT 
+                        P.id, 
+                        P.name, 
+                        P.url_img, 
+                        P.stock, 
+                        P.price, 
+                        P.price_promotion, 
+                        P.promotion
+                        FROM products AS P
+                        INNER JOIN sales_products AS SP
+                        ON P.id = SP.id_product
+                        WHERE SP.created_at 
+                        BETWEEN DATE_ADD(NOW(), INTERVAL -90 DAY) AND NOW()
+                        GROUP BY 
+                            P.id, 
+                            P.name, 
+                            P.url_img, 
+                            P.stock, 
+                            P.price, 
+                            P.price_promotion, 
+                            P.promotion, 
+                            P.disabled, 
+                            P.deleted_at
+                        HAVING 
+                            P.disabled=False AND P.deleted_at Is Null
+                        ORDER BY Sum(SP.p_quantity) DESC
+                        LIMIT ${limit};
+                `)
 
-            const brinquedos = await app.db({ p: table, c: 'categories' })
-                .select("p.*", "c.name as id_category")
-                .limit(limitCat).offset(0)
-                .whereRaw('?? = ??', ['p.id_category', 'c.id'])
-                .where({ 'c.name': 'Brinquedos' })
-                .whereRaw(whereRaw)
+            const semana = await app.db
+                .raw(`SELECT 
+                        P.id, 
+                        P.name, 
+                        P.url_img, 
+                        P.stock, 
+                        P.price, 
+                        P.price_promotion, 
+                        P.promotion
+                        FROM products AS P
+                        INNER JOIN sales_products AS SP
+                        ON P.id = SP.id_product
+                        WHERE SP.created_at 
+                        BETWEEN DATE_ADD(NOW(), INTERVAL -7 DAY) AND NOW()
+                        GROUP BY 
+                            P.id, 
+                            P.name, 
+                            P.url_img, 
+                            P.stock, 
+                            P.price, 
+                            P.price_promotion, 
+                            P.promotion, 
+                            P.disabled, 
+                            P.deleted_at
+                        HAVING 
+                            P.disabled=False AND P.deleted_at Is Null
+                        ORDER BY Sum(SP.p_quantity) DESC
+                        LIMIT ${limit};
+                `)
 
-            const comedouros = await app.db({ p: table, c: 'categories' })
-                .select("p.*", "c.name as id_category")
-                .limit(limitCat).offset(0)
-                .whereRaw('?? = ??', ['p.id_category', 'c.id'])
-                .where({ 'c.name': 'Comedouros' })
-                .whereRaw(whereRaw)
+            const oferta = await app.db
+                .raw(`SELECT 
+                    P.id, 
+                    P.name, 
+                    P.url_img, 
+                    P.stock, 
+                    P.price, 
+                    P.price_promotion, 
+                    P.promotion
+                    FROM products AS P
+                    WHERE (P.promotion=TRUE) 
+                    AND (P.disabled=FALSE) 
+                    AND (P.deleted_at Is NULL) 
+                    ORDER BY P.updated_at DESC
+                    LIMIT ${limit};
+                `)
 
-            const cozinhas = await app.db({ p: table, c: 'categories' })
-                .select("p.*", "c.name as id_category")
-                .limit(limitCat).offset(0)
-                .whereRaw('?? = ??', ['p.id_category', 'c.id'])
-                .where({ 'c.name': 'Casinhas' })
-                .whereRaw(whereRaw)
-
-            res.json({ camas, brinquedos, comedouros, cozinhas });
+            res.json({ vendidos: vendidos[0], semana: semana[0], oferta: oferta[0] });
         } catch (error) {
             utility_console("products.get", error)
             res.status(500).send(msgErrorDefault)

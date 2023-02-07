@@ -25,6 +25,7 @@ exports.up = function (knex) {
             table.decimal("p_amount_promotion", 65, 2).notNull() /* [preco de venda promocional(price_promotio)] * quantidade */
 
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
+            table.timestamp('created_at').defaultTo(knex.fn.now())
         })
 };
 

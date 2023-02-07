@@ -42,7 +42,7 @@ const SectionProductSC = styled.div`
         gap: 0.4rem;
     }
 `
-export default function Cart({ camas, brinquedos, cozinhas }) {
+export default function Cart({ vendidos, semana, oferta }) {
     const { myCart: { products, totals } } = useContext(MyCartContext)
 
     return (
@@ -89,9 +89,9 @@ export default function Cart({ camas, brinquedos, cozinhas }) {
                 </Content>
             }
             <Content noShadow padding="0.5rem 0">
-                <CardNavSugOne title="Produtos mais vendidos" products={camas} />
-                <CardNavSugOne title="O que outros clientes estão comprando" products={brinquedos} />
-                <CardNavSugOne title="Produtos em ofertas" products={cozinhas} />
+                <CardNavSugOne title="Produtos mais vendidos" products={vendidos} />
+                <CardNavSugOne title="O que outros clientes estão comprando" products={semana} />
+                <CardNavSugOne title="Produtos em ofertas" products={oferta} />
             </Content>
         </>
     )

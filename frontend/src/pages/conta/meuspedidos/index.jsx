@@ -31,7 +31,7 @@ const VerMais = styled.div`
     }
 `
 
-export default function Requests({ dt_pedidos, totals, session, camas, brinquedos, cozinhas }) {
+export default function Requests({ dt_pedidos, totals, session, vendidos, semana, oferta }) {
     const [loading, setLoading] = useState(true);
     const [nextPage, setNextPage] = useState(1);
     const [limitPage] = useState(10);
@@ -77,9 +77,9 @@ export default function Requests({ dt_pedidos, totals, session, camas, brinquedo
                     <>
                         <CartVazio title="Seu histórico está vazio" />
                         <Content noShadow padding="0.5rem 0">
-                            <CardNavSugOne title="Produtos mais vendidos" products={camas} />
-                            <CardNavSugOne title="O que outros clientes estão comprando" products={brinquedos} />
-                            <CardNavSugOne title="Produtos em ofertas" products={cozinhas} />
+                            <CardNavSugOne title="Produtos mais vendidos" products={vendidos} />
+                            <CardNavSugOne title="O que outros clientes estão comprando" products={semana} />
+                            <CardNavSugOne title="Produtos em ofertas" products={oferta} />
                         </Content>
                     </>
                 }

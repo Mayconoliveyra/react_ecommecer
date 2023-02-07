@@ -91,10 +91,7 @@ module.exports = app => {
                                 const tempCart = await conexao("temp_cart").first()
                                 /* Limpa registros antigos na tabela temp_cart. */
                                 if (tempCart) {
-                                        const data = new Date()
-                                        data.setDate(data.getDate() - 90) /* subtrai 90 dias na data atual. */
-                                        const dateLimit = data.toISOString().split('T')[0]
-                                        await conexao("temp_cart").whereRaw(`DATE(updated_at) < "${dateLimit}"`).del();
+                                        await conexao("temp_cart").whereRaw(`DATE(updated_at) < DATE_ADD(NOW(), INTERVAL -90 DAY)`).del();
                                 }
 
                                 /* Seta instancia para ser utilizada nas proximas requisição; */
