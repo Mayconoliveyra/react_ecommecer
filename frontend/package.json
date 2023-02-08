@@ -1,6 +1,14 @@
 {
-  "name": "challenger",
-  "version": "0.1.0",
+  "name": "softconnect-site",
+  "version": "0.0.1",
+  "description": "Frontend Softconnect(Cliente Site)",
+  "author": "Maycon Oliveira",
+  "contributors": [
+    {
+      "name": "Maycon Oliveira",
+      "email": "mayconbrito1998@hotmail.com"
+    }
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
