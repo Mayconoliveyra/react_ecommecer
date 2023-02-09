@@ -5,7 +5,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import TemplateContext from "../../../context/template"
 
-const MenuLoginSC = styled.div`
+const MenuLoginSC = styled.aside`
     position: fixed;
     height:100vh;
     width: 100%;
@@ -104,6 +104,7 @@ export default function MenuLogin() {
                     </button>
                 </div>
                 <ul data="ul-li">
+                    <li><Link href="/portal">Gestão</Link></li>
                     <li><Link href="/conta/meusdados">Meus dados</Link></li>
                     <li><Link href="/conta/endereco">Endereço de entrega</Link></li>
                     <li data="barra"></li>

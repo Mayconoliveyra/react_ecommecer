@@ -7,7 +7,7 @@ import { PersonCircle, PersonFillGear, ChevronRight } from "react-bootstrap-icon
 
 import TemplateContext from "../../../context/template"
 
-const MenuSC = styled.div`
+const MenuSC = styled.aside`
     position: fixed;
     height:100vh;
     width: 100%;

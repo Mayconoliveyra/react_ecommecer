@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 
 import Header from "../components/template/header"
 import Content from "../components/template/content"
+
+import PortalContent from "../components/template/portal/content";
+
 import Loanding from "../components/template/loanding"
 import Menu from "../components/template/menu";
 import MenuLogin from "../components/template/menulogin";
@@ -21,9 +24,10 @@ import TemplateContext from "../context/template"
 import StoreContext from "../context/store";
 import MyCartContext from "../context/myCart"
 
+
 export default function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter()
-  const defaultTemplate = { loading: false, showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false, showEndereco: true }
+  const defaultTemplate = { loading: false, showHeaderSearch: true, showMenu: false, showMenuLogin: false, footerReduce: false, showEndereco: true, portal: false }
   const [template, setTemplate] = useState(defaultTemplate)
   const [myCart, setMyCart] = useState([])
   const [store, setStore] = useState([])
@@ -36,7 +40,7 @@ export default function MyApp({ Component, pageProps }) {
 
   /* Ajusta o template de acordo com a rota que está sendo acessada (TemplateContext) */
   useEffect(() => {
-    /* console.log(pathname) */
+    console.log(pathname)
     switch (pathname) {
       case '/login':
       case '/carrinho':
@@ -54,6 +58,12 @@ export default function MyApp({ Component, pageProps }) {
         break;
       case '/produto/[id]':
         setTemplate({ ...defaultTemplate, footerReduce: true })
+        break;
+
+      /* PORTAL */
+      case '/portal':
+      case '/portal/cadastro/produtos':
+        setTemplate({ ...defaultTemplate, portal: true })
         break;
       default:
         setTemplate(defaultTemplate)
@@ -112,15 +122,24 @@ export default function MyApp({ Component, pageProps }) {
         <TemplateContext.Provider value={{ template, setTemplate }}>
           <StoreContext.Provider value={store}>
             <MyCartContext.Provider value={{ myCart, setMyCart }}>
-
-              {template.loading ? <Loanding /> :
+              {template.loading ?
+                <Loanding />
+                :
                 <>
-                  {template.showMenu && <Menu />}
-                  {template.showMenuLogin && <MenuLogin />}
-                  <Header />
-                  <Content>
-                    <Component {...pageProps} />
-                  </Content>
+                  {template.portal ?
+                    <PortalContent>
+                      <Component {...pageProps} />
+                    </PortalContent>
+                    :
+                    <>
+                      {template.showMenu && <Menu />}
+                      {template.showMenuLogin && <MenuLogin />}
+                      <Header />
+                      <Content>
+                        <Component {...pageProps} />
+                      </Content>
+                    </>
+                  }
                 </>
               }
             </MyCartContext.Provider>
