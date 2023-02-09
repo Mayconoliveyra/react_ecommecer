@@ -7,6 +7,7 @@ const MainSC = styled.main`
     min-height: calc( 100vh - 50px) !important;
     display: flex !important;
     flex-direction: row !important;
+    background: #f9f9f9 !important;
 `
 export default function PortalContent({ children }) {
     return (

@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import Link from "next/link";
+import Image from "next/image";
 import { List, BellFill, DoorOpenFill } from "react-bootstrap-icons"
+
 const HeaderSC = styled.header`
     display: flex;
     align-items: center;
@@ -9,22 +11,25 @@ const HeaderSC = styled.header`
     height: 50px;
 
     [data="nav-logo"]{
+        [data="logo"]{
+            margin: auto 13px;
+        }
         button{
             background-color: transparent;
         }
     }
     [data="notificacao"]{
-        a{
-            /* padding: 10px 10px; */
-        }
     }
 `
 export default function PortalHeader() {
     return (
         <HeaderSC>
             <div data="nav-logo">
+                <Link data="logo" href="/">
+                    <Image src={'/assets/images/logo.png'} width={135} height={30} alt="logo" quality={100} priority={true} />
+                </Link>
                 <button type="button" data="nav-icon">
-                    <List height={35} width={50} color="#FFF" />
+                    <List height={30} width={50} color="#FFF" />
                 </button>
             </div>
             <div data="notificacao">
