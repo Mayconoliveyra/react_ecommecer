@@ -94,6 +94,9 @@ const HeaderSC = styled.header`
                     }
                 }
                 [data="cart"]{
+                    &:hover{
+                        color: #fff;
+                    }
                     position: relative;
                     padding: 7px 13px 7px 5px;
                     svg{

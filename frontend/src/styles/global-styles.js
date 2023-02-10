@@ -76,6 +76,11 @@ export const GlobalStyles = createGlobalStyle`
     color: inherit;
     outline: none;
   }
+
+  a:hover {
+    color: #0F1111;
+  }
+
   textarea {
     border: solid 1px #B8B8B8;
   }

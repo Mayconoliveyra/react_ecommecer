@@ -1,5 +1,12 @@
+import Head from "next/head";
+
 export default function Portal() {
     return (
-        <h1>Portal</h1>
+        <>
+            <Head>
+                <title>Softconnect - Dashboard</title>
+            </Head>
+            <h1>Portal</h1>
+        </>
     )
 }

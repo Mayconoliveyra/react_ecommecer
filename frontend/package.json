@@ -26,6 +26,8 @@
     "nookies": "2.5.2",
     "passport-jwt": "4.0.1",
     "react": "18.2.0",
+    "bootstrap": "5.2.3",
+    "react-bootstrap": "2.7.0",
     "react-bootstrap-icons": "1.10.2",
     "react-dom": "18.2.0",
     "react-text-mask": "5.5.0",

@@ -8,6 +8,9 @@ const MainSC = styled.main`
     display: flex !important;
     flex-direction: row !important;
     background: #f9f9f9 !important;
+    [data="content"]{
+        flex: 1;
+    }
 `
 export default function PortalContent({ children }) {
     return (
@@ -15,7 +18,9 @@ export default function PortalContent({ children }) {
             <PortalHeader />
             <MainSC>
                 <PortalMenu />
-                {children}
+                <section data="content">
+                    {children}
+                </section>
             </MainSC>
         </>
     )
