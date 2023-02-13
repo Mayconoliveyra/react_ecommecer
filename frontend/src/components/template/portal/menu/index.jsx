@@ -2,6 +2,9 @@ import styled from "styled-components"
 import Link from "next/link";
 
 const HeaderSC = styled.aside`
+    @media (max-width: 720px){
+        display: none;
+    }
     width: 180px;
     background-color: #F4F4F4;
     box-shadow: inset -3px 0px 8px -4px rgb(0 0 0 / 7%);

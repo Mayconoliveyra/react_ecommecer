@@ -56,7 +56,10 @@ module.exports = (app) => {
     .get(userAuth(app.api.cart.getPixDetail))
 
 
-
+  const prefixPortal = "/portal"
+  app.route(`${prefixPortal}/produtos`)
+    .all(app.config.passport.authenticate())
+    .get(app.api.portal.products.get)
 
 
   /* TESTE */

@@ -24,7 +24,6 @@ import TemplateContext from "../context/template"
 import StoreContext from "../context/store";
 import MyCartContext from "../context/myCart"
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter()
@@ -64,6 +63,7 @@ export default function MyApp({ Component, pageProps }) {
       /* PORTAL */
       case '/portal':
       case '/portal/cadastro/produtos':
+      case '/portal/cadastro/produtos/adicionar':
         setTemplate({ ...defaultTemplate, portal: true })
         break;
       default:

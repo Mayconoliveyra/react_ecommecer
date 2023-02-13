@@ -1,8 +1,12 @@
 import styled from "styled-components"
 
 const HeaderFormOneSC = styled.section`
+    display: flex;
     padding: 20px 15px;
-  /*  border: solid 1px red; */
+    justify-content: space-between;
+    @media (max-width: 720px){
+        flex-direction: column;
+    }
 `;
 const HeaderFormOne = ({ children }) => {
     return (
