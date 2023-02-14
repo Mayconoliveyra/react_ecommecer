@@ -13,12 +13,15 @@ const TitleSC = styled.section`
         font-size: 1.3rem;
         font-family: ${({ theme }) => theme.font.family.regular};
     }
+    @media (max-width: 720px){
+        padding: 10px;
+    }
     [data="ol-li"]{
         display: flex;
         @media (max-width: 720px){
-            margin-top: 0.3rem;
+            margin-top: 0.5rem;
             background: #efefef;
-            padding: 0.5rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 2px;
         }
         li{

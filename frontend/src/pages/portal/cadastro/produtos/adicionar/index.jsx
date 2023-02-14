@@ -1,35 +1,21 @@
 import Head from "next/head";
-import { ChevronRight } from "react-bootstrap-icons"
+import { ChevronRight, CardImage, Cash, Boxes, Check, X } from "react-bootstrap-icons"
 import Link from "next/link"
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import styled from "styled-components";
+import Alert from 'react-bootstrap/Alert';
+import { useState } from "react";
+import { Formik } from "formik";
 
 import { TitleOne } from "../../../../../components/portal/titulo/components"
+import { FormOne, GroupOne, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
+import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/button/components"
 
 import { getAllPortal } from "../../../../api/portal/produtos";
 import { moneyMask } from "../../../../../../masks"
 
-import { Formik } from "formik";
-import { FormOne, GroupOne, GroupSelectOne } from "../../../../../components/portal/form/components";
-
-const TabsSC = styled.div`
-    padding: 20px 15px;
-    @media (max-width: 720px){
-        padding: 20px 0px;
-    }
-    .nav-tabs{
-        button{
-            color: #333333 !important;
-        }
-    }
-    .nav-link{
-        border-radius: 0px;
-        font-family:${({ theme }) => theme.font.family.medium} ;
-    }
-`
 
 export default function Adicionar({ data }) {
+    const [alert1, setAlert1] = useState(true);
+    const [alert2, setAlert2] = useState(true);
     const initialValues = {
         nome: '',
         nmr_contato: '',
@@ -69,6 +55,11 @@ export default function Adicionar({ data }) {
             >
                 {() => (
                     <FormOne>
+                        {alert1 &&
+                            <Alert variant="warning" onClose={() => setAlert1(false)} dismissible >
+                                Os campos marcados com <span className="text-danger"><b>*</b></span> são de preenchimento obrigatório.
+                            </Alert>
+                        }
                         <GroupOne
                             label="Nome do produto"
                             name="nome"
@@ -84,15 +75,19 @@ export default function Adicionar({ data }) {
                             xl={4}
                         />
                         <GroupSelectOne
-                            label="Status"
+                            label="Produto ativo"
                             name="sexo"
                             data={[
-                                { value: true, name: "Habilitada" },
-                                { value: false, name: "Desabilitada" },
+                                { value: true, name: "Sim" },
+                                { value: false, name: "Não" },
                             ]}
                             md={12}
                             xl={3}
                         />
+                        <TitleFormOne>
+                            <Cash size={19} />
+                            <h4>Valores e Promoções</h4>
+                        </TitleFormOne>
                         <GroupOne
                             label="Valor de venda"
                             name="nome"
@@ -108,32 +103,53 @@ export default function Adicionar({ data }) {
                             label="Promoção ativa"
                             name="sexo"
                             data={[
-                                { value: true, name: "Ativa" },
-                                { value: false, name: "Inativa" },
+                                { value: true, name: "Sim" },
+                                { value: false, name: "Não" },
                             ]}
                             md={4}
                         />
+                        <TitleFormOne>
+                            <Boxes size={19} />
+                            <h4>Controle de estoque</h4>
+                        </TitleFormOne>
                         <GroupOne
                             label="Estoque atual"
                             name="nome"
-                            md={4}
+                            md={3}
                         />
                         <GroupOne
                             label="Estoque mínimo"
                             name="nome"
-                            md={4}
+                            md={3}
                             disabled
                         />
                         <GroupOne
                             label="Quant. min. venda"
                             name="nome"
-                            md={4}
+                            md={3}
                             disabled
                         />
+                        <GroupSelectOne
+                            label="Controlar estoque"
+                            name="sexo"
+                            data={[
+                                { value: true, name: "Sim" },
+                                { value: false, name: "Não" },
+                            ]}
+                            md={3}
+                        />
+                        <TitleFormOne>
+                            <CardImage size={19} />
+                            <h4>Imagens</h4>
+                        </TitleFormOne>
+                        {alert2 &&
+                            <Alert variant="info " onClose={() => setAlert2(false)} dismissible >
+                                As imagens devem ser preenchidas com o endereço URL. Se tiver duvidas de como fazer isso acesse <b>Softconnect.com</b>
+                            </Alert>
+                        }
                         <GroupOne
                             label="Imagem principal"
                             name="nome"
-                            type="file"
                             required
                             xs={12}
                         />
@@ -157,6 +173,15 @@ export default function Adicionar({ data }) {
                             name="nome"
                             xs={12}
                         />
+
+                        <RowBtns>
+                            <ButtonVerde margin="0 7px 0 0">
+                                <button><Check size={23} /> Cadastrar</button>
+                            </ButtonVerde>
+                            <ButtonVermelho>
+                                <button><X size={23} /> Cancelar</button>
+                            </ButtonVermelho>
+                        </RowBtns>
                     </FormOne>
                 )}
             </Formik>

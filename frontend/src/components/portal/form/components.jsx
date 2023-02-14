@@ -92,6 +92,42 @@ const GroupOneSC = styled(Col)`
         color: #fe316c;
     }
 `;
+const TitleFormOneSC = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+    h4{
+        font-family:${({ theme }) => theme.font.family.bold} ;
+        font-size: 16px;
+        margin-left: 6px;
+    }
+`
+const TabsSC = styled.div`
+    padding: 20px 15px;
+    @media (max-width: 720px){
+        padding: 20px 0px;
+    }
+    .nav-tabs{
+        button{
+            color: #333333 !important;
+        }
+    }
+    .nav-link{
+        border-radius: 0px;
+        font-family:${({ theme }) => theme.font.family.medium} ;
+    }
+`
+const RowBtnsSC = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    button{
+        min-width: 150px;
+    }
+    @media (max-width: 720px){
+        justify-content: space-around;
+    }
+`
 
 const FormOne = ({ children }) => {
     return (
@@ -199,60 +235,20 @@ const GroupSelectOne = ({ name, label, required = false, data = [], xs, sm, md, 
         </GroupOneSC>
     );
 };
-const GroupFile = ({ name, label, type = "text", required = false, autocomplete = "off", maxlength = 255, mask = false, placeholder, disabled, xs, sm, md, lg, xl, xxl }) => {
-    const propsGroup = {
-        xs,
-        sm,
-        md,
-        lg,
-        xl,
-        xxl,
-    };
+
+const TitleFormOne = ({ children }) => {
     return (
-        <GroupOneSC {...propsGroup} required={required}>
-            <label htmlFor={name}>{label}</label>
-            {!mask && (
-                <Field name={name}>
-                    {({ field }) => (
-                        <input
-                            {...field}
-                            id={name}
-                            type={type}
-                            maxLength={maxlength}
-                            autoComplete={autocomplete}
-                            placeholder={placeholder}
-                            disabled={disabled}
-                            required={required}
-                            value={field.value || ''}
-                        />
-                    )}
-                </Field>
-            )}
-            {!!mask && (
-                <Field name={name}>
-                    {({ field }) => (
-                        <MaskedInput
-                            {...field}
-                            id={name}
-                            type={type}
-                            maxLength={maxlength}
-                            autoComplete={autocomplete}
-                            mask={mask}
-                            guide={false}
-                            showMask={false}
-                            placeholder={placeholder}
-                            disabled={disabled}
-                            required={required}
-                            value={field.value || ''}
-                        />
-                    )}
-                </Field>
-            )}
-            <small>
-                <ErrorMessage name={name} />
-            </small>
-        </GroupOneSC>
+        <TitleFormOneSC>
+            {children}
+        </TitleFormOneSC>
+    );
+};
+const RowBtns = ({ children }) => {
+    return (
+        <RowBtnsSC>
+            {children}
+        </RowBtnsSC>
     );
 };
 
-export { FormOne, FormTwo, GroupOne, GroupSelectOne }
+export { FormOne, FormTwo, GroupOne, GroupSelectOne, TitleFormOne, RowBtns }

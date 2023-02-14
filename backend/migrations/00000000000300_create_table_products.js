@@ -5,7 +5,9 @@ exports.up = function (knex) {
             table.string("name", 120).notNull();
             table.string("url_img", 120).notNull();
 
-            table.integer("stock").notNull().defaultTo(0);
+            table.integer("estoque_atual").notNull().defaultTo(0);
+            table.integer("estoque_atual").notNull().defaultTo(0);
+            table.integer("estoque_atual").notNull().defaultTo(0);
 
             table.string("img_1", 120)
             table.string("img_2", 120)
