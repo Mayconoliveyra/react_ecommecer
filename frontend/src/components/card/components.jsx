@@ -176,19 +176,19 @@ const Description = ({ product, height, width, maxwidth, maxheight, margin, padd
 const Price = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
     return (
         <PriceSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
-            {!!product.promotion ?
+            {!!product.promocao_ativa ?
                 (
                     <>
                         <span>R$</span>
-                        <span>{moneyMask(product.price_promotion, false)}</span>
-                        <span>{moneyMask(product.price)}</span>
+                        <span>{moneyMask(product.preco_promocao, false)}</span>
+                        <span>{moneyMask(product.preco)}</span>
                     </>
 
 
                 ) : (
                     <>
                         <span>R$</span>
-                        <span>{moneyMask(product.price, false)}</span>
+                        <span>{moneyMask(product.preco, false)}</span>
                     </>
                 )
             }
@@ -196,10 +196,10 @@ const Price = ({ product, height, width, maxwidth, maxheight, margin, padding, b
     )
 }
 const Promotion = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
-    if (product.promotion)
+    if (product.promocao_ativa)
         return (
             <PromotionSC height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
-                <span data="off">{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}% off</span> <span data="oferta">Oferta</span>
+                <span data="off">{(Number(product.preco - product.preco_promocao) / Number(product.preco) * 100).toFixed(0)}% off</span> <span data="oferta">Oferta</span>
             </PromotionSC >
         )
 }

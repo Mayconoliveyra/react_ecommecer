@@ -12,7 +12,7 @@ module.exports = (app) => {
 
         if (search) {
             await app.db(table)
-                .select("id", "name", "url_img", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "price", "price_promotion", "promotion")
+                .select("id", "name", "url_img", "estoque_atual", "price", "price_promotion", "promotion")
                 .whereRaw(simplify(search))
                 .whereRaw('disabled = False AND deleted_at IS NULL')
                 .limit(limit).offset(page * limit - limit)
@@ -28,7 +28,7 @@ module.exports = (app) => {
 
         if (id) {
             await app.db(table)
-                .select("id", "name", "url_img", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "img_1", "img_2", "img_3", "img_4", "price", "price_promotion", "promotion", "description")
+                .select("id", "name", "url_img", "estoque_atual", "img_1", "img_2", "img_3", "img_4", "price", "price_promotion", "promotion", "description")
                 .where({ id: id })
                 .whereRaw('disabled = False AND deleted_at IS NULL')
                 .first()
@@ -50,8 +50,6 @@ module.exports = (app) => {
                         P.name, 
                         P.url_img, 
                         P.estoque_atual, 
-                        P.estoque_qtd_minima, 
-                        P.estoque_controle, 
                         P.price, 
                         P.price_promotion, 
                         P.promotion
@@ -65,8 +63,6 @@ module.exports = (app) => {
                             P.name, 
                             P.url_img, 
                             P.estoque_atual, 
-                            P.estoque_qtd_minima, 
-                            P.estoque_controle, 
                             P.price, 
                             P.price_promotion, 
                             P.promotion, 
@@ -84,8 +80,6 @@ module.exports = (app) => {
                         P.name, 
                         P.url_img, 
                         P.estoque_atual, 
-                        P.estoque_qtd_minima, 
-                        P.estoque_controle, 
                         P.price, 
                         P.price_promotion, 
                         P.promotion
@@ -99,8 +93,6 @@ module.exports = (app) => {
                             P.name, 
                             P.url_img, 
                             P.estoque_atual, 
-                            P.estoque_qtd_minima, 
-                            P.estoque_controle, 
                             P.price, 
                             P.price_promotion, 
                             P.promotion, 
@@ -118,8 +110,6 @@ module.exports = (app) => {
                     P.name, 
                     P.url_img, 
                     P.estoque_atual, 
-                    P.estoque_qtd_minima, 
-                    P.estoque_controle, 
                     P.price, 
                     P.price_promotion, 
                     P.promotion

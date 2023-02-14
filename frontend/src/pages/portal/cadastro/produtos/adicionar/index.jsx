@@ -62,21 +62,21 @@ export default function Adicionar({ data }) {
                         }
                         <GroupOne
                             label="Nome do produto"
-                            name="nome"
+                            name="name"
                             required
                             md={7}
                             xl={5}
                         />
                         <GroupOne
                             label="Código interno"
-                            name="nome"
+                            name="codigo_interno"
                             required
                             md={5}
                             xl={4}
                         />
                         <GroupSelectOne
                             label="Produto ativo"
-                            name="sexo"
+                            name="disabled"
                             data={[
                                 { value: true, name: "Sim" },
                                 { value: false, name: "Não" },
