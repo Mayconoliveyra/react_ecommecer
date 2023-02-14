@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react"
 import { useRouter } from "next/router";
+/* import 'bootstrap/dist/css/bootstrap-grid.min.css'; */
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Header from "../components/template/header"
 import Content from "../components/template/content"

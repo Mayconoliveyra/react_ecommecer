@@ -67,6 +67,7 @@ const HeaderSC = styled.header`
                     font-family:${({ theme }) => theme.font.family.bold};
                     font-size: 13px;
                     padding: 7px 0;
+                    color: #FFF;
                     span{
                         overflow:hidden;
                         max-width: 85px;

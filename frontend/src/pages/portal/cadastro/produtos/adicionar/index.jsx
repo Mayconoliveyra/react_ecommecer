@@ -8,7 +8,15 @@ import { TitleOne } from "../../../../../components/portal/titulo/components"
 import { getAllPortal } from "../../../../api/portal/produtos";
 import { moneyMask } from "../../../../../../masks"
 
+import { Formik } from "formik";
+import { FormOne, GroupOne, GroupSelectOne } from "../../../../../components/portal/form/components";
+
 export default function Adicionar({ data }) {
+    const initialValues = {
+        nome: '',
+        nmr_contato: '',
+        sexo: '',
+    }
     return (
         <>
             <Head>
@@ -25,8 +33,97 @@ export default function Adicionar({ data }) {
                     Adicionar
                 </li>
             </TitleOne>
-
-           
+            <Formik
+                /* innerRef={formRef} */
+                validateOnMount
+                /*  validationSchema={scheme}
+                 initialValues={initialValues} */
+                initialValues={initialValues}
+                onSubmit={async (values) => {
+                    await save(values, values.id)
+                        .then(() => {
+                            const msgShow = !values.id ? 'realizado' : "alterado";
+                            showSucesso(`Cadastro ${msgShow} com sucesso!.`)
+                            navigate(prefixUrl);
+                        })
+                        .catch(showError);
+                }}
+            >
+                {() => (
+                    <FormOne>
+                        <GroupOne
+                            label="Nome do produto"
+                            name="nome"
+                            required
+                            md={7}
+                            xl={5}
+                        />
+                        <GroupOne
+                            label="Código interno"
+                            name="nome"
+                            required
+                            md={5}
+                            xl={4}
+                        />
+                        <GroupSelectOne
+                            label="Status"
+                            name="sexo"
+                            data={[
+                                { value: true, name: "Habilitada" },
+                                { value: false, name: "Desabilitada" },
+                            ]}
+                            md={12}
+                            xl={3}
+                        />
+                        <GroupOne
+                            label="Valor de venda"
+                            name="nome"
+                            required
+                            md={4}
+                        />
+                        <GroupOne
+                            label="Valor promoção"
+                            name="nome"
+                            md={4}
+                        />
+                        <GroupSelectOne
+                            label="Promoção ativa"
+                            name="sexo"
+                            data={[
+                                { value: true, name: "Ativa" },
+                                { value: false, name: "Inativa" },
+                            ]}
+                            md={4}
+                        />
+                        <GroupOne
+                            label="Imagem principal"
+                            name="nome"
+                            required
+                            xs={12}
+                        />
+                        <GroupOne
+                            label="Imagem 1"
+                            name="nome"
+                            xs={12}
+                        />
+                        <GroupOne
+                            label="Imagem 2"
+                            name="nome"
+                            xs={12}
+                        />
+                        <GroupOne
+                            label="Imagem 3"
+                            name="nome"
+                            xs={12}
+                        />
+                        <GroupOne
+                            label="Imagem 4"
+                            name="nome"
+                            xs={12}
+                        />
+                    </FormOne>
+                )}
+            </Formik>
         </>
     )
 }

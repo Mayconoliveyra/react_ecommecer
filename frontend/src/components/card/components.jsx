@@ -74,6 +74,7 @@ const PriceSC = styled(Link)`
     padding: 3px 5px;
     padding-bottom: 7px;
     display: flex;
+    color: #0F1111 !important;
     span:nth-child(1) {
         margin-right: 1px;
         position:relative;
@@ -135,6 +136,7 @@ const BtnAddSC = styled(Link)`
     padding: 0.7rem 1rem;
     margin: 0 0.2rem;
     margin-top:auto;
+    color: #0F1111 !important;
 
     background: #FFD814;
     border-color: #FCD200;  

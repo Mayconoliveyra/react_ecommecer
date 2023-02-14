@@ -46,6 +46,7 @@ const NavSC = styled.footer`
                 svg{
                     font-size: 2rem;
                     margin: 1.5rem 1.6rem;
+                    color: #FFFFFF !important;
                 }   
             } 
             p{
@@ -95,6 +96,7 @@ const NavSC = styled.footer`
                 svg{
                     font-size: 2rem;
                     margin: 1.5rem 1.6rem;
+                    color: #FFFFFF !important;
                 }   
             }          
         }
