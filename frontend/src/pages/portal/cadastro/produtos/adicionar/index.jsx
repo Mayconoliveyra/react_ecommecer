@@ -1,7 +1,9 @@
 import Head from "next/head";
 import { ChevronRight } from "react-bootstrap-icons"
 import Link from "next/link"
-import { Search, PencilSquare, X } from "react-bootstrap-icons"
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import styled from "styled-components";
 
 import { TitleOne } from "../../../../../components/portal/titulo/components"
 
@@ -10,6 +12,22 @@ import { moneyMask } from "../../../../../../masks"
 
 import { Formik } from "formik";
 import { FormOne, GroupOne, GroupSelectOne } from "../../../../../components/portal/form/components";
+
+const TabsSC = styled.div`
+    padding: 20px 15px;
+    @media (max-width: 720px){
+        padding: 20px 0px;
+    }
+    .nav-tabs{
+        button{
+            color: #333333 !important;
+        }
+    }
+    .nav-link{
+        border-radius: 0px;
+        font-family:${({ theme }) => theme.font.family.medium} ;
+    }
+`
 
 export default function Adicionar({ data }) {
     const initialValues = {
@@ -96,8 +114,26 @@ export default function Adicionar({ data }) {
                             md={4}
                         />
                         <GroupOne
+                            label="Estoque atual"
+                            name="nome"
+                            md={4}
+                        />
+                        <GroupOne
+                            label="Estoque mínimo"
+                            name="nome"
+                            md={4}
+                            disabled
+                        />
+                        <GroupOne
+                            label="Quant. min. venda"
+                            name="nome"
+                            md={4}
+                            disabled
+                        />
+                        <GroupOne
                             label="Imagem principal"
                             name="nome"
+                            type="file"
                             required
                             xs={12}
                         />

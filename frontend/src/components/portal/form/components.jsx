@@ -29,7 +29,25 @@ const FormOneSC = styled.section`
         margin-left: 0px;
     }
 `;
+const FormTwoSC = styled.section`
+    @media (max-width: 720px){
+        padding: 0px;
+    }
+    form{
+        background: #ffffff;
+        margin-bottom: 20px;
+        border-radius: 3px;
+        width: 100%;
 
+        padding: 15px 10px;
+        border: solid 1px #dee2e6;
+        border-top: none;
+    }
+    #row{
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+`;
 const GroupOneSC = styled(Col)`
     padding: 0px 5px;
     label {
@@ -63,6 +81,10 @@ const GroupOneSC = styled(Col)`
         &:focus{
             border-color: #0C1B25 !important;
         }
+        &:disabled {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
     }
 
     small {
@@ -78,6 +100,15 @@ const FormOne = ({ children }) => {
                 <Row id="row">{children}</Row>
             </Form>
         </FormOneSC>
+    );
+};
+const FormTwo = ({ children }) => {
+    return (
+        <FormTwoSC>
+            <Form>
+                <Row id="row">{children}</Row>
+            </Form>
+        </FormTwoSC>
     );
 };
 const GroupOne = ({ name, label, type = "text", required = false, autocomplete = "off", maxlength = 255, mask = false, placeholder, disabled, xs, sm, md, lg, xl, xxl }) => {
@@ -168,5 +199,60 @@ const GroupSelectOne = ({ name, label, required = false, data = [], xs, sm, md, 
         </GroupOneSC>
     );
 };
+const GroupFile = ({ name, label, type = "text", required = false, autocomplete = "off", maxlength = 255, mask = false, placeholder, disabled, xs, sm, md, lg, xl, xxl }) => {
+    const propsGroup = {
+        xs,
+        sm,
+        md,
+        lg,
+        xl,
+        xxl,
+    };
+    return (
+        <GroupOneSC {...propsGroup} required={required}>
+            <label htmlFor={name}>{label}</label>
+            {!mask && (
+                <Field name={name}>
+                    {({ field }) => (
+                        <input
+                            {...field}
+                            id={name}
+                            type={type}
+                            maxLength={maxlength}
+                            autoComplete={autocomplete}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            required={required}
+                            value={field.value || ''}
+                        />
+                    )}
+                </Field>
+            )}
+            {!!mask && (
+                <Field name={name}>
+                    {({ field }) => (
+                        <MaskedInput
+                            {...field}
+                            id={name}
+                            type={type}
+                            maxLength={maxlength}
+                            autoComplete={autocomplete}
+                            mask={mask}
+                            guide={false}
+                            showMask={false}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            required={required}
+                            value={field.value || ''}
+                        />
+                    )}
+                </Field>
+            )}
+            <small>
+                <ErrorMessage name={name} />
+            </small>
+        </GroupOneSC>
+    );
+};
 
-export { FormOne, GroupOne, GroupSelectOne }
+export { FormOne, FormTwo, GroupOne, GroupSelectOne }
