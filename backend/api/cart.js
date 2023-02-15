@@ -175,24 +175,6 @@ module.exports = (app) => {
             existOrError(modelo.pgt_metodo, "[pgt_metodo] não pode ser nulo.")
             existOrError(modelo.pgt_forma, "[pgt_forma] não pode ser nulo.")
 
-            /*!Atenção!, se alterar essa consulta verificar se precisa alterar em getCartTemp tambem */
-            /*  const rawTotals = await app.db.raw(`
-             SELECT 
-             ROUND(Sum(If(promotion=True,preco_promocao*quantidade,price*quantidade)),2) AS vlr_pagar_produtos, 
-             ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
-             ROUND(Sum(price*quantidade),2) AS vlr_produtos, 
-             ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
-             ROUND(Sum(If(promotion=True,price*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
-             NULL  AS pgt_metodo, 
-             NULL AS pgt_forma 
-             FROM temp_carrinho 
-             INNER JOIN products ON temp_carrinho.id_produto = products.id
-             GROUP BY products.deleted_at, products.disabled, temp_carrinho.id_storage
-             HAVING (((products.deleted_at) Is NULL) 
-             AND ((products.disabled)=FALSE) 
-             AND ((temp_carrinho.id_storage)='${modelo.id_storage}'));
-             `) */
-
             const rawTotals = await app.db.raw(`
             SELECT 
             ROUND(Sum(If(promocao_ativa=True,preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
