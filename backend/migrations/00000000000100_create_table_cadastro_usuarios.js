@@ -1,6 +1,6 @@
 exports.up = function (knex) {
     return knex.schema
-        .createTable("users", (table) => {
+        .createTable("cadastro_usuarios", (table) => {
             table.increments("id").primary();
 
             table.string("nome").defaultTo("Não informado").notNull()
@@ -31,5 +31,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTable("users");
+    return knex.schema.dropTable("cadastro_usuarios");
 };

@@ -39,9 +39,9 @@ module.exports = (app) => {
 
             if (elemento.slice(-1) == 's') {
                 /* Remove o 's' do final da palavra. ex: lampadas, tintas...*/
-                textAndReturn = `${textAndReturn} name LIKE '%${elemento.slice(0, elemento.length - 1)}%' AND`;
+                textAndReturn = `${textAndReturn} nome LIKE '%${elemento.slice(0, elemento.length - 1)}%' AND`;
             } else {
-                textAndReturn = `${textAndReturn} name LIKE '%${elemento}%' AND`;
+                textAndReturn = `${textAndReturn} nome LIKE '%${elemento}%' AND`;
             }
         });
         /* Remover o AND do final da query */
@@ -88,7 +88,7 @@ module.exports = (app) => {
         format2.map(item => {
             /* Se tiver algum caracteres do removeFilter remover */
             if (removeFilter.includes(item)) return
-            arrayRetun.push({ id_product: id, text_filter: item })
+            arrayRetun.push({ id_produto: id, text_filter: item })
         })
 
         return arrayRetun

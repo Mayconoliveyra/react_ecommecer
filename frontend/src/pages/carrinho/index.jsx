@@ -56,11 +56,11 @@ export default function Cart({ vendidos, semana, oferta }) {
                     {products && products.length > 0 && (
                         <>
                             <SubTotal>
-                                Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_products, false)}</span>
+                                Subtotal <span>R$</span> <span>{moneyMask(totals.vlr_pagar_produtos, false)}</span>
                             </SubTotal>
                             <ButtonYellow margin="0 0 1.5rem 0">
                                 <Link href="carrinho/fechar">
-                                    Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                                    Fechar pedido ({totals.qtd_produtos} {totals.qtd_produtos == 1 ? 'Item' : "Itens"})
                                 </Link>
                             </ButtonYellow>
                         </>
@@ -78,7 +78,7 @@ export default function Cart({ vendidos, semana, oferta }) {
                     {products && products.length > 5 && (
                         <ButtonYellow margin="1.5rem 0 1rem 0">
                             <Link href="carrinho/fechar">
-                                Fechar pedido ({totals.qtd_products} {totals.qtd_products == 1 ? 'Item' : "Itens"})
+                                Fechar pedido ({totals.qtd_produtos} {totals.qtd_produtos == 1 ? 'Item' : "Itens"})
                             </Link>
                         </ButtonYellow>
                     )}

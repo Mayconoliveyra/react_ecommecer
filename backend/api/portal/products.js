@@ -2,7 +2,7 @@ module.exports = (app) => {
     const { utility_console, msgErrorDefault } = app.api.utilities;
     const { simplify } = app.api.search;
 
-    const table = "products";
+    const table = "cadastro_produtos";
 
     const get = (req, res) => {
         const page = Number(req.query._page) ?? 1;

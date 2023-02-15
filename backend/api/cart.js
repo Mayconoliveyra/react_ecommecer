@@ -7,31 +7,31 @@ module.exports = (app) => {
         const body = req.body
         const modelo = {
             id_storage: body.id_storage,
-            id_product: body.id_product,
-            quantity: body.quantity,
+            id_produto: body.id_produto,
+            quantidade: body.quantidade,
         }
 
         try {
             existOrError(modelo.id_storage, "[id_storage] não pode ser nulo.")
-            existOrError(modelo.id_product, "[id_product] não pode ser nulo.")
+            existOrError(modelo.id_produto, "[id_produto] não pode ser nulo.")
 
-            const productDB = await app.db("products").where({ id: modelo.id_product }).first()
-            existOrError(productDB, "[id_product] mercadoria não existe.")
+            const productDB = await app.db("cadastro_produtos").where({ id: modelo.id_produto }).first()
+            existOrError(productDB, "[id_produto] mercadoria não existe.")
         } catch (error) {
             utility_console("cart.saveIncrementer", error)
             return res.status(400).send(error)
         }
 
-        const tempCartDB = await app.db("temp_cart")
+        const tempCartDB = await app.db("temp_carrinho")
             .where({ id_storage: modelo.id_storage })
-            .andWhere({ id_product: modelo.id_product })
+            .andWhere({ id_produto: modelo.id_produto })
             .first()
 
         if (tempCartDB) {
             /* Se a mercadoria ja  ja existir no carrinho e a nova quantidade for 0, eu vou excluir a mercadoria do carrinho */
             /* Se a quantidade for maior que 0, vou apenas atualizar a quantidade */
-            if (modelo.quantity == 0) {
-                app.db("temp_cart")
+            if (modelo.quantidade == 0) {
+                app.db("temp_carrinho")
                     .delete(modelo)
                     .where({ id: tempCartDB.id })
                     .then(() => res.status(204).send())
@@ -40,7 +40,7 @@ module.exports = (app) => {
                         return res.status(500).send(msgErrorDefault);
                     });
             } else {
-                app.db("temp_cart")
+                app.db("temp_carrinho")
                     .update(modelo)
                     .where({ id: tempCartDB.id })
                     .then(() => res.status(204).send())
@@ -51,8 +51,8 @@ module.exports = (app) => {
             }
         } else {
             /* Se a quantidade for menos que 1, atualizo para 1 */
-            if (modelo.quantity < 1) modelo.quantity = 1
-            app.db("temp_cart")
+            if (modelo.quantidade < 1) modelo.quantidade = 1
+            app.db("temp_carrinho")
                 .insert(modelo)
                 .then(() => res.status(204).send())
                 .catch((error) => {
@@ -80,39 +80,41 @@ module.exports = (app) => {
             const products = await app.db.raw(`
             SELECT 
             p.id, 
-            p.name, 
+            p.nome, 
             p.url_img, 
             p.estoque_atual, 
-            p.price, 
-            p.price_promotion, 
-            p.promotion, 
-            tc.quantity, 
-            p.price * tc.quantity AS amount,  
-            p.price_promotion * tc.quantity  AS amount_promotion 
-            FROM temp_cart AS tc 
-            INNER JOIN products AS p 
-            ON tc.id_product 
+            p.estoque_qtd_minima, 
+            p.estoque_controle, 
+            p.preco, 
+            p.preco_promocao, 
+            p.promocao_ativa, 
+            tc.quantidade, 
+            p.preco * tc.quantidade AS amount,  
+            p.preco_promocao * tc.quantidade  AS amount_promotion 
+            FROM temp_carrinho AS tc 
+            INNER JOIN cadastro_produtos AS p 
+            ON tc.id_produto 
             = p.id
-            WHERE p.disabled = False 
+            WHERE p.produto_ativo = True 
             AND p.deleted_at IS NULL
             AND tc.id_storage = '${id}'`)
 
             /*!Atenção!, se alterar essa consulta verificar se precisa alterar em savePedido tambem */
             const rawTotals = await app.db.raw(`
             SELECT 
-            ROUND(Sum(If(promotion=True,price_promotion*quantity,price*quantity)),2) AS vlr_pagar_products, 
-            ROUND(Sum(temp_cart.quantity),2) AS qtd_products, 
-            ROUND(Sum(price*quantity),2) AS vlr_products, 
-            ROUND(Sum(price_promotion*quantity),2) AS vlr_products_promotion, 
-            ROUND(Sum(If(promotion=True,price*quantity-price_promotion*quantity,0)),2) AS vlr_diferenca_promotion, 
+            ROUND(Sum(If(promocao_ativa=True,preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
+            ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
+            ROUND(Sum(preco*quantidade),2) AS vlr_produtos, 
+            ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
+            ROUND(Sum(If(promocao_ativa=True,preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
             NULL  AS pgt_metodo, 
             NULL AS pgt_forma 
-            FROM temp_cart 
-            INNER JOIN products ON temp_cart.id_product = products.id
-            GROUP BY products.deleted_at, products.disabled, temp_cart.id_storage
-            HAVING (((products.deleted_at) Is NULL) 
-            AND ((products.disabled)=FALSE) 
-            AND ((temp_cart.id_storage)='${id}'));
+            FROM temp_carrinho 
+            INNER JOIN cadastro_produtos ON temp_carrinho.id_produto = cadastro_produtos.id
+            GROUP BY cadastro_produtos.deleted_at, cadastro_produtos.produto_ativo, temp_carrinho.id_storage
+            HAVING (((cadastro_produtos.deleted_at) Is NULL) 
+            AND ((cadastro_produtos.produto_ativo)= True) 
+            AND ((temp_carrinho.id_storage)='${id}'));
             `)
             const totals = rawTotals[0][0]
 
@@ -120,7 +122,7 @@ module.exports = (app) => {
             if (id_user && products[0].length > 0) {
                 const store = app.store
 
-                const user = await app.db.select("distancia_km").table("users").where({ id: id_user }).first()
+                const user = await app.db.select("distancia_km").table("cadastro_usuarios").where({ id: id_user }).first()
                 existOrError(user, "[user] não foi encontrado.")
 
                 const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
@@ -128,15 +130,15 @@ module.exports = (app) => {
                     /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
                     vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
 
-                    totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
-                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                    totals.vlr_pagar_com_frete = (totals.vlr_pagar_produtos + totals.vlr_frete)
+                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_produtos
                     totals.distancia_km = user.distancia_km
                     totals.percentual_frete = store.percentual_frete
                 } else {
                     totals.vlr_frete = 0.00;
 
-                    totals.vlr_pagar_com_frete = totals.vlr_pagar_products
-                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                    totals.vlr_pagar_com_frete = totals.vlr_pagar_produtos
+                    totals.vlr_pagar_sem_frete = totals.vlr_pagar_produtos
                     totals.distancia_km = user.distancia_km
                     totals.percentual_frete = 0.00;
                 }
@@ -153,11 +155,11 @@ module.exports = (app) => {
         const modelo = {
             id_user: body.id_user,
             id_storage: body.id_storage,
-            vlr_pagar_products: body.vlr_pagar_products,
-            qtd_products: body.qtd_products,
-            vlr_products: body.vlr_products,
-            vlr_products_promotion: body.vlr_products_promotion,
-            vlr_diferenca_promotion: body.vlr_diferenca_promotion,
+            vlr_pagar_produtos: body.vlr_pagar_produtos,
+            qtd_produtos: body.qtd_produtos,
+            vlr_produtos: body.vlr_produtos,
+            vlr_produtos_promocao: body.vlr_produtos_promocao,
+            vlr_diferenca_promocao: body.vlr_diferenca_promocao,
             pgt_metodo: body.pgt_metodo,
             pgt_forma: body.pgt_forma,
             vlr_frete: body.vlr_frete,
@@ -174,27 +176,44 @@ module.exports = (app) => {
             existOrError(modelo.pgt_forma, "[pgt_forma] não pode ser nulo.")
 
             /*!Atenção!, se alterar essa consulta verificar se precisa alterar em getCartTemp tambem */
+            /*  const rawTotals = await app.db.raw(`
+             SELECT 
+             ROUND(Sum(If(promotion=True,preco_promocao*quantidade,price*quantidade)),2) AS vlr_pagar_produtos, 
+             ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
+             ROUND(Sum(price*quantidade),2) AS vlr_produtos, 
+             ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
+             ROUND(Sum(If(promotion=True,price*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
+             NULL  AS pgt_metodo, 
+             NULL AS pgt_forma 
+             FROM temp_carrinho 
+             INNER JOIN products ON temp_carrinho.id_produto = products.id
+             GROUP BY products.deleted_at, products.disabled, temp_carrinho.id_storage
+             HAVING (((products.deleted_at) Is NULL) 
+             AND ((products.disabled)=FALSE) 
+             AND ((temp_carrinho.id_storage)='${modelo.id_storage}'));
+             `) */
+
             const rawTotals = await app.db.raw(`
             SELECT 
-            ROUND(Sum(If(promotion=True,price_promotion*quantity,price*quantity)),2) AS vlr_pagar_products, 
-            ROUND(Sum(temp_cart.quantity),2) AS qtd_products, 
-            ROUND(Sum(price*quantity),2) AS vlr_products, 
-            ROUND(Sum(price_promotion*quantity),2) AS vlr_products_promotion, 
-            ROUND(Sum(If(promotion=True,price*quantity-price_promotion*quantity,0)),2) AS vlr_diferenca_promotion, 
+            ROUND(Sum(If(promocao_ativa=True,preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
+            ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
+            ROUND(Sum(preco*quantidade),2) AS vlr_produtos, 
+            ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
+            ROUND(Sum(If(promocao_ativa=True,preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
             NULL  AS pgt_metodo, 
             NULL AS pgt_forma 
-            FROM temp_cart 
-            INNER JOIN products ON temp_cart.id_product = products.id
-            GROUP BY products.deleted_at, products.disabled, temp_cart.id_storage
-            HAVING (((products.deleted_at) Is NULL) 
-            AND ((products.disabled)=FALSE) 
-            AND ((temp_cart.id_storage)='${modelo.id_storage}'));
+            FROM temp_carrinho 
+            INNER JOIN cadastro_produtos ON temp_carrinho.id_produto = cadastro_produtos.id
+            GROUP BY cadastro_produtos.deleted_at, cadastro_produtos.produto_ativo, temp_carrinho.id_storage
+            HAVING (((cadastro_produtos.deleted_at) Is NULL) 
+            AND ((cadastro_produtos.produto_ativo)= True) 
+            AND ((temp_carrinho.id_storage)='${modelo.id_storage}'));
             `)
             const totals = rawTotals[0][0]
 
             const store = app.store
 
-            const user = await app.db.select("id", "nome", "cpf", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("users").where({ id: modelo.id_user }).first()
+            const user = await app.db.select("id", "nome", "cpf", "email", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "distancia_km", "tempo").table("cadastro_usuarios").where({ id: modelo.id_user }).first()
             existOrError(user, "[user] não foi encontrado.")
 
             const vlrFreteDistancia = Math.round(user.distancia_km * store.percentual_frete)
@@ -202,15 +221,15 @@ module.exports = (app) => {
                 /* O valor do frete é maior que a taxa de frete minimo?. Se não for seta a taxa minima de frete. */
                 vlrFreteDistancia > store.taxa_min_frete ? totals.vlr_frete = vlrFreteDistancia : totals.vlr_frete = store.taxa_min_frete;
 
-                totals.vlr_pagar_com_frete = (totals.vlr_pagar_products + totals.vlr_frete)
-                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                totals.vlr_pagar_com_frete = (totals.vlr_pagar_produtos + totals.vlr_frete)
+                totals.vlr_pagar_sem_frete = totals.vlr_pagar_produtos
                 totals.distancia_km = user.distancia_km
                 totals.percentual_frete = store.percentual_frete
             } else {
                 totals.vlr_frete = 0.00;
 
-                totals.vlr_pagar_com_frete = totals.vlr_pagar_products
-                totals.vlr_pagar_sem_frete = totals.vlr_pagar_products
+                totals.vlr_pagar_com_frete = totals.vlr_pagar_produtos
+                totals.vlr_pagar_sem_frete = totals.vlr_pagar_produtos
                 totals.distancia_km = user.distancia_km
                 totals.percentual_frete = 0.00;
             }
@@ -256,11 +275,11 @@ module.exports = (app) => {
                 numero: user.numero,
                 distancia_km: user.distancia_km,
                 tempo: user.tempo,
-                vlr_pagar_products: totals.vlr_pagar_products,
-                qtd_products: totals.qtd_products,
-                vlr_products: totals.vlr_products,
-                vlr_products_promotion: totals.vlr_products_promotion,
-                vlr_diferenca_promotion: totals.vlr_diferenca_promotion,
+                vlr_pagar_produtos: totals.vlr_pagar_produtos,
+                qtd_produtos: totals.qtd_produtos,
+                vlr_produtos: totals.vlr_produtos,
+                vlr_produtos_promocao: totals.vlr_produtos_promocao,
+                vlr_diferenca_promocao: totals.vlr_diferenca_promocao,
                 vlr_frete: totals.vlr_frete,
                 vlr_pagar_com_frete: totals.vlr_pagar_com_frete,
                 vlr_pagar_sem_frete: totals.vlr_pagar_sem_frete,
@@ -274,43 +293,47 @@ module.exports = (app) => {
             await app.db.transaction(async trans => {
                 /* CADASTRA O CABEÇALHO DO PEDIDO E RETORNA O ID */
                 const idTotalsHeader = await trans.insert(modeloTotals)
-                    .table("sales_header")
+                    .table("vendas_cabecalho")
                     .returning('id')
                     .then((id) => id[0])
 
                 /*!Atenção!, se alterar essa consulta verificar se precisa alterar em getCartTemp tambem */
                 const salesProducts = await trans.raw(`
                 SELECT 
-                ${idTotalsHeader} AS id_sale, 
-                p.id AS id_product, 
-                p.name, 
-                p.url_img, 
+                ${idTotalsHeader} AS id_venda, 
+                p.id AS id_produto, 
+                p.nome, 
+                p.codigo_interno, 
+                p.produto_ativo, 
                 p.estoque_atual, 
+                p.estoque_minimo, 
+                p.estoque_qtd_minima, 
+                p.estoque_controle, 
+                p.url_img, 
                 p.img_1, 
                 p.img_2, 
                 p.img_3, 
                 p.img_4, 
-                p.price, 
-                p.price_promotion, 
-                p.promotion, 
-                p.id_category, 
-                tc.quantity AS p_quantity, 
-                p.price * tc.quantity AS p_amount,  
-                p.price_promotion * tc.quantity  AS p_amount_promotion 
-                FROM temp_cart AS tc 
-                INNER JOIN products AS p 
-                ON tc.id_product 
+                p.preco, 
+                p.preco_promocao, 
+                p.promocao_ativa, 
+                tc.quantidade AS p_quantidade, 
+                p.preco * tc.quantidade AS p_vlr_total,  
+                p.preco_promocao * tc.quantidade  AS p_vlr_total_promocao 
+                FROM temp_carrinho AS tc 
+                INNER JOIN cadastro_produtos AS p 
+                ON tc.id_produto 
                 = p.id
-                WHERE p.disabled = False 
+                WHERE p.produto_ativo = True 
                 AND p.deleted_at IS NULL
                 AND tc.id_storage = '${modelo.id_storage}'`)
 
                 await trans.delete()
-                    .table("temp_cart")
+                    .table("temp_carrinho")
                     .where({ id_storage: modelo.id_storage })
 
                 await trans.insert(salesProducts[0])
-                    .table("sales_products")
+                    .table("vendas_produtos")
 
                 /* FORMA DE PAGAMENTO PIX */
                 if (modeloTotals.pgt_forma == "PIX") {
@@ -324,7 +347,7 @@ module.exports = (app) => {
 
                     /*pix = {pix_chave:"...", pix_qrcode:"..."} */
                     await trans.update(pix)
-                        .table("sales_header")
+                        .table("vendas_cabecalho")
                         .where({ id: idTotalsHeader })
 
                     res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/pix/${idTotalsHeader}` })
@@ -349,14 +372,14 @@ module.exports = (app) => {
     /* !!! MUITA ATENÇÃO SE FOR FAZER ALTERAÇÃO NESSAS 2 FUNÇÕES(getCartTemp,savePedido) !!! */
 
     const getPixDetail = async (req, res) => {
-        const id = Number(req.params.id_sale); /* id do pedido */
+        const id = Number(req.params.id_venda); /* id do pedido */
         const id_user = req.userAuth.id /* ID do usuario. */
 
         try {
             existOrError(id, "[id] não pode ser nulo.")
             existOrError(id_user, "[id_user] não pode ser nulo.")
 
-            const pagamento = await app.db("sales_header")
+            const pagamento = await app.db("vendas_cabecalho")
                 .select("id", "vlr_pago", "pix_qrcode", "pix_img_qrcode", "pix_status", "pix_expiracao", "pgt_metodo", "cancelado", "pgt_forma")
                 .where({ id: id })
                 .andWhere({ id_user: id_user })
@@ -376,13 +399,13 @@ module.exports = (app) => {
 
     const getPedidos = async (req, res) => {
         const id_user = req.userAuth.id
-        const id_sales = Number(req.params.id_sale); /* id_sale= id do pedido. utilizado para retornar os produtos do pedido "sales_products"*/
+        const id_vendas = Number(req.params.id_venda); /* id_venda= id do pedido. utilizado para retornar os produtos do pedido "vendas_produtos"*/
         const page = Number(req.query._page);
         const limit = Number(req.query._limit);
 
         try {
             existOrError(id_user, "[id_user] não pode ser nulo.")
-            if (!id_sales) {
+            if (!id_vendas) {
                 existOrError(page, "[page] não pode ser nulo.")
                 existOrError(limit, "[limit] não pode ser nulo.")
             }
@@ -391,25 +414,25 @@ module.exports = (app) => {
             return res.status(500).send(msgErrorDefault)
         }
 
-        if (id_sales) {
+        if (id_vendas) {
             /* Retorna os produtos do pedido */
-            app.db("sales_products").where({ id_sale: id_sales })
+            app.db("vendas_produtos").where({ id_venda: id_vendas })
                 .then((products) => res.json(products))
                 .catch((error) => {
-                    utility_console("cart.getPedidos.id_sales", error)
+                    utility_console("cart.getPedidos.id_vendas", error)
                     return res.status(500).send(msgErrorDefault)
                 })
         } else {
             try {
                 const { totals } = await app
-                    .db("sales_header")
+                    .db("vendas_cabecalho")
                     .count({ totals: "*" })
                     .where({ id_user: id_user })
                     .first();
 
                 const pedidos = await app
-                    .db("sales_header")
-                    .select("id", "nome", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "vlr_frete", "vlr_pago", "pgt_metodo", "pgt_forma", "cobrar_frete", "vlr_pagar_products", "qtd_products", "created_at", "status")
+                    .db("vendas_cabecalho")
+                    .select("id", "nome", "contato", "cep", "logradouro", "complemento", "bairro", "localidade", "uf", "numero", "vlr_frete", "vlr_pago", "pgt_metodo", "pgt_forma", "cobrar_frete", "vlr_pagar_produtos", "qtd_produtos", "created_at", "status")
                     .whereRaw(` 
                         id_user = ${id_user}
                         ${orderBy("id", "DESC")}

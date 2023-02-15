@@ -91,7 +91,7 @@ export default function Resume({ session, products, totals, payment }) {
                             <tbody>
                                 <tr>
                                     <td>Itens:</td>
-                                    <td data="td-value">{moneyMask(totals.vlr_pagar_products)}</td>
+                                    <td data="td-value">{moneyMask(totals.vlr_pagar_produtos)}</td>
                                 </tr>
                                 {payment.pgt_metodo == "Receber em casa" ?
                                     <>

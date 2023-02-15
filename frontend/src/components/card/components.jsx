@@ -161,7 +161,7 @@ const Img = ({ product, height, width, maxwidth, maxheight, margin, padding, bac
     return (
         <ImageSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
             <div data="img-img">
-                <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} title={product.name ? product.name : "Sem descrição"} alt={product.name ? product.name : "Sem descrição"} />
+                <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} title={product.nome ? product.nome : "Sem descrição"} alt={product.nome ? product.nome : "Sem descrição"} />
             </div>
         </ImageSC>
     )
@@ -169,7 +169,7 @@ const Img = ({ product, height, width, maxwidth, maxheight, margin, padding, bac
 const Description = ({ product, height, width, maxwidth, maxheight, margin, padding, background }) => {
     return (
         <DescriptionSC href={`/produto/${product.id}`} height={height} width={width} maxwidth={maxwidth} maxheight={maxheight} margin={margin} padding={padding} background={background}>
-            <span>{product.name}</span>
+            <span>{product.nome}</span>
         </DescriptionSC>
     )
 }

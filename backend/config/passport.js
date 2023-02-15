@@ -86,12 +86,12 @@ module.exports = app => {
 
                                 await conexao.migrate.latest()
                                 /* Testando se as principais tabelas estão setadas. */
-                                await conexao("products").first()
-                                await conexao("users").first()
-                                const tempCart = await conexao("temp_cart").first()
-                                /* Limpa registros antigos na tabela temp_cart. */
+                                await conexao("cadastro_produtos").first()
+                                await conexao("cadastro_usuarios").first()
+                                const tempCart = await conexao("temp_carrinho").first()
+                                /* Limpa registros antigos na tabela temp_carrinho. */
                                 if (tempCart) {
-                                        await conexao("temp_cart").whereRaw(`DATE(updated_at) < DATE_ADD(NOW(), INTERVAL -90 DAY)`).del();
+                                        await conexao("temp_carrinho").whereRaw(`DATE(updated_at) < DATE_ADD(NOW(), INTERVAL -90 DAY)`).del();
                                 }
 
                                 /* Seta instancia para ser utilizada nas proximas requisição; */

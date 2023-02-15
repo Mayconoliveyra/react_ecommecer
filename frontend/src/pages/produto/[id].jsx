@@ -10,7 +10,7 @@ import { CardNavSugOne } from "../../components/cardsNav";
 
 import { moneyMask } from "../../../masks"
 import { getByID } from "../api/products"
-import { getCartTemp, storeQuantity } from "../api/cart";
+import { getCartTemp, storeQuantidade } from "../api/cart";
 import { getAll } from "../api/products";
 
 import MyCartContext from "../../context/myCart";
@@ -105,7 +105,7 @@ export default function Product({ vendidos, semana, oferta }) {
     const [urlImg, setUrlImg] = useState(null)
 
     const handleAddMyCart = async (id) => {
-        await storeQuantity(id, 1, myCartId)
+        await storeQuantidade(id, 1, myCartId)
         await setMyCart(await getCartTemp({ id_storage: myCartId }))
         router.push("/")
     }
@@ -130,16 +130,16 @@ export default function Product({ vendidos, semana, oferta }) {
     return (
         <>
             <Head>
-                <title>{product.name ? product.name : 'Carregando...'}</title>
+                <title>{product.nome ? product.nome : 'Carregando...'}</title>
             </Head>
             <Content noShadow padding="0">
                 <Content maxwidth="40rem" bgWhite noShadow padding="1rem">
                     <CardSC>
                         <div data="card-name">
-                            <h1>{product.name}</h1>
+                            <h1>{product.nome}</h1>
                         </div>
                         <div data="card-img">
-                            <img src={urlImg} alt={product.name} />
+                            <img src={urlImg} alt={product.nome} />
                         </div>
                         <div data="nav-imgs">
                             <ul>
@@ -181,7 +181,7 @@ export default function Product({ vendidos, semana, oferta }) {
                             </ul>
                         </div>
                         <div data="price">
-                            {!!product.promotion ?
+                            {!!product.promocao_ativa ?
                                 (
                                     <>
                                         <div data="oferta">
@@ -189,10 +189,10 @@ export default function Product({ vendidos, semana, oferta }) {
                                                 <span data="oft-t">Oferta</span>
                                             </div>
                                             <div data="p-r-v">
-                                                <span data="red">{(Number(product.price - product.price_promotion) / Number(product.price) * 100).toFixed(0)}%</span>
+                                                <span data="red">{(Number(product.preco - product.preco_promocao) / Number(product.preco) * 100).toFixed(0)}%</span>
                                                 <span data="rs">R$</span>
-                                                <span data="valor">{moneyMask(product.price_promotion, false)}</span>
-                                                <span data="valor-old">{moneyMask(product.price)}</span>
+                                                <span data="valor">{moneyMask(product.preco_promocao, false)}</span>
+                                                <span data="valor-old">{moneyMask(product.preco)}</span>
                                             </div>
                                         </div>
                                     </>
@@ -203,7 +203,7 @@ export default function Product({ vendidos, semana, oferta }) {
                                         <div data="oferta">
                                             <div data="p-r-v">
                                                 <span data="rs">R$</span>
-                                                <span data="valor">{moneyMask(product.price, false)}</span>
+                                                <span data="valor">{moneyMask(product.preco, false)}</span>
                                             </div>
                                         </div>
                                     </>

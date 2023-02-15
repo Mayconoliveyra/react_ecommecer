@@ -2,7 +2,7 @@ module.exports = (app) => {
     const { utility_console, msgErrorDefault } = app.api.utilities;
     const { simplify } = app.api.search;
 
-    const table = "products";
+    const table = "cadastro_produtos";
 
     const get = async (req, res) => {
         const page = Number(req.query._page) ?? 1;
@@ -12,9 +12,9 @@ module.exports = (app) => {
 
         if (search) {
             await app.db(table)
-                .select("id", "name", "url_img", "estoque_atual", "price", "price_promotion", "promotion")
+                .select("id", "nome", "url_img", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "preco", "preco_promocao", "promocao_ativa")
                 .whereRaw(simplify(search))
-                .whereRaw('disabled = False AND deleted_at IS NULL')
+                .whereRaw('produto_ativo = True AND deleted_at IS NULL')
                 .limit(limit).offset(page * limit - limit)
                 .orderBy('id', 'desc')
                 .then(products => res.json(products))
@@ -28,9 +28,9 @@ module.exports = (app) => {
 
         if (id) {
             await app.db(table)
-                .select("id", "name", "url_img", "estoque_atual", "img_1", "img_2", "img_3", "img_4", "price", "price_promotion", "promotion", "description")
+                .select("id", "nome", "url_img", "img_1", "img_2", "img_3", "img_4", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "preco", "preco_promocao", "promocao_ativa")
                 .where({ id: id })
-                .whereRaw('disabled = False AND deleted_at IS NULL')
+                .whereRaw('produto_ativo = True AND deleted_at IS NULL')
                 .first()
                 .then(products => res.json(products))
                 .catch((error) => {
@@ -47,75 +47,85 @@ module.exports = (app) => {
             const vendidos = await app.db
                 .raw(`SELECT 
                         P.id, 
-                        P.name, 
+                        P.nome, 
                         P.url_img, 
                         P.estoque_atual, 
-                        P.price, 
-                        P.price_promotion, 
-                        P.promotion
-                        FROM products AS P
-                        INNER JOIN sales_products AS SP
-                        ON P.id = SP.id_product
+                        P.estoque_qtd_minima, 
+                        P.estoque_controle, 
+                        P.preco, 
+                        P.preco_promocao, 
+                        P.promocao_ativa
+                        FROM cadastro_produtos AS P
+                        INNER JOIN vendas_produtos AS SP
+                        ON P.id = SP.id_produto
                         WHERE SP.created_at 
                         BETWEEN DATE_ADD(NOW(), INTERVAL -90 DAY) AND NOW()
                         GROUP BY 
                             P.id, 
-                            P.name, 
+                            P.nome, 
                             P.url_img, 
                             P.estoque_atual, 
-                            P.price, 
-                            P.price_promotion, 
-                            P.promotion, 
-                            P.disabled, 
+                            P.estoque_qtd_minima, 
+                            P.estoque_controle, 
+                            P.preco, 
+                            P.preco_promocao, 
+                            P.promocao_ativa,
+                            P.produto_ativo, 
                             P.deleted_at
                         HAVING 
-                            P.disabled=False AND P.deleted_at Is Null
-                        ORDER BY Sum(SP.p_quantity) DESC
+                            P.produto_ativo= True AND P.deleted_at Is Null
+                        ORDER BY Sum(SP.p_quantidade) DESC
                         LIMIT ${limit};
                 `)
 
             const semana = await app.db
                 .raw(`SELECT 
                         P.id, 
-                        P.name, 
+                        P.nome, 
                         P.url_img, 
                         P.estoque_atual, 
-                        P.price, 
-                        P.price_promotion, 
-                        P.promotion
-                        FROM products AS P
-                        INNER JOIN sales_products AS SP
-                        ON P.id = SP.id_product
+                        P.estoque_qtd_minima, 
+                        P.estoque_controle, 
+                        P.preco, 
+                        P.preco_promocao, 
+                        P.promocao_ativa
+                        FROM cadastro_produtos AS P
+                        INNER JOIN vendas_produtos AS SP
+                        ON P.id = SP.id_produto
                         WHERE SP.created_at 
                         BETWEEN DATE_ADD(NOW(), INTERVAL -7 DAY) AND NOW()
                         GROUP BY 
                             P.id, 
-                            P.name, 
+                            P.nome, 
                             P.url_img, 
                             P.estoque_atual, 
-                            P.price, 
-                            P.price_promotion, 
-                            P.promotion, 
-                            P.disabled, 
+                            P.estoque_qtd_minima, 
+                            P.estoque_controle, 
+                            P.preco, 
+                            P.preco_promocao, 
+                            P.promocao_ativa,
+                            P.produto_ativo, 
                             P.deleted_at
                         HAVING 
-                            P.disabled=False AND P.deleted_at Is Null
-                        ORDER BY Sum(SP.p_quantity) DESC
+                            P.produto_ativo= True AND P.deleted_at Is Null
+                        ORDER BY Sum(SP.p_quantidade) DESC
                         LIMIT ${limit};
                 `)
 
             const oferta = await app.db
                 .raw(`SELECT 
                     P.id, 
-                    P.name, 
+                    P.nome, 
                     P.url_img, 
                     P.estoque_atual, 
-                    P.price, 
-                    P.price_promotion, 
-                    P.promotion
-                    FROM products AS P
-                    WHERE (P.promotion=TRUE) 
-                    AND (P.disabled=FALSE) 
+                    P.estoque_qtd_minima, 
+                    P.estoque_controle, 
+                    P.preco, 
+                    P.preco_promocao, 
+                    P.promocao_ativa
+                    FROM cadastro_produtos AS P
+                    WHERE (P.promocao_ativa= True) 
+                    AND (P.produto_ativo=  True) 
                     AND (P.deleted_at Is NULL) 
                     ORDER BY P.updated_at DESC
                     LIMIT ${limit};

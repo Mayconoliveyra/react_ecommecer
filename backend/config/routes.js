@@ -47,11 +47,11 @@ module.exports = (app) => {
     .all(app.config.passport.authenticate())
     .post(userAuth(app.api.cart.savePedido))
 
-  app.route("/cart/meus-pedidos/:id_sale")
+  app.route("/cart/meus-pedidos/:id_venda")
     .all(app.config.passport.authenticate())
     .get(userAuth(app.api.cart.getPedidos))
 
-  app.route("/cart/pix-detalhes/:id_sale")
+  app.route("/cart/pix-detalhes/:id_venda")
     .all(app.config.passport.authenticate())
     .get(userAuth(app.api.cart.getPixDetail))
 

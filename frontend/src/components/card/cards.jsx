@@ -5,7 +5,7 @@ import { Dash, Plus, Trash3 } from "react-bootstrap-icons"
 
 import { Card, Img, Description, Price, Promotion, BtnAdd } from "./components"
 
-import { getCartTemp, storeQuantity } from "../../pages/api/cart"
+import { getCartTemp, storeQuantidade } from "../../pages/api/cart"
 import MyCartContext from "../../context/myCart"
 import { moneyMask } from "../../../masks"
 
@@ -187,16 +187,16 @@ const CardThree = ({ product }) => {
 }
 const CardCarRow = ({ product }) => {
     const { setMyCart } = useContext(MyCartContext)
-    const refQuantity = useRef();
-    const [quantity, setQuantity] = useState(product.quantity)
+    const refQuantidade = useRef();
+    const [quantidade, setQuantidade] = useState(product.quantidade)
     const { myCartId } = parseCookies();
 
-    const handleQuantity = async (newValue) => {
+    const handleQuantidade = async (newValue) => {
         /* newValue é utilizado nos botoes + e - */
-        const value = newValue >= 0 ? newValue : refQuantity.current.value.replace(/[^0-9]/g, '')
+        const value = newValue >= 0 ? newValue : refQuantidade.current.value.replace(/[^0-9]/g, '')
         if (value.toString().length > 4) return
 
-        setQuantity(value)
+        setQuantidade(value)
 
         if (value && value >= 0) {
             await handleAddMyCart(product.id, value)
@@ -205,12 +205,12 @@ const CardCarRow = ({ product }) => {
 
     const handleRemoveProduct = async (id) => {
         /* Para remover o produto do carrinho basta enviar o id com a quantiade 0 */
-        await storeQuantity(id, 0, myCartId)
+        await storeQuantidade(id, 0, myCartId)
         await setMyCart(await getCartTemp({ id_storage: myCartId }))
     }
 
-    const handleAddMyCart = async (id, quantity) => {
-        await storeQuantity(id, quantity, myCartId)
+    const handleAddMyCart = async (id, quantidade) => {
+        await storeQuantidade(id, quantidade, myCartId)
         await setMyCart(await getCartTemp({ id_storage: myCartId }))
     }
 
@@ -226,13 +226,13 @@ const CardCarRow = ({ product }) => {
 
             <BtnIncrementerSC>
                 <div data="input-div">
-                    {quantity > 1 ? (
-                        <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) - 1))}><Dash /></button>
+                    {quantidade > 1 ? (
+                        <button type="button" onClick={() => handleQuantidade(parseInt(Number(quantidade) - 1))}><Dash /></button>
                     ) : (
                         <button type="button" onClick={() => handleRemoveProduct(product.id)}><Trash3 data="icon-remover" /></button>
                     )}
-                    <input ref={refQuantity} type="number" id="quantity" value={quantity} onChange={handleQuantity} />
-                    <button type="button" onClick={() => handleQuantity(parseInt(Number(quantity) + 1))}><Plus /></button>
+                    <input ref={refQuantidade} type="number" value={quantidade} onChange={handleQuantidade} />
+                    <button type="button" onClick={() => handleQuantidade(parseInt(Number(quantidade) + 1))}><Plus /></button>
                 </div>
                 <button onClick={() => handleRemoveProduct(product.id)} type="button" data="btn-div">
                     Excluir
@@ -246,34 +246,34 @@ const CardPayment = ({ product }) => {
         <CardPaymentSC>
             <div data='a-card'>
                 <div data="img-card-pay">
-                    <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.alt ? product.alt : "Sem discrição"} />
+                    <img src={product.url_img ? product.url_img : '/assets/images/default_product.png'} alt={product.nome ? product.nome : "Sem discrição"} />
                 </div>
                 <div data="name-price">
                     <div data="name">
-                        <h2>{product.name}</h2>
+                        <h2>{product.nome}</h2>
                     </div>
                     <div data="price">
-                        {!!product.promotion ?
+                        {!!product.promocao_ativa ?
                             (
                                 <>
-                                    <span>R$ {moneyMask(product.price_promotion, false)}</span>
+                                    <span>R$ {moneyMask(product.preco_promocao, false)}</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>R$ {moneyMask(product.price, false)}</span>
+                                    <span>R$ {moneyMask(product.preco, false)}</span>
                                 </>
                             )
                         }
                     </div>
                     <div data="quantity">
-                        {!!product.promotion ?
+                        {!!product.promocao_ativa ?
                             (
                                 <>
-                                    <span>Qtd: {product.quantity}</span>   <span>Total: {moneyMask(product.price_promotion * product.quantity)}</span>
+                                    <span>Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco_promocao * product.quantidade)}</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Qtd: {product.quantity}</span>   <span>Total: {moneyMask(product.price * product.quantity)}</span>
+                                    <span>Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco * product.quantidade)}</span>
                                 </>
                             )
                         }

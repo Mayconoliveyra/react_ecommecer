@@ -1,8 +1,8 @@
 exports.up = function (knex) {
     return knex.schema
-        .createTable("sales_header", (table) => {
+        .createTable("vendas_cabecalho", (table) => {
             table.increments("id").primary();
-            table.integer('id_user').unsigned().notNull().references('id').inTable('users')
+            table.integer('id_user').unsigned().notNull().references('id').inTable('cadastro_usuarios')
             table.string("id_storage", 28).notNull();
 
             table.string("nome").notNull()
@@ -19,11 +19,11 @@ exports.up = function (knex) {
             table.float("distancia_km", 8, 1).notNull()
             table.float("tempo", 8, 1).notNull()
 
-            table.decimal("vlr_pagar_products", 65, 2).notNull()
-            table.integer("qtd_products").notNull()
-            table.decimal("vlr_products", 65, 2).notNull()
-            table.decimal("vlr_products_promotion", 65, 2).notNull()
-            table.decimal("vlr_diferenca_promotion", 65, 2).notNull()
+            table.decimal("vlr_pagar_produtos", 65, 2).notNull()
+            table.integer("qtd_produtos").notNull()
+            table.decimal("vlr_produtos", 65, 2).notNull()
+            table.decimal("vlr_produtos_promocao", 65, 2).notNull()
+            table.decimal("vlr_diferenca_promocao", 65, 2).notNull()
             table.float("vlr_frete").notNull()
             table.decimal("vlr_pagar_com_frete", 65, 2).notNull()
             table.decimal("vlr_pagar_sem_frete", 65, 2).notNull()
@@ -61,5 +61,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTable("sales_header");
+    return knex.schema.dropTable("vendas_cabecalho");
 };

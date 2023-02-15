@@ -79,7 +79,7 @@ const Pedido = ({ pedido, session }) => {
         setIconChevro(!iconChevro)
 
         if (products.length == 0)
-            await getPedidos({ id_sales: pedido.id, session })
+            await getPedidos({ id_vendas: pedido.id, session })
                 .then(async (products) => {
                     setProducts(products)
                 })
@@ -148,7 +148,7 @@ const Pedido = ({ pedido, session }) => {
                                     </tr>
                                     <tr>
                                         <td>Itens:</td>
-                                        <td data="td-value">{moneyMask(pedido.vlr_pagar_products)}</td>
+                                        <td data="td-value">{moneyMask(pedido.vlr_pagar_produtos)}</td>
                                     </tr>
                                     <tr>
                                         <td>Frete:</td>
@@ -160,7 +160,7 @@ const Pedido = ({ pedido, session }) => {
                                     </tr>
                                     <tr>
                                         <td data="td-bold">Total do pedido</td>
-                                        <td data="td-red">{moneyMask(pedido.vlr_pago)} ({pedido.qtd_products} {pedido.qtd_products > 1 ? "itens" : "item"})</td>
+                                        <td data="td-red">{moneyMask(pedido.vlr_pago)} ({pedido.qtd_produtos} {pedido.qtd_produtos > 1 ? "itens" : "item"})</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -235,7 +235,7 @@ const Pedido = ({ pedido, session }) => {
                                     return (
                                         <tr key={product.id}>
                                             <td>
-                                                <CardPayment product={{ ...product, quantity: product.p_quantity, amount: product.p_amount, amount_promotion: product.p_amount_promotion }} />
+                                                <CardPayment product={{ ...product, quantidade: product.p_quantidade, amount: product.p_vlr_total, amount_promotion: product.p_vlr_total_promocao }} />
                                             </td>
                                         </tr>
                                     )

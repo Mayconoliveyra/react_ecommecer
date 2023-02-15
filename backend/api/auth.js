@@ -7,7 +7,7 @@ module.exports = app => {
         const { consultCEP } = app.services.maps;
         const { sendEmail } = app.services.email;
 
-        const table = "users";
+        const table = "cadastro_usuarios";
 
         /* GERA O TOKEN UTILIZADO PARA AUTENTICAR USUARIO NOVO E PARA RESTAURAR SENHA */
         const generateTokenAuth = (user) => {

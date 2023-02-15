@@ -100,11 +100,11 @@ export default function CloseOrder({ totals }) {
                                             <tbody>
                                                 <tr>
                                                     <td>Quantidade de itens:</td>
-                                                    <td data="td-value">{totals && totals.qtd_products}</td>
+                                                    <td data="td-value">{totals && totals.qtd_produtos}</td>
                                                 </tr>
                                                 <tr>
                                                     <td data="td-bold">Total dos produtos:</td>
-                                                    <td data="td-red">{moneyMask(totals && totals.vlr_pagar_products)}</td>
+                                                    <td data="td-red">{moneyMask(totals && totals.vlr_pagar_produtos)}</td>
                                                 </tr>
                                                 <tr>
                                                     <td data="td-bold">Valor de Frete:</td>
