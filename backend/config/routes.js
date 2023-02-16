@@ -60,6 +60,7 @@ module.exports = (app) => {
   app.route(`${prefixPortal}/produtos`)
     .all(app.config.passport.authenticate())
     .get(app.api.portal.products.get)
+    .post(app.api.portal.products.save)
 
 
   /* TESTE */

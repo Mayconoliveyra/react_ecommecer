@@ -15,6 +15,12 @@ const config = (db_name) => {
                         database: db_name,
                         port: DB_CONFIG.port,
                         dateStrings: true,
+                       /*  typeCast: function (field, next) {
+                                if (field.type == 'TINY' && field.length == 1) {
+                                        return (field.string() == '1'); // 1 = true, 0 = false
+                                }
+                                return next();
+                        } */
                 },
                 pool: {
                         min: 2,

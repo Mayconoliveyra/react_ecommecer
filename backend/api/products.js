@@ -14,7 +14,7 @@ module.exports = (app) => {
             await app.db(table)
                 .select("id", "nome", "url_img", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "preco", "preco_promocao", "promocao_ativa")
                 .whereRaw(simplify(search))
-                .whereRaw('produto_ativo = True AND deleted_at IS NULL')
+                .whereRaw('produto_ativo = "Sim" AND deleted_at IS NULL')
                 .limit(limit).offset(page * limit - limit)
                 .orderBy('id', 'desc')
                 .then(products => res.json(products))
@@ -30,7 +30,7 @@ module.exports = (app) => {
             await app.db(table)
                 .select("id", "nome", "url_img", "img_1", "img_2", "img_3", "img_4", "estoque_atual", "estoque_qtd_minima", "estoque_controle", "preco", "preco_promocao", "promocao_ativa")
                 .where({ id: id })
-                .whereRaw('produto_ativo = True AND deleted_at IS NULL')
+                .whereRaw('produto_ativo = "Sim" AND deleted_at IS NULL')
                 .first()
                 .then(products => res.json(products))
                 .catch((error) => {
@@ -73,7 +73,7 @@ module.exports = (app) => {
                             P.produto_ativo, 
                             P.deleted_at
                         HAVING 
-                            P.produto_ativo= True AND P.deleted_at Is Null
+                            P.produto_ativo= 'Sim' AND P.deleted_at Is Null
                         ORDER BY Sum(SP.p_quantidade) DESC
                         LIMIT ${limit};
                 `)
@@ -107,7 +107,7 @@ module.exports = (app) => {
                             P.produto_ativo, 
                             P.deleted_at
                         HAVING 
-                            P.produto_ativo= True AND P.deleted_at Is Null
+                            P.produto_ativo= 'Sim' AND P.deleted_at Is Null
                         ORDER BY Sum(SP.p_quantidade) DESC
                         LIMIT ${limit};
                 `)
@@ -124,8 +124,8 @@ module.exports = (app) => {
                     P.preco_promocao, 
                     P.promocao_ativa
                     FROM cadastro_produtos AS P
-                    WHERE (P.promocao_ativa= True) 
-                    AND (P.produto_ativo=  True) 
+                    WHERE (P.promocao_ativa= 'Sim') 
+                    AND (P.produto_ativo= 'Sim') 
                     AND (P.deleted_at Is NULL) 
                     ORDER BY P.updated_at DESC
                     LIMIT ${limit};

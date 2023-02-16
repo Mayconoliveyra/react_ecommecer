@@ -1,5 +1,5 @@
 const moneyMask = (vlr, showRS = true) => {
-    if (!Number(vlr)) return 'R$ 0,00'
+  /*   if (!Number(vlr)) return 'R$ 0,00' */
     const valor = Number(vlr)
         .toFixed(2)
         .replace(".", ",")

@@ -63,10 +63,10 @@ export default function CadastroProdutos({ data }) {
                             return (
                                 <tr key={product.id}>
                                     <TdOne maxwidth="100px">{product.id}</TdOne>
-                                    <TdOne maxwidth="9999px">{product.name}</TdOne>
+                                    <TdOne maxwidth="9999px">{product.nome}</TdOne>
                                     <TdOne maxwidth="100px">{product.estoque_atual}</TdOne>
-                                    <TdOne maxwidth="100px">{moneyMask(product.price, false)}</TdOne>
-                                    <TdOne maxwidth="100px">{moneyMask(product.price_promotion, false)}</TdOne>
+                                    <TdOne maxwidth="100px">{moneyMask(product.preco, false)}</TdOne>
+                                    <TdOne maxwidth="100px">{moneyMask(product.preco_promocao, false)}</TdOne>
                                     <TdOne margin="0 auto" maxwidth="104px">
                                         <div data="acoes">
                                             <ButtonAzul margin="0 3px 0 0" padding="4px 4px 5px 8px">

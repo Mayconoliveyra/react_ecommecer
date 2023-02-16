@@ -253,7 +253,7 @@ const CardPayment = ({ product }) => {
                         <h2>{product.nome}</h2>
                     </div>
                     <div data="price">
-                        {!!product.promocao_ativa ?
+                        {product.promocao_ativa == 'Sim' ?
                             (
                                 <>
                                     <span>R$ {moneyMask(product.preco_promocao, false)}</span>
@@ -266,7 +266,7 @@ const CardPayment = ({ product }) => {
                         }
                     </div>
                     <div data="quantity">
-                        {!!product.promocao_ativa ?
+                        {product.promocao_ativa == 'Sim' ?
                             (
                                 <>
                                     <span>Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco_promocao * product.quantidade)}</span>

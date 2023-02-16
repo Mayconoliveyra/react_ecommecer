@@ -28,6 +28,9 @@ const FormOneSC = styled.section`
         margin-right: 0px;
         margin-left: 0px;
     }
+    #Col{
+        padding: 0px 3px; 
+    }
 `;
 const FormTwoSC = styled.section`
     @media (max-width: 720px){
@@ -48,7 +51,7 @@ const FormTwoSC = styled.section`
         margin-left: 0px;
     }
 `;
-const GroupOneSC = styled(Col)`
+const GroupOneSC = styled.div`
     padding: 0px 5px;
     label {
         color: #333333 !important;
@@ -64,6 +67,10 @@ const GroupOneSC = styled(Col)`
     
     
     input, select {
+        /* PARAMENTRO 'error' */
+        border-color:${({ error }) => error && "#d00 !important;"};
+        box-shadow:${({ error }) => error && "0 0 0 0.2rem rgb(221 0 0 / 15%) inset !important;"};
+
         margin-top: 2px;
         display: block;
         width: 100%;
@@ -147,7 +154,7 @@ const FormTwo = ({ children }) => {
         </FormTwoSC>
     );
 };
-const GroupOne = ({ name, label, type = "text", required = false, autocomplete = "off", maxlength = 255, mask = false, placeholder, disabled, xs, sm, md, lg, xl, xxl }) => {
+const GroupOne = ({ name, label, type = "text", required = false, autocomplete = "off", maxlength = 255, mask = false, error = false, placeholder, disabled = false, xs, sm, md, lg, xl, xxl }) => {
     const propsGroup = {
         xs,
         sm,
@@ -157,9 +164,70 @@ const GroupOne = ({ name, label, type = "text", required = false, autocomplete =
         xxl,
     };
     return (
-        <GroupOneSC {...propsGroup} required={required}>
-            <label htmlFor={name}>{label}</label>
-            {!mask && (
+        < Col id="Col"  {...propsGroup} >
+            <GroupOneSC required={required} error={error} >
+                <label htmlFor={name}>{label}</label>
+                {
+                    !mask && (
+                        <Field name={name}>
+                            {({ field }) => (
+                                <input
+                                    {...field}
+                                    id={name}
+                                    type={type}
+                                    maxLength={maxlength}
+                                    autoComplete={autocomplete}
+                                    placeholder={placeholder}
+                                    disabled={disabled == true || disabled == "true" || disabled == "1" || disabled == 1 ? true : false}
+                                    required={required}
+                                    value={field.value != undefined ? field.value : ""}
+                                />
+                            )}
+                        </Field>
+                    )
+                }
+                {
+                    !!mask && (
+                        <Field name={name}>
+                            {({ field }) => (
+                                <MaskedInput
+                                    {...field}
+                                    id={name}
+                                    type={type}
+                                    maxLength={maxlength}
+                                    autoComplete={autocomplete}
+                                    mask={mask}
+                                    guide={false}
+                                    showMask={false}
+                                    placeholder={placeholder}
+                                    d disabled={disabled == true || disabled == "true" || disabled == "1" || disabled == 1 ? true : false}
+                                    required={required}
+                                    value={field.value != undefined ? field.value : ""}
+                                />
+                            )}
+                        </Field>
+                    )
+                }
+                <small>
+                    <ErrorMessage name={name} />
+                </small>
+            </GroupOneSC>
+        </Col >
+    );
+};
+const GroupMoney = ({ fixed = 2, setFieldValue, name, label, type = "number", required = false, autocomplete = "off", maxlength = 7, error = false, placeholder = "R$ 0,00", disabled = false, xs, sm, md, lg, xl, xxl }) => {
+    const propsGroup = {
+        xs,
+        sm,
+        md,
+        lg,
+        xl,
+        xxl,
+    };
+    return (
+        < Col id="Col"  {...propsGroup} >
+            <GroupOneSC required={required} error={error} >
+                <label htmlFor={name}>{label}</label>
                 <Field name={name}>
                     {({ field }) => (
                         <input
@@ -169,37 +237,20 @@ const GroupOne = ({ name, label, type = "text", required = false, autocomplete =
                             maxLength={maxlength}
                             autoComplete={autocomplete}
                             placeholder={placeholder}
-                            disabled={disabled}
+                            disabled={disabled == true || disabled == "true" || disabled == "1" || disabled == 1 ? true : false}
                             required={required}
-                            value={field.value || ''}
+                            value={field.value != undefined ? field.value : ""}
+                            onBlur={(() =>
+                                setFieldValue(name, Number(field.value).toFixed(fixed))
+                            )}
                         />
                     )}
                 </Field>
-            )}
-            {!!mask && (
-                <Field name={name}>
-                    {({ field }) => (
-                        <MaskedInput
-                            {...field}
-                            id={name}
-                            type={type}
-                            maxLength={maxlength}
-                            autoComplete={autocomplete}
-                            mask={mask}
-                            guide={false}
-                            showMask={false}
-                            placeholder={placeholder}
-                            disabled={disabled}
-                            required={required}
-                            value={field.value || ''}
-                        />
-                    )}
-                </Field>
-            )}
-            <small>
-                <ErrorMessage name={name} />
-            </small>
-        </GroupOneSC>
+                <small>
+                    <ErrorMessage name={name} />
+                </small>
+            </GroupOneSC>
+        </Col >
     );
 };
 const GroupSelectOne = ({ name, label, required = false, data = [], xs, sm, md, lg, xl, xxl }) => {
@@ -212,27 +263,29 @@ const GroupSelectOne = ({ name, label, required = false, data = [], xs, sm, md, 
         xxl,
     };
     return (
-        <GroupOneSC {...propsGroup} required={required}>
-            <label htmlFor={name}>{label}</label>
-            <Field children name={name}>
-                {({ field }) => (
-                    <select
-                        {...field}
-                        id={name}
-                        name={name}
-                        required={required}
-                        value={field.value || ''}
-                    >
-                        {data.map((item, key) => {
-                            return <option key={key} value={item.value}>{item.name}</option>
-                        })}
-                    </select>
-                )}
-            </Field>
-            <small>
-                <ErrorMessage name={name} />
-            </small>
-        </GroupOneSC>
+        < Col id="Col"  {...propsGroup} >
+            <GroupOneSC required={required}>
+                <label htmlFor={name}>{label}</label>
+                <Field name={name}>
+                    {({ field }) => (
+                        <select
+                            {...field}
+                            id={name}
+                            name={name}
+                            required={required}
+                            value={field.value != undefined ? field.value : ""}
+                        >
+                            {data.map((item, key) => {
+                                return <option key={key} value={item.value}>{item.name}</option>
+                            })}
+                        </select>
+                    )}
+                </Field>
+                <small>
+                    <ErrorMessage name={name} />
+                </small>
+            </GroupOneSC>
+        </Col>
     );
 };
 
@@ -251,4 +304,4 @@ const RowBtns = ({ children }) => {
     );
 };
 
-export { FormOne, FormTwo, GroupOne, GroupSelectOne, TitleFormOne, RowBtns }
+export { FormOne, FormTwo, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns }

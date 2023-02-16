@@ -1,26 +1,74 @@
 import Head from "next/head";
-import { ChevronRight, CardImage, Cash, Boxes, Check, X } from "react-bootstrap-icons"
 import Link from "next/link"
+import router from "next/router"
+import { ChevronRight, CardImage, Cash, Boxes, Check, X } from "react-bootstrap-icons"
 import Alert from 'react-bootstrap/Alert';
 import { useState } from "react";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
+import * as Yup from "yup";
+import { pt } from "yup-locale-pt";
+Yup.setLocale(pt);
 
 import { TitleOne } from "../../../../../components/portal/titulo/components"
-import { FormOne, GroupOne, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
+import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
 import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/button/components"
 
-import { getAllPortal } from "../../../../api/portal/produtos";
+import { getAllPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
 import { moneyMask } from "../../../../../../masks"
+import { FormatObjNull } from "../../../../../../global"
+import { toast } from "react-toastify";
 
 
 export default function Adicionar({ data }) {
     const [alert1, setAlert1] = useState(true);
     const [alert2, setAlert2] = useState(true);
     const initialValues = {
-        nome: '',
-        nmr_contato: '',
-        sexo: '',
+        nome: "",
+        codigo_interno: "",
+        produto_ativo: "Sim",
+        estoque_atual: "",
+        estoque_minimo: "",
+        estoque_qtd_minima: "",
+        estoque_controle: "Não",
+        url_img: "",
+        img_1: "",
+        img_2: "",
+        img_3: "",
+        img_4: "",
+        preco: "",
+        preco_promocao: "",
+        promocao_ativa: "Não"
     }
+    const scheme = Yup.object().shape({
+        nome: Yup.string().label("Nome do produto").nullable().required().trim(),
+        codigo_interno: Yup.string().label("Código interno").nullable().required().trim(),
+        produto_ativo: Yup.string().label("Produto ativo").required(),
+        estoque_controle: Yup.string().label("Controlar estoque").required(),
+        estoque_atual: Yup.string().nullable().when("estoque_controle", {
+            is: "Sim",
+            then: Yup.string().label("Estoque atual").nullable().min(0).required()
+        }),
+        estoque_minimo: Yup.string().nullable().when("estoque_controle", {
+            is: "Sim",
+            then: Yup.string().label("Estoque mínimo").nullable().min(0).required()
+        }),
+        estoque_qtd_minima: Yup.string().nullable().when("estoque_controle", {
+            is: "Sim",
+            then: Yup.string().label("Quant. min. venda").nullable().min(0).required()
+        }),
+
+        url_img: Yup.string().label("Imagem principal").nullable().required().trim(),
+        img_1: Yup.string().label("Imagem 1").nullable().optional(),
+        img_2: Yup.string().label("Imagem 2").nullable().optional(),
+        img_3: Yup.string().label("Imagem 3").nullable().optional(),
+        img_4: Yup.string().label("Imagem 4").nullable().optional(),
+        preco: Yup.string().label("Valor de venda").nullable().required().trim(),
+        promocao_ativa: Yup.string().label("Promoção ativa").required(),
+        preco_promocao: Yup.string().nullable().when("promocao_ativa", {
+            is: "Sim",
+            then: Yup.string().label("Valor promoção").nullable().min(0).required()
+        }),
+    });
     return (
         <>
             <Head>
@@ -38,22 +86,29 @@ export default function Adicionar({ data }) {
                 </li>
             </TitleOne>
             <Formik
-                /* innerRef={formRef} */
-                validateOnMount
-                /*  validationSchema={scheme}
-                 initialValues={initialValues} */
-                initialValues={initialValues}
-                onSubmit={async (values) => {
-                    await save(values, values.id)
-                        .then(() => {
-                            const msgShow = !values.id ? 'realizado' : "alterado";
-                            showSucesso(`Cadastro ${msgShow} com sucesso!.`)
-                            navigate(prefixUrl);
+                validationSchema={scheme}
+                initialValues={data[2]}
+                onSubmit={async (values, setValues) => {
+                    const valuesFormat = FormatObjNull(values)
+                    await saveProdutoPortal(valuesFormat)
+                        .then(() => router.push("/portal/cadastro/produtos"))
+                        .catch((res) => {
+                            /* Se status 400, significa que o erro foi tratado. */
+                            if (res && res.response && res.response.status == 400) {
+                                /* Se data.erro=500, será exibido no toast */
+                                if (res.response.data && res.response.data[500]) {
+                                    toast.error(res.response.data[500])
+                                } else {
+                                    setValues.setErrors(res.response.data)
+                                }
+                            } else {
+                                /* Mensagem padrão */
+                                toast.error("Ops... Não possível realizar a operação. Por favor, tente novamente.")
+                            }
                         })
-                        .catch(showError);
                 }}
             >
-                {() => (
+                {({ errors, touched, values, setFieldValue }) => (
                     <FormOne>
                         {alert1 &&
                             <Alert variant="warning" onClose={() => setAlert1(false)} dismissible >
@@ -61,25 +116,27 @@ export default function Adicionar({ data }) {
                             </Alert>
                         }
                         <GroupOne
+                            error={!!errors.nome && touched.nome}
                             label="Nome do produto"
-                            name="name"
-                            required
+                            name="nome"
+                            maxlength={120}
                             md={7}
                             xl={5}
                         />
                         <GroupOne
+                            error={!!errors.codigo_interno && touched.codigo_interno}
                             label="Código interno"
                             name="codigo_interno"
-                            required
+                            maxlength={120}
                             md={5}
                             xl={4}
                         />
                         <GroupSelectOne
                             label="Produto ativo"
-                            name="disabled"
+                            name="produto_ativo"
                             data={[
-                                { value: true, name: "Sim" },
-                                { value: false, name: "Não" },
+                                { value: "Sim", name: "Sim" },
+                                { value: "Não", name: "Não" },
                             ]}
                             md={12}
                             xl={3}
@@ -88,23 +145,29 @@ export default function Adicionar({ data }) {
                             <Cash size={19} />
                             <h4>Valores e Promoções</h4>
                         </TitleFormOne>
-                        <GroupOne
+                        <GroupMoney
+                            error={!!errors.preco && touched.preco}
                             label="Valor de venda"
-                            name="nome"
-                            required
+                            name="preco"
+                            placeholder=""
+                            setFieldValue={setFieldValue}
                             md={4}
                         />
-                        <GroupOne
+                        <GroupMoney
+                            error={!!errors.preco_promocao && touched.preco_promocao}
                             label="Valor promoção"
-                            name="nome"
+                            name="preco_promocao"
+                            placeholder=""
+                            setFieldValue={setFieldValue}
+                            disabled={values.promocao_ativa == "Não"}
                             md={4}
                         />
                         <GroupSelectOne
                             label="Promoção ativa"
-                            name="sexo"
+                            name="promocao_ativa"
                             data={[
-                                { value: true, name: "Sim" },
-                                { value: false, name: "Não" },
+                                { value: "Sim", name: "Sim" },
+                                { value: "Não", name: "Não" },
                             ]}
                             md={4}
                         />
@@ -112,29 +175,42 @@ export default function Adicionar({ data }) {
                             <Boxes size={19} />
                             <h4>Controle de estoque</h4>
                         </TitleFormOne>
-                        <GroupOne
+                        <GroupMoney
+                            error={!!errors.estoque_atual && touched.estoque_atual}
                             label="Estoque atual"
-                            name="nome"
+                            name="estoque_atual"
+                            setFieldValue={setFieldValue}
+                            fixed={0}
+                            placeholder=""
+                            disabled={values.estoque_controle == "Não"}
                             md={3}
                         />
-                        <GroupOne
+                        <GroupMoney
+                            error={!!errors.estoque_minimo && touched.estoque_minimo}
                             label="Estoque mínimo"
-                            name="nome"
+                            name="estoque_minimo"
+                            setFieldValue={setFieldValue}
+                            fixed={0}
+                            placeholder=""
+                            disabled={values.estoque_controle == "Não"}
                             md={3}
-                            disabled
                         />
-                        <GroupOne
+                        <GroupMoney
+                            error={!!errors.estoque_qtd_minima && touched.estoque_qtd_minima}
                             label="Quant. min. venda"
-                            name="nome"
+                            name="estoque_qtd_minima"
+                            setFieldValue={setFieldValue}
+                            fixed={0}
+                            placeholder=""
+                            disabled={values.estoque_controle == "Não"}
                             md={3}
-                            disabled
                         />
                         <GroupSelectOne
                             label="Controlar estoque"
-                            name="sexo"
+                            name="estoque_controle"
                             data={[
-                                { value: true, name: "Sim" },
-                                { value: false, name: "Não" },
+                                { value: "Sim", name: "Sim" },
+                                { value: "Não", name: "Não" },
                             ]}
                             md={3}
                         />
@@ -148,35 +224,40 @@ export default function Adicionar({ data }) {
                             </Alert>
                         }
                         <GroupOne
+                            error={!!errors.url_img && touched.url_img}
                             label="Imagem principal"
-                            name="nome"
-                            required
+                            name="url_img"
+                            maxlength={120}
                             xs={12}
                         />
                         <GroupOne
                             label="Imagem 1"
-                            name="nome"
+                            name="img_1"
+                            maxlength={120}
                             xs={12}
                         />
                         <GroupOne
                             label="Imagem 2"
-                            name="nome"
+                            name="img_2"
+                            maxlength={120}
                             xs={12}
                         />
                         <GroupOne
                             label="Imagem 3"
-                            name="nome"
+                            name="img_3"
+                            maxlength={120}
                             xs={12}
                         />
                         <GroupOne
                             label="Imagem 4"
-                            name="nome"
+                            name="img_4"
+                            maxlength={120}
                             xs={12}
                         />
 
                         <RowBtns>
                             <ButtonVerde margin="0 7px 0 0">
-                                <button><Check size={23} /> Cadastrar</button>
+                                <button type="submit"><Check size={23} /> Cadastrar</button>
                             </ButtonVerde>
                             <ButtonVermelho>
                                 <button><X size={23} /> Cancelar</button>

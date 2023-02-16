@@ -181,7 +181,7 @@ export default function Product({ vendidos, semana, oferta }) {
                             </ul>
                         </div>
                         <div data="price">
-                            {!!product.promocao_ativa ?
+                            {product.promocao_ativa == 'Sim' ?
                                 (
                                     <>
                                         <div data="oferta">

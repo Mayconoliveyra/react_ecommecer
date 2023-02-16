@@ -95,25 +95,25 @@ module.exports = (app) => {
             INNER JOIN cadastro_produtos AS p 
             ON tc.id_produto 
             = p.id
-            WHERE p.produto_ativo = True 
+            WHERE p.produto_ativo = 'Sim' 
             AND p.deleted_at IS NULL
             AND tc.id_storage = '${id}'`)
 
             /*!Atenção!, se alterar essa consulta verificar se precisa alterar em savePedido tambem */
             const rawTotals = await app.db.raw(`
             SELECT 
-            ROUND(Sum(If(promocao_ativa=True,preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
+            ROUND(Sum(If(promocao_ativa='Sim',preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
             ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
             ROUND(Sum(preco*quantidade),2) AS vlr_produtos, 
             ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
-            ROUND(Sum(If(promocao_ativa=True,preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
+            ROUND(Sum(If(promocao_ativa='Sim',preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
             NULL  AS pgt_metodo, 
             NULL AS pgt_forma 
             FROM temp_carrinho 
             INNER JOIN cadastro_produtos ON temp_carrinho.id_produto = cadastro_produtos.id
             GROUP BY cadastro_produtos.deleted_at, cadastro_produtos.produto_ativo, temp_carrinho.id_storage
             HAVING (((cadastro_produtos.deleted_at) Is NULL) 
-            AND ((cadastro_produtos.produto_ativo)= True) 
+            AND ((cadastro_produtos.produto_ativo)= 'Sim') 
             AND ((temp_carrinho.id_storage)='${id}'));
             `)
             const totals = rawTotals[0][0]
@@ -177,18 +177,18 @@ module.exports = (app) => {
 
             const rawTotals = await app.db.raw(`
             SELECT 
-            ROUND(Sum(If(promocao_ativa=True,preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
+            ROUND(Sum(If(promocao_ativa='Sim',preco_promocao*quantidade,preco*quantidade)),2) AS vlr_pagar_produtos, 
             ROUND(Sum(temp_carrinho.quantidade),2) AS qtd_produtos, 
             ROUND(Sum(preco*quantidade),2) AS vlr_produtos, 
             ROUND(Sum(preco_promocao*quantidade),2) AS vlr_produtos_promocao, 
-            ROUND(Sum(If(promocao_ativa=True,preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
+            ROUND(Sum(If(promocao_ativa='Sim',preco*quantidade-preco_promocao*quantidade,0)),2) AS vlr_diferenca_promocao, 
             NULL  AS pgt_metodo, 
             NULL AS pgt_forma 
             FROM temp_carrinho 
             INNER JOIN cadastro_produtos ON temp_carrinho.id_produto = cadastro_produtos.id
             GROUP BY cadastro_produtos.deleted_at, cadastro_produtos.produto_ativo, temp_carrinho.id_storage
             HAVING (((cadastro_produtos.deleted_at) Is NULL) 
-            AND ((cadastro_produtos.produto_ativo)= True) 
+            AND ((cadastro_produtos.produto_ativo)= 'Sim') 
             AND ((temp_carrinho.id_storage)='${modelo.id_storage}'));
             `)
             const totals = rawTotals[0][0]
@@ -306,7 +306,7 @@ module.exports = (app) => {
                 INNER JOIN cadastro_produtos AS p 
                 ON tc.id_produto 
                 = p.id
-                WHERE p.produto_ativo = True 
+                WHERE p.produto_ativo = 'Sim' 
                 AND p.deleted_at IS NULL
                 AND tc.id_storage = '${modelo.id_storage}'`)
 
