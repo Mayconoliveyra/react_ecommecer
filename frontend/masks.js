@@ -1,5 +1,14 @@
+import moment from "moment"
+import 'moment/locale/pt-br'
+moment.locale('pt-br')
+
+const dataFormat = (date) => {
+    if (!date) return ""
+    return moment(date).format('L HH:mm:ss')
+}
+
 const moneyMask = (vlr, showRS = true) => {
-  /*   if (!Number(vlr)) return 'R$ 0,00' */
+    /*   if (!Number(vlr)) return 'R$ 0,00' */
     const valor = Number(vlr)
         .toFixed(2)
         .replace(".", ",")
@@ -15,8 +24,9 @@ const proneMask = ["(", /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, /\d/, "-",
 const cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/];
 
 const cpfMask = [/\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, "-", /\d/, /\d/];
- 
+
 export {
+    dataFormat,
     moneyMask,
     proneMask,
     cepMask,

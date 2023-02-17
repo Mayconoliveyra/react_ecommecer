@@ -2,14 +2,29 @@ import styled from "styled-components"
 const TableOneSC = styled.div`
     display: flex;
     padding: 0px 15px;
+
+    height:${({ height }) => height} !important;
+    max-height: ${({ maxheight }) => maxheight} !important;
+    width:${({ width }) => width} !important;
+    max-width: ${({ maxwidth }) => maxwidth} !important;
+    margin:${({ margin }) => margin} !important;
+    padding:${({ padding }) => padding} !important;
+    background:${({ background }) => background} !important;
+    color:${({ color }) => color} !important;
+    font-size:${({ fontsize }) => fontsize} !important;
+    font-weight:${({ fontweight }) => fontweight} !important;
+    border:${({ border }) => border} !important;
+    border-radius:${({ borderadius }) => borderadius} !important;
+    box-shadow:${({ boxshadow }) => boxshadow} !important;
+
     table {
         border-bottom: 1px solid #dddddd;
         width: 100%;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 200px);
+        max-height: calc(100vh - 200px);
         @media (max-width: 720px){
-            height: calc(100vh - 280px);
+            max-height: calc(100vh - 280px);
         }
         
         tbody, thead {
@@ -50,13 +65,6 @@ const TableOneSC = styled.div`
                 @media (max-width: 720px){
                     font-size: 11px;
                 }
-            }
-            th{
-                height: auto;
-                padding: 8px 5px;
-            }
-            th:last-child{
-                 border-right: 0px !important;
             }
         }
         tr:nth-child(odd) {
@@ -100,6 +108,13 @@ const TdSC = styled.td`
     }
 `
 const ThSC = styled.th`
+    height: auto  !important;
+    padding: 8px 5px  !important;
+
+    &:last-child{
+        border-right: 0px !important;
+    }
+           
     max-width: 200px;
     background-color: #ffffff;
     color: #333333;
@@ -125,6 +140,76 @@ const ThSC = styled.th`
         overflow: hidden; 
     }
 `
+/* Tabela de visualização de dados */
+const TableVWSC = styled.div`
+    display: flex;
+    padding: 20px 15px;
+    @media (max-width: 720px){
+        padding: 13px 5px;
+    }
+    table {
+        color: #333333 !important;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        tbody, thead {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #dddddd;
+            border-bottom: none;
+            border-spacing: 0;
+            background-color: #ffffff;
+        }
+        tbody{
+            overflow-x: hidden;
+            height: 100%;
+        }
+        tr{
+            display: flex;
+            td,th{
+                display: flex;
+                align-items: center;
+                height: 37px;
+                flex: 1;
+                padding: 0 10px;
+                border-right: 1px solid #dddddd;
+                border-bottom: 1px solid #dddddd;
+                font-size: 13px;
+                @media (max-width: 720px){
+                    font-size: 11px;
+                }
+
+                .span-th-vw{
+                    font-weight: normal;
+                    font-family:${({ theme }) => theme.font.family.bold};
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    word-break: break-word;
+                }
+                .span-td-vw{
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    word-break: break-word;
+                }
+            }
+            th{
+                max-width: 200px;
+            }
+            td:last-child{
+                border-right: none;
+            }
+        }
+    }
+`
+
 
 const TableOne = ({ children, height, maxheight, width, maxwidth, margin, padding, background, color, fontsize, fontweight, border, borderadius, boxshadow }) => {
     return (
@@ -139,6 +224,13 @@ const TableOne = ({ children, height, maxheight, width, maxwidth, margin, paddin
         >
             {children}
         </TableOneSC>
+    )
+}
+const TableVW = ({ children }) => {
+    return (
+        <TableVWSC>
+            {children}
+        </TableVWSC>
     )
 }
 const TdOne = ({ children, height, maxheight, width, maxwidth, margin, padding, background, color, fontsize, fontweight, border, borderadius, boxshadow }) => {
@@ -174,4 +266,4 @@ const ThOne = ({ children, height, maxheight, width, maxwidth, margin, padding, 
 }
 
 
-export { TableOne, TdOne, ThOne }
+export { TableOne, TdOne, ThOne, TableVW }

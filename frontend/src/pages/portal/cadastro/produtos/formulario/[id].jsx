@@ -14,7 +14,6 @@ import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } 
 import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/button/components"
 
 import { getAllPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
-import { moneyMask } from "../../../../../../masks"
 import { FormatObjNull } from "../../../../../../global"
 import { toast } from "react-toastify";
 
@@ -22,23 +21,7 @@ import { toast } from "react-toastify";
 export default function Adicionar({ data }) {
     const [alert1, setAlert1] = useState(true);
     const [alert2, setAlert2] = useState(true);
-    const initialValues = {
-        nome: "",
-        codigo_interno: "",
-        produto_ativo: "Sim",
-        estoque_atual: "",
-        estoque_minimo: "",
-        estoque_qtd_minima: "",
-        estoque_controle: "Não",
-        url_img: "",
-        img_1: "",
-        img_2: "",
-        img_3: "",
-        img_4: "",
-        preco: "",
-        preco_promocao: "",
-        promocao_ativa: "Não"
-    }
+
     const scheme = Yup.object().shape({
         nome: Yup.string().label("Nome do produto").nullable().required().trim(),
         codigo_interno: Yup.string().label("Código interno").nullable().required().trim(),
@@ -62,7 +45,7 @@ export default function Adicionar({ data }) {
         img_2: Yup.string().label("Imagem 2").nullable().optional(),
         img_3: Yup.string().label("Imagem 3").nullable().optional(),
         img_4: Yup.string().label("Imagem 4").nullable().optional(),
-        preco: Yup.string().label("Valor de venda").nullable().required().trim(),
+        preco: Yup.number().label("Valor de venda").nullable().required().min(0.01, "Valor de venda deve ser informado"),
         promocao_ativa: Yup.string().label("Promoção ativa").required(),
         preco_promocao: Yup.string().nullable().when("promocao_ativa", {
             is: "Sim",
@@ -72,9 +55,9 @@ export default function Adicionar({ data }) {
     return (
         <>
             <Head>
-                <title>Softconnect - Adicionar produto</title>
+                <title>Softconnect - Editar produto</title>
             </Head>
-            <TitleOne title="Adicionar produto">
+            <TitleOne title="Editar produto">
                 <li>
                     <Link href="/portal">Início <ChevronRight height={10} /></Link>
                 </li>
@@ -82,12 +65,12 @@ export default function Adicionar({ data }) {
                     <Link href="/portal/cadastro/produtos">Produtos <ChevronRight height={10} /></Link>
                 </li>
                 <li data="ativo">
-                    Adicionar
+                    Editar
                 </li>
             </TitleOne>
             <Formik
                 validationSchema={scheme}
-                initialValues={data[2]}
+                initialValues={data}
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
                     await saveProdutoPortal(valuesFormat)
@@ -270,12 +253,16 @@ export default function Adicionar({ data }) {
     )
 }
 
-export async function getServerSideProps() {
-    const data = await getAllPortal()
+export async function getServerSideProps(context) {
+    const { id } = context.params; /* id do produto; */
 
-    if (!data) {
+    const data = await getAllPortal({ id: id })
+    if (!data || !data.id) {
         return {
-            notFound: true,
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
         }
     }
 

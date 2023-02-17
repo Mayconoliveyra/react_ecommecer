@@ -32,7 +32,7 @@ export default function CadastroProdutos({ data }) {
             </TitleOne>
             <HeaderFormOne>
                 <ButtonVerde>
-                    <Link href="/portal/cadastro/produtos/adicionar"><PlusCircleDotted size={18} />Adicionar</Link>
+                    <Link href="/portal/cadastro/produtos/formulario"><PlusCircleDotted size={18} />Adicionar</Link>
                 </ButtonVerde>
 
                 <InputSearchOne>
@@ -70,7 +70,7 @@ export default function CadastroProdutos({ data }) {
                                     <TdOne margin="0 auto" maxwidth="104px">
                                         <div data="acoes">
                                             <ButtonAzul margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                                <Link href="/portal/cadastro/produtos/visualizar">
+                                                <Link href={`/portal/cadastro/produtos/visualizar/${product.id}`}>
                                                     <Search size={13} />
                                                 </Link>
                                             </ButtonAzul>
@@ -97,7 +97,7 @@ export default function CadastroProdutos({ data }) {
 }
 
 export async function getServerSideProps() {
-    const data = await getAllPortal()
+    const data = await getAllPortal({})
 
     if (!data) {
         return {
