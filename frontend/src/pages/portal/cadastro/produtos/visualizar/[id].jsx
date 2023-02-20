@@ -8,7 +8,7 @@ Yup.setLocale(pt);
 import { TableVW } from "../../../../../components/portal/table/components"
 import { TitleOne } from "../../../../../components/portal/titulo/components"
 
-import { getAllPortal } from "../../../../api/portal/produtos";
+import { getProdutoPortal } from "../../../../api/portal/produtos";
 import { moneyMask, dataFormat } from "../../../../../../masks"
 
 export default function Adicionar({ data }) {
@@ -246,7 +246,7 @@ export default function Adicionar({ data }) {
 export async function getServerSideProps(context) {
     const { id } = context.params; /* id do produto; */
 
-    const data = await getAllPortal({ id: id })
+    const data = await getProdutoPortal({ id: id })
     if (!data || !data.id) {
         return {
             redirect: {

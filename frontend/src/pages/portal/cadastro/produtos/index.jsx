@@ -1,19 +1,21 @@
 import Head from "next/head";
 import { ChevronRight, BoxFill } from "react-bootstrap-icons"
 import Link from "next/link"
-import { PlusCircleDotted, Search, PencilSquare, X } from "react-bootstrap-icons"
+import { PlusCircleDotted, Search, PencilSquare, X, ArrowUp, ArrowDown } from "react-bootstrap-icons"
 
 import { TitleOne } from "../../../../components/portal/titulo/components"
 import { HeaderFormOne } from "../../../../components/portal/headerform/components"
 import { ButtonVerde, ButtonVermelho, ButtonLaranja, ButtonPreto, ButtonAzul } from "../../../../components/portal/button/components"
 import { InputSearchOne } from "../../../../components/portal/input/components"
-import { TableOne, TdOne, ThOne } from "../../../../components/portal/table/components"
+import { TableOne, TdOne, ThOne, Paginador } from "../../../../components/portal/table/components"
 
-import { getAllPortal } from "../../../api/portal/produtos";
+import { getProdutoPortal } from "../../../api/portal/produtos";
 import { moneyMask } from "../../../../../masks"
 
-export default function CadastroProdutos({ data }) {
+export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page }) {
     const prefix = "produto"
+    const prefixRouter = "/portal/cadastro/produtos"
+
     return (
         <>
             <Head>
@@ -24,7 +26,7 @@ export default function CadastroProdutos({ data }) {
                     <Link href="/portal">Início <ChevronRight height={10} /></Link>
                 </li>
                 <li>
-                    <Link href="/portal/cadastro/produtos">Produtos <ChevronRight height={10} /></Link>
+                    <Link href={prefixRouter}>{`${prefix[0].toUpperCase() + prefix.substring(1)}s`} <ChevronRight height={10} /></Link>
                 </li>
                 <li data="ativo">
                     Listar
@@ -32,7 +34,7 @@ export default function CadastroProdutos({ data }) {
             </TitleOne>
             <HeaderFormOne>
                 <ButtonVerde>
-                    <Link href="/portal/cadastro/produtos/formulario"><PlusCircleDotted size={18} />Adicionar</Link>
+                    <Link href={`${prefixRouter}/formulario`}><PlusCircleDotted size={18} />Adicionar</Link>
                 </ButtonVerde>
 
                 <InputSearchOne>
@@ -49,20 +51,84 @@ export default function CadastroProdutos({ data }) {
                 <table>
                     <thead>
                         <tr>
-                            <ThOne margin="0 auto" maxwidth="100px">Cód.</ThOne>
-                            <ThOne maxwidth="9999px">Nome</ThOne>
-                            <ThOne maxwidth="100px">Estoque</ThOne>
-                            <ThOne maxwidth="100px">Venda</ThOne>
-                            <ThOne maxwidth="100px">Promoção</ThOne>
+                            <ThOne maxwidth="100px">
+                                <Link href={`${prefixRouter}?_page=1&_sort=codigo_interno&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                                    {_sort == "codigo_interno" &&
+                                        <>
+                                            {_order == "DESC" ?
+                                                <ArrowUp />
+                                                :
+                                                <ArrowDown />
+                                            }
+                                        </>
+                                    }
+                                    Cód.
+                                </Link>
+                            </ThOne>
+                            <ThOne maxwidth="9999px">
+                                <Link href={`${prefixRouter}?_page=1&_sort=nome&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                                    {_sort == "nome" &&
+                                        <>
+                                            {_order == "DESC" ?
+                                                <ArrowUp />
+                                                :
+                                                <ArrowDown />
+                                            }
+                                        </>
+                                    }
+                                    Nome
+                                </Link>
+                            </ThOne>
+                            <ThOne maxwidth="100px">
+                                <Link href={`${prefixRouter}?_page=1&_sort=estoque_atual&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                                    {_sort == "estoque_atual" &&
+                                        <>
+                                            {_order == "DESC" ?
+                                                <ArrowUp />
+                                                :
+                                                <ArrowDown />
+                                            }
+                                        </>
+                                    }
+                                    Estoque
+                                </Link>
+                            </ThOne>
+                            <ThOne maxwidth="100px">
+                                <Link href={`${prefixRouter}?_page=1&_sort=preco&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                                    {_sort == "preco" &&
+                                        <>
+                                            {_order == "DESC" ?
+                                                <ArrowUp />
+                                                :
+                                                <ArrowDown />
+                                            }
+                                        </>
+                                    }
+                                    Venda
+                                </Link>
+                            </ThOne>
+                            <ThOne maxwidth="100px">
+                                <Link href={`${prefixRouter}?_page=1&_sort=preco_promocao&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                                    {_sort == "preco_promocao" &&
+                                        <>
+                                            {_order == "DESC" ?
+                                                <ArrowUp />
+                                                :
+                                                <ArrowDown />
+                                            }
+                                        </>
+                                    }
+                                    Promoção
+                                </Link>
+                            </ThOne>
                             <ThOne maxwidth="104px">Ações</ThOne>
-                            <ThOne maxwidth="11px" padding="8px 2px">↕</ThOne>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((product => {
+                        {produtos.map((product => {
                             return (
                                 <tr key={product.id}>
-                                    <TdOne maxwidth="100px">{product.id}</TdOne>
+                                    <TdOne maxwidth="100px">{product.codigo_interno}</TdOne>
                                     <TdOne maxwidth="9999px">{product.nome}</TdOne>
                                     <TdOne maxwidth="100px">{product.estoque_atual}</TdOne>
                                     <TdOne maxwidth="100px">{moneyMask(product.preco, false)}</TdOne>
@@ -70,17 +136,17 @@ export default function CadastroProdutos({ data }) {
                                     <TdOne margin="0 auto" maxwidth="104px">
                                         <div data="acoes">
                                             <ButtonAzul margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                                <Link href={`/portal/cadastro/produtos/visualizar/${product.id}`}>
+                                                <Link href={`${prefixRouter}/visualizar/${product.id}`}>
                                                     <Search size={13} />
                                                 </Link>
                                             </ButtonAzul>
                                             <ButtonLaranja margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                                <Link href="/portal/cadastro/produtos/editar">
+                                                <Link href={`${prefixRouter}/formulario/${product.id}`}>
                                                     <PencilSquare size={13} />
                                                 </Link>
                                             </ButtonLaranja>
                                             <ButtonVermelho margin="0" padding="2px 2px 3px 6px">
-                                                <Link href="/portal/cadastro/produtos/delete">
+                                                <Link href="">
                                                     <X size={17} />
                                                 </Link>
                                             </ButtonVermelho>
@@ -92,20 +158,37 @@ export default function CadastroProdutos({ data }) {
                     </tbody>
                 </table>
             </TableOne>
+            {totalPags > 1 &&
+                <Paginador>
+                    {(() => {
+                        let links = [];
+                        for (let page = 1; page <= totalPags; page++) {
+                            links.push(
+                                <Link key={page} className={_page == page ? 'active' : ''} href={`${prefixRouter}?_page=${page}&_sort=${_sort}&_order=${_order}`}>{page}</Link>
+                            );
+                        }
+                        return links;
+                    })()}
+                </Paginador>
+            }
         </>
     )
 }
 
-export async function getServerSideProps() {
-    const data = await getAllPortal({})
+export async function getServerSideProps(context) {
+    try {
+        const { _sort = "id", _order = "DESC", _page = 1 } = context.query;
+        const { produtos, totalPags } = await getProdutoPortal({ _sort: _sort, _order: _order, _page: _page })
 
-    if (!data) {
         return {
-            notFound: true,
+            props: { produtos, totalPags, _sort, _order, _page },
         }
-    }
-
-    return {
-        props: { data },
+    } catch (error) {
+        return {
+            redirect: {
+                destination: "/portal/cadastro/produtos",
+                permanent: false
+            }
+        }
     }
 }

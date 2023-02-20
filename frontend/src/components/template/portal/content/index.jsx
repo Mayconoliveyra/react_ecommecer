@@ -10,6 +10,7 @@ const MainSC = styled.main`
     background: #f9f9f9 !important;
     [data="content"]{
         flex: 1;
+        padding-bottom: 200px;
     }
 `
 export default function PortalContent({ children }) {

@@ -1,12 +1,12 @@
 import { apiPortal } from "../../axios";
 const prefix = "portal/produtos";
 
-const getAllPortal = async ({ id, page = 1, limit = 150 }) => {
+const getProdutoPortal = async ({ id, _page = 1, _limit = 20, _sort = "id", _order = "DESC" }) => {
   const axios = await apiPortal();
   if (id) {
     return await axios.get(`${prefix}/${id}`).then(res => res.data);
   }
-  return await axios.get(`${prefix}?_page=${page}&_limit=${limit}`).then(res => res.data);
+  return await axios.get(`${prefix}?_page=${_page}&_limit=${_limit}&_sort=${_sort}&_order=${_order}`).then(res => res.data);
 };
 const saveProdutoPortal = async (data) => {
   const axios = await apiPortal();
@@ -14,4 +14,4 @@ const saveProdutoPortal = async (data) => {
 };
 
 
-export { getAllPortal, saveProdutoPortal }
+export { getProdutoPortal, saveProdutoPortal }

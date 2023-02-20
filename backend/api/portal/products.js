@@ -2,8 +2,30 @@ module.exports = (app) => {
     const { utility_console, msgErrorDefault, existOrError, notExistOrErrorDB } = app.api.utilities;
     const table = "cadastro_produtos";
 
-    const get = (req, res) => {
-        const id = Number(req.params.id) ?? null;
+    const get = async (req, res) => {
+        const sortColuns = {
+            id: "id",
+            codigo_interno: "codigo_interno",
+            nome: "nome",
+            estoque_atual: "estoque_atual",
+            preco: "preco",
+            preco_promocao: "preco_promocao",
+            produto_ativo: "produto_ativo"
+        }
+        const orderColuns = {
+            ASC: "ASC",
+            asc: "ASC",
+            DESC: "DESC",
+            desc: "DESC",
+        }
+        const page = parseInt(req.query._page) ? parseInt(req.query._page) : 1;
+        const limit = parseInt(req.query._limit) ? parseInt(req.query._limit) : 20;
+        const sort = sortColuns[req.query._sort] ? sortColuns[req.query._sort] : 'id';
+        const order = orderColuns[req.query._order] ? orderColuns[req.query._order] : 'ASC';
+        const id = parseInt(req.params.id) ? parseInt(req.params.id) : false;
+
+        const search = req.query._search ?? null
+
 
         if (id) {
             app.db(table)
@@ -16,13 +38,22 @@ module.exports = (app) => {
                     return res.status(500).send(msgErrorDefault);
                 })
         } else {
-            app.db(table)
-                .whereNull("deleted_at")
-                .then(products => res.json(products))
-                .catch((error) => {
-                    utility_console("portal.products.get", error)
-                    return res.status(500).send(msgErrorDefault);
-                })
+            try {
+                const { totalPags } = await app.db(table)
+                    .count({ totalPags: "*" })
+                    .whereNull("deleted_at")
+                    .first()
+
+                const produtos = await app.db(table)
+                    .whereNull("deleted_at")
+                    .limit(limit).offset(page * limit - limit)
+                    .orderBy(sort, order)
+
+                res.json({ produtos: produtos, totalPags: Math.ceil(totalPags / limit) })
+            } catch (error) {
+                utility_console("portal.products.get", error)
+                return res.status(500).send(msgErrorDefault);
+            }
         }
     };
 

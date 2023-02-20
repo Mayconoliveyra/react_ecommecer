@@ -13,7 +13,7 @@ import { TitleOne } from "../../../../../components/portal/titulo/components"
 import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
 import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/button/components"
 
-import { getAllPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
+import { getProdutoPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
 import { FormatObjNull } from "../../../../../../global"
 import { toast } from "react-toastify";
 
