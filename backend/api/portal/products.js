@@ -58,7 +58,7 @@ module.exports = (app) => {
     };
 
     const save = async (req, res) => {
-        const id = Number(req.params.id);
+        const id = parseInt(req.params.id);
         const body = req.body;
 
 
@@ -80,7 +80,6 @@ module.exports = (app) => {
             promocao_ativa: body.promocao_ativa,
             id_categoria: 1,
         }
-        console.log(modelo)
         try {
             existOrError(modelo.nome, { nome: "Nome do produto deve ser informado." })
             existOrError(modelo.codigo_interno, { codigo_interno: "Código interno deve ser informado." })
@@ -104,7 +103,7 @@ module.exports = (app) => {
                 .where({ id: id })
                 .then(() => res.status(204).send())
                 .catch((error) => {
-                    utility_console("products.save", error)
+                    utility_console("products.save.put", error)
                     return res.status(500).send(msgErrorDefault);
                 });
         } else {
@@ -112,7 +111,7 @@ module.exports = (app) => {
                 .insert(modelo)
                 .then(() => res.status(204).send())
                 .catch((error) => {
-                    utility_console("products.save", error)
+                    utility_console("products.save.post", error)
                     return res.status(500).send(msgErrorDefault);
                 });
         }

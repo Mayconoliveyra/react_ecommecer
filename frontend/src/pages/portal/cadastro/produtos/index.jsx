@@ -16,6 +16,23 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
     const prefix = "produto"
     const prefixRouter = "/portal/cadastro/produtos"
 
+    const LinkHrefTable = (nomeExibir, columnDb) => {
+        return (
+            <Link href={`${prefixRouter}?_page=1&_sort=${columnDb}&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
+                {_sort == columnDb &&
+                    <>
+                        {_order == "DESC" ?
+                            <ArrowUp />
+                            :
+                            <ArrowDown />
+                        }
+                    </>
+                }
+                {nomeExibir}
+            </Link>
+        )
+    }
+
     return (
         <>
             <Head>
@@ -52,74 +69,19 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
                     <thead>
                         <tr>
                             <ThOne maxwidth="100px">
-                                <Link href={`${prefixRouter}?_page=1&_sort=codigo_interno&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
-                                    {_sort == "codigo_interno" &&
-                                        <>
-                                            {_order == "DESC" ?
-                                                <ArrowUp />
-                                                :
-                                                <ArrowDown />
-                                            }
-                                        </>
-                                    }
-                                    Cód.
-                                </Link>
+                                {LinkHrefTable("Cód.", "codigo_interno")}
                             </ThOne>
                             <ThOne maxwidth="9999px">
-                                <Link href={`${prefixRouter}?_page=1&_sort=nome&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
-                                    {_sort == "nome" &&
-                                        <>
-                                            {_order == "DESC" ?
-                                                <ArrowUp />
-                                                :
-                                                <ArrowDown />
-                                            }
-                                        </>
-                                    }
-                                    Nome
-                                </Link>
+                                {LinkHrefTable("Nome", "nome")}
                             </ThOne>
                             <ThOne maxwidth="100px">
-                                <Link href={`${prefixRouter}?_page=1&_sort=estoque_atual&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
-                                    {_sort == "estoque_atual" &&
-                                        <>
-                                            {_order == "DESC" ?
-                                                <ArrowUp />
-                                                :
-                                                <ArrowDown />
-                                            }
-                                        </>
-                                    }
-                                    Estoque
-                                </Link>
+                                {LinkHrefTable("Estoque", "estoque_atual")}
                             </ThOne>
                             <ThOne maxwidth="100px">
-                                <Link href={`${prefixRouter}?_page=1&_sort=preco&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
-                                    {_sort == "preco" &&
-                                        <>
-                                            {_order == "DESC" ?
-                                                <ArrowUp />
-                                                :
-                                                <ArrowDown />
-                                            }
-                                        </>
-                                    }
-                                    Venda
-                                </Link>
+                                {LinkHrefTable("Venda", "preco")}
                             </ThOne>
                             <ThOne maxwidth="100px">
-                                <Link href={`${prefixRouter}?_page=1&_sort=preco_promocao&_order=${_order == "DESC" ? "ASC" : "DESC"}`}>
-                                    {_sort == "preco_promocao" &&
-                                        <>
-                                            {_order == "DESC" ?
-                                                <ArrowUp />
-                                                :
-                                                <ArrowDown />
-                                            }
-                                        </>
-                                    }
-                                    Promoção
-                                </Link>
+                                {LinkHrefTable("Promoção", "preco_promocao")}
                             </ThOne>
                             <ThOne maxwidth="104px">Ações</ThOne>
                         </tr>
@@ -161,7 +123,7 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
             {totalPags > 1 &&
                 <Paginador>
                     {(() => {
-                        let links = [];
+                        const links = [];
                         for (let page = 1; page <= totalPags; page++) {
                             links.push(
                                 <Link key={page} className={_page == page ? 'active' : ''} href={`${prefixRouter}?_page=${page}&_sort=${_sort}&_order=${_order}`}>{page}</Link>

@@ -18,7 +18,7 @@ import { FormatObjNull } from "../../../../../../global"
 import { toast } from "react-toastify";
 
 
-export default function Adicionar({ data }) {
+export default function Editar({ data }) {
     const [alert1, setAlert1] = useState(true);
     const [alert2, setAlert2] = useState(true);
 
@@ -73,7 +73,7 @@ export default function Adicionar({ data }) {
                 initialValues={data}
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
-                    await saveProdutoPortal(valuesFormat)
+                    await saveProdutoPortal(valuesFormat, data.id)
                         .then(() => router.push("/portal/cadastro/produtos"))
                         .catch((res) => {
                             /* Se status 400, significa que o erro foi tratado. */
@@ -254,19 +254,23 @@ export default function Adicionar({ data }) {
 }
 
 export async function getServerSideProps(context) {
-    const { id } = context.params; /* id do produto; */
+    try {
+        const { id } = context.params;
+        const data = await getProdutoPortal({ id: id })
 
-    const data = await getProdutoPortal({ id: id })
-    if (!data || !data.id) {
+        if (!data || !data.id) {
+            throw ""
+        }
+
+        return {
+            props: { data },
+        }
+    } catch (error) {
         return {
             redirect: {
-                destination: "/",
+                destination: "/portal/cadastro/produtos",
                 permanent: false
             }
         }
-    }
-
-    return {
-        props: { data },
     }
 }

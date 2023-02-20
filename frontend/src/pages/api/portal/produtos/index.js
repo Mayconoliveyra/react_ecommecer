@@ -8,8 +8,11 @@ const getProdutoPortal = async ({ id, _page = 1, _limit = 20, _sort = "id", _ord
   }
   return await axios.get(`${prefix}?_page=${_page}&_limit=${_limit}&_sort=${_sort}&_order=${_order}`).then(res => res.data);
 };
-const saveProdutoPortal = async (data) => {
+const saveProdutoPortal = async (data, id) => {
   const axios = await apiPortal();
+  if (id) {
+    return await axios.put(`${prefix}/${id}`, data).then(res => res.data);
+  }
   return await axios.post(`${prefix}`, data).then(res => res.data);
 };
 
