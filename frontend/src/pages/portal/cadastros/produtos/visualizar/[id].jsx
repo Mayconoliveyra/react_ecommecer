@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link"
-import { ChevronRight, X } from "react-bootstrap-icons"
+import { ChevronRight } from "react-bootstrap-icons"
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -12,17 +12,20 @@ import { getProdutoPortal } from "../../../../api/portal/produtos";
 import { moneyMask, dataFormat } from "../../../../../../masks"
 
 export default function Adicionar({ data }) {
+    const prefix = "produto"
+    const prefixRouter = "/portal/cadastros/produtos"
+
     return (
         <>
             <Head>
-                <title>Softconnect - Visualizar produto</title>
+                <title>{`Softconnect - Visualizar ${prefix}`}</title>
             </Head>
-            <TitleOne title="Visualizar produto">
+            <TitleOne title={`Visualizar ${prefix}`}>
                 <li>
                     <Link href="/portal">Início <ChevronRight height={10} /></Link>
                 </li>
                 <li>
-                    <Link href="/portal/cadastro/produtos">Produtos <ChevronRight height={10} /></Link>
+                    <Link href={prefixRouter}>{`${prefix[0].toUpperCase() + prefix.substring(1)}s`} <ChevronRight height={10} /></Link>
                 </li>
                 <li data="ativo">
                     Visualizar

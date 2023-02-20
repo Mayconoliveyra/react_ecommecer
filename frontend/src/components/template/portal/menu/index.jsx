@@ -35,10 +35,10 @@ export default function PortalMenu() {
             <ul data="ul-li">
                 <li><Link href="/portal">Visão geral</Link></li>
                 <li><Link href="/conta/meusdados">Pedidos</Link></li>
-                <li><Link href="/portal/cadastro/produtos">Produtos</Link></li>
-                <li><Link href="/portal/cadastro/produtos">Categorias</Link></li>
-                <li><Link href="/portal/cadastro/produtos">Imagens</Link></li>
-                <li><Link href="/portal/cadastro/produtos">Promoções</Link></li>
+                <li><Link href="/portal/cadastros/produtos">Produtos</Link></li>
+                <li><Link href="/portal/cadastros/produtos">Categorias</Link></li>
+                <li><Link href="/portal/cadastros/produtos">Imagens</Link></li>
+                <li><Link href="/portal/cadastros/produtos">Promoções</Link></li>
             </ul>
         </HeaderSC >
     )

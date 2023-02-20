@@ -64,10 +64,10 @@ export default function MyApp({ Component, pageProps }) {
 
       /* PORTAL */
       case '/portal':
-      case '/portal/cadastro/produtos':
-      case '/portal/cadastro/produtos/formulario':
-      case '/portal/cadastro/produtos/formulario/[id]':
-      case '/portal/cadastro/produtos/visualizar/[id]':
+      case '/portal/cadastros/produtos':
+      case '/portal/cadastros/produtos/adicionar':
+      case '/portal/cadastros/produtos/editar/[id]':
+      case '/portal/cadastros/produtos/visualizar/[id]':
         setTemplate({ ...defaultTemplate, portal: true })
         break;
       default:

@@ -205,7 +205,6 @@ const PaginadorSC = styled.div`
     } 
 `
 
-
 const TableOne = ({ children, height, maxheight, width, maxwidth, margin, padding, background, color, fontsize, fontweight, border, borderadius, boxshadow }) => {
     return (
         <TableOneSC

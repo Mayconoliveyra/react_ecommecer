@@ -4,7 +4,8 @@ import router from "next/router"
 import { ChevronRight, CardImage, Cash, Boxes, Check, X } from "react-bootstrap-icons"
 import Alert from 'react-bootstrap/Alert';
 import { useState } from "react";
-import { Formik, Field } from "formik";
+import { Formik } from "formik";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -15,10 +16,12 @@ import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/bu
 
 import { getProdutoPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
 import { FormatObjNull } from "../../../../../../global"
-import { toast } from "react-toastify";
 
 
 export default function Editar({ data }) {
+    const prefix = "produto"
+    const prefixRouter = "/portal/cadastros/produtos"
+
     const [alert1, setAlert1] = useState(true);
     const [alert2, setAlert2] = useState(true);
 
@@ -55,14 +58,14 @@ export default function Editar({ data }) {
     return (
         <>
             <Head>
-                <title>Softconnect - Editar produto</title>
+                <title>{`Softconnect - Editar ${prefix}`}</title>
             </Head>
-            <TitleOne title="Editar produto">
+            <TitleOne title={`Editar ${prefix}`}>
                 <li>
                     <Link href="/portal">Início <ChevronRight height={10} /></Link>
                 </li>
                 <li>
-                    <Link href="/portal/cadastro/produtos">Produtos <ChevronRight height={10} /></Link>
+                    <Link href={prefixRouter}>{`${prefix[0].toUpperCase() + prefix.substring(1)}s`} <ChevronRight height={10} /></Link>
                 </li>
                 <li data="ativo">
                     Editar
@@ -74,7 +77,7 @@ export default function Editar({ data }) {
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
                     await saveProdutoPortal(valuesFormat, data.id)
-                        .then(() => router.push("/portal/cadastro/produtos"))
+                        .then(() => router.push(prefixRouter))
                         .catch((res) => {
                             /* Se status 400, significa que o erro foi tratado. */
                             if (res && res.response && res.response.status == 400) {
@@ -268,7 +271,7 @@ export async function getServerSideProps(context) {
     } catch (error) {
         return {
             redirect: {
-                destination: "/portal/cadastro/produtos",
+                destination: "/portal/cadastros/produtos",
                 permanent: false
             }
         }

@@ -14,7 +14,7 @@ import { moneyMask } from "../../../../../masks"
 
 export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page }) {
     const prefix = "produto"
-    const prefixRouter = "/portal/cadastro/produtos"
+    const prefixRouter = "/portal/cadastros/produtos"
 
     const LinkHrefTable = (nomeExibir, columnDb) => {
         return (
@@ -51,7 +51,7 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
             </TitleOne>
             <HeaderFormOne>
                 <ButtonVerde>
-                    <Link href={`${prefixRouter}/formulario`}><PlusCircleDotted size={18} />Adicionar</Link>
+                    <Link href={`${prefixRouter}/adicionar`}><PlusCircleDotted size={18} />Adicionar</Link>
                 </ButtonVerde>
 
                 <InputSearchOne>
@@ -103,7 +103,7 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
                                                 </Link>
                                             </ButtonAzul>
                                             <ButtonLaranja margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                                <Link href={`${prefixRouter}/formulario/${product.id}`}>
+                                                <Link href={`${prefixRouter}/editar/${product.id}`}>
                                                     <PencilSquare size={13} />
                                                 </Link>
                                             </ButtonLaranja>
@@ -148,7 +148,7 @@ export async function getServerSideProps(context) {
     } catch (error) {
         return {
             redirect: {
-                destination: "/portal/cadastro/produtos",
+                destination: "/portal/cadastros/produtos",
                 permanent: false
             }
         }

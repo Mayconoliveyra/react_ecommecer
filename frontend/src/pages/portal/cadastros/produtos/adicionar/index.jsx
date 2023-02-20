@@ -4,7 +4,7 @@ import router from "next/router"
 import { ChevronRight, CardImage, Cash, Boxes, Check, X } from "react-bootstrap-icons"
 import Alert from 'react-bootstrap/Alert';
 import { useState } from "react";
-import { Formik, Field } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
@@ -13,12 +13,15 @@ import { TitleOne } from "../../../../../components/portal/titulo/components"
 import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
 import { ButtonVerde, ButtonVermelho } from "../../../../../components/portal/button/components"
 
-import { getProdutoPortal, saveProdutoPortal } from "../../../../api/portal/produtos";
+import { saveProdutoPortal } from "../../../../api/portal/produtos";
 import { FormatObjNull } from "../../../../../../global"
 import { toast } from "react-toastify";
 
 
 export default function Adicionar() {
+    const prefix = "produto"
+    const prefixRouter = "/portal/cadastros/produtos"
+
     const [alert1, setAlert1] = useState(true);
     const [alert2, setAlert2] = useState(true);
     const initialValues = {
@@ -71,14 +74,14 @@ export default function Adicionar() {
     return (
         <>
             <Head>
-                <title>Softconnect - Adicionar produto</title>
+                <title>{`Softconnect - Adicionar ${prefix}`}</title>
             </Head>
-            <TitleOne title="Adicionar produto">
+            <TitleOne title={`Adicionar ${prefix}`}>
                 <li>
                     <Link href="/portal">Início <ChevronRight height={10} /></Link>
                 </li>
                 <li>
-                    <Link href="/portal/cadastro/produtos">Produtos <ChevronRight height={10} /></Link>
+                    <Link href={prefixRouter}>{`${prefix[0].toUpperCase() + prefix.substring(1)}s`} <ChevronRight height={10} /></Link>
                 </li>
                 <li data="ativo">
                     Adicionar
@@ -90,7 +93,7 @@ export default function Adicionar() {
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
                     await saveProdutoPortal(valuesFormat)
-                        .then(() => router.push("/portal/cadastro/produtos"))
+                        .then(() => router.push(prefixRouter))
                         .catch((res) => {
                             /* Se status 400, significa que o erro foi tratado. */
                             if (res && res.response && res.response.status == 400) {
