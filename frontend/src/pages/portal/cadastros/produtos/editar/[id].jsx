@@ -73,7 +73,11 @@ export default function Editar({ data }) {
             </TitleOne>
             <Formik
                 validationSchema={scheme}
-                initialValues={data}
+                initialValues={{
+                    ...data,
+                    preco: data.preco.toFixed(2),
+                    preco_promocao: data.preco_promocao.toFixed(2),
+                }}
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
                     await saveProdutoPortal(valuesFormat, data.id)
