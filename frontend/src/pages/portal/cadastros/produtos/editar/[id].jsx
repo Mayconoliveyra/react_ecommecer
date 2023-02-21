@@ -263,23 +263,22 @@ export default function Editar({ data, session }) {
 
 export async function getServerSideProps(context) {
     try {
-        /* Sessão */
         const { req } = context
         const session = await getSession({ req })
-        if (!session || !session.id) {
+        if (session && session.id && session.email_auth && session.adm) {
+            const { id } = context.params;
+            const data = await getProdutoPortal({ id: id, session })
+
+            if (data && data.id) {
+                return {
+                    props: { data, session },
+                }
+            }
+
             throw ""
         }
 
-        const { id } = context.params;
-        const data = await getProdutoPortal({ id: id, session })
-
-        if (!data || !data.id) {
-            throw ""
-        }
-
-        return {
-            props: { data, session },
-        }
+        throw ""
     } catch (error) {
         return {
             redirect: {

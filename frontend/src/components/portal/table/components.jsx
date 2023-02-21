@@ -51,6 +51,9 @@ const TableOneSC = styled.div`
             td:last-child{
                 border-right: none;
             }
+            th:last-child{
+                border-right: none;
+            }
         }
         tr:nth-child(odd) {
             background-color: #f3f4f5;
@@ -94,8 +97,7 @@ const ThOneSC = styled.th`
 const TdOneSC = styled.td`
     align-items: center;
     max-width: 200px;
-
-    span{
+    .span{
         text-overflow: ellipsis;
         white-space: normal;
         display: -webkit-box;
@@ -103,9 +105,11 @@ const TdOneSC = styled.td`
         -webkit-box-orient: vertical;
         overflow: hidden;
         word-break: break-word;
-        [data="acoes"]{
-            display: flex;
-        }
+    }
+    .acoes{
+        display: flex;
+        justify-content: center;
+        width: 100%;
     }
 
     max-width: ${({ maxwidth }) => maxwidth} !important;
@@ -239,15 +243,21 @@ const ThOne = ({ children, maxwidth, minwidth, padding, background, color, fonts
         </ThOneSC>
     )
 }
-const TdOne = ({ children, maxwidth, minwidth, padding, background, color, fontsize, fontweight }) => {
+const TdOne = ({ children, maxwidth, minwidth, padding, background, color, fontsize, fontweight, element }) => {
     return (
         <TdOneSC
             padding={padding}
             maxwidth={maxwidth} minwidth={minwidth}
             background={background} color={color}
             fontsize={fontsize} fontweight={fontweight}
+            element={element}
         >
-            <span>{children}</span>
+            {!element && (
+                <span className="span">{children}</span>
+            )}
+            {element == "acoes" && (
+                <div className="acoes">{children}</div>
+            )}
         </TdOneSC>
     )
 }

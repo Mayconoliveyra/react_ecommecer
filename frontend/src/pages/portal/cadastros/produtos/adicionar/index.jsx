@@ -275,16 +275,15 @@ export default function Adicionar({ session }) {
 
 export async function getServerSideProps(context) {
     try {
-        /* Sessão */
         const { req } = context
         const session = await getSession({ req })
-        if (!session || !session.id) {
-            throw ""
+        if (session && session.id && session.email_auth && session.adm) {
+            return {
+                props: { session },
+            }
         }
 
-        return {
-            props: { session },
-        }
+        throw ""
     } catch (error) {
         return {
             redirect: {

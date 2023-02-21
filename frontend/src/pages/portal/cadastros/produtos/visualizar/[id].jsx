@@ -249,23 +249,22 @@ export default function Adicionar({ data }) {
 
 export async function getServerSideProps(context) {
     try {
-        /* Sessão */
         const { req } = context
         const session = await getSession({ req })
-        if (!session || !session.id) {
+        if (session && session.id && session.email_auth && session.adm) {
+            const { id } = context.params;
+            const data = await getProdutoPortal({ id: id, session: session })
+
+            if (data && data.id) {
+                return {
+                    props: { data }
+                }
+            }
+
             throw ""
         }
 
-        const { id } = context.params;
-        const data = await getProdutoPortal({ id: id, session: session })
-        if (!data || !data.id) {
-            throw ""
-        }
-
-        return {
-            props: { data },
-        }
-
+        throw ""
     } catch (error) {
         return {
             redirect: {
