@@ -151,6 +151,9 @@ const CardPaymentSC = styled.div`
                             font-family: ${({ theme }) => theme.font.family.medium};
                             font-size: 1rem;
                         }
+                        .quantidade-span{
+                            margin-right: 1.2rem;
+                        }
                 }
             }
         }
@@ -269,11 +272,11 @@ const CardPayment = ({ product }) => {
                         {product.promocao_ativa == 'Sim' ?
                             (
                                 <>
-                                    <span>Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco_promocao * product.quantidade)}</span>
+                                    <span className="quantidade-span">Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco_promocao * product.quantidade)}</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco * product.quantidade)}</span>
+                                    <span className="quantidade-span">Qtd: {product.quantidade}</span>   <span>Total: {moneyMask(product.preco * product.quantidade)}</span>
                                 </>
                             )
                         }
