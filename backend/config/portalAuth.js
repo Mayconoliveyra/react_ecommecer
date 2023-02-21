@@ -6,7 +6,7 @@ module.exports = middleware => {
                         if (!req.headers || !req.headers.portalauth) throw "[1] Autenticação portal inválida"
                         const body = jwt.decode(req.headers.portalauth, SECRET_KEY_SERVER_PORTAL);
 
-                        if (body && body.id && body.adm && body.email_auth) {
+                        if (body && body.id && body.email_auth && body.adm) {
                                 req.portalAuth = body
                                 middleware(req, res, next)
                         } else {
