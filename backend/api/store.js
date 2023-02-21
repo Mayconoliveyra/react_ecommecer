@@ -38,7 +38,7 @@ module.exports = (app) => {
             m_yutube: store.m_yutube,
         }
 
-        return res.json(modelo)
+        return res.status(200).json(modelo)
     };
 
     return { getTeste, get };

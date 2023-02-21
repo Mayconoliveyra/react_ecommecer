@@ -144,7 +144,7 @@ module.exports = (app) => {
                 }
             }
 
-            res.json({ products: products[0], totals: totals })
+            res.status(200).json({ products: products[0], totals: totals })
         } catch (error) {
             utility_console("cart.getCartTemp", error)
             return res.status(500).send(msgErrorDefault);
@@ -332,18 +332,18 @@ module.exports = (app) => {
                         .table("vendas_cabecalho")
                         .where({ id: idTotalsHeader })
 
-                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/pix/${idTotalsHeader}` })
+                    res.status(200).json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/pix/${idTotalsHeader}` })
                 }
                 if (modeloTotals.pgt_forma == "Cartão") {
                     console.log("Cartão...")
 
-                    res.json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/cartao' })
+                    res.status(200).json({ id: idTotalsHeader, redirect: '/carrinho/pagamento/cartao' })
                 }
                 if (modeloTotals.pgt_forma == "Pagar na loja") {
-                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/loja/${idTotalsHeader}` })
+                    res.status(200).json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/loja/${idTotalsHeader}` })
                 }
                 if (modeloTotals.pgt_forma == "Pagar na entrega") {
-                    res.json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/entrega/${idTotalsHeader}` })
+                    res.status(200).json({ id: idTotalsHeader, redirect: `/carrinho/pagamento/entrega/${idTotalsHeader}` })
                 }
             })
         } catch (error) {
@@ -367,12 +367,12 @@ module.exports = (app) => {
                 .andWhere({ id_user: id_user })
                 .first()
 
-            if (pagamento.cancelado || pagamento.pgt_forma != "PIX" || pagamento.pix_status != "ATIVA") return res.json(false)
+            if (pagamento.cancelado || pagamento.pgt_forma != "PIX" || pagamento.pix_status != "ATIVA") return res.status(200).json(false)
             const dateAt = new Date();
             const dateExp = new Date(pagamento.pix_expiracao);
-            if (dateAt.getTime() > dateExp.getTime()) return res.json(false)
+            if (dateAt.getTime() > dateExp.getTime()) return res.status(200).json(false)
 
-            return res.json(pagamento)
+            return res.status(200).json(pagamento)
         } catch (error) {
             utility_console("cart.getPagamento", error)
             return res.status(400).send(msgErrorDefault)
@@ -399,7 +399,7 @@ module.exports = (app) => {
         if (id_vendas) {
             /* Retorna os produtos do pedido */
             app.db("vendas_produtos").where({ id_venda: id_vendas })
-                .then((products) => res.json(products))
+                .then((products) => res.status(200).json(products))
                 .catch((error) => {
                     utility_console("cart.getPedidos.id_vendas", error)
                     return res.status(500).send(msgErrorDefault)
@@ -421,7 +421,7 @@ module.exports = (app) => {
                         ${LimitOFFSET(page, limit)}
                     `)
 
-                res.json({ dt_pedidos: pedidos, totals })
+                res.status(200).json({ dt_pedidos: pedidos, totals })
             } catch (error) {
                 utility_console("cart.getPedidos", error)
                 return res.status(500).send(msgErrorDefault)

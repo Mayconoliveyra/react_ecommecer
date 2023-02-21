@@ -17,7 +17,7 @@ module.exports = (app) => {
                 .whereRaw('produto_ativo = "Sim" AND deleted_at IS NULL')
                 .limit(limit).offset(page * limit - limit)
                 .orderBy('id', 'desc')
-                .then(products => res.json(products))
+                .then(products => res.status(200).json(products))
                 .catch((error) => {
                     utility_console("products.get.search", error)
                     return res.status(500).send(msgErrorDefault);
@@ -32,7 +32,7 @@ module.exports = (app) => {
                 .where({ id: id })
                 .whereRaw('produto_ativo = "Sim" AND deleted_at IS NULL')
                 .first()
-                .then(products => res.json(products))
+                .then(products => res.status(200).json(products))
                 .catch((error) => {
                     utility_console("products.get.id", error)
                     return res.status(500).send(msgErrorDefault);
@@ -131,7 +131,7 @@ module.exports = (app) => {
                     LIMIT ${limit};
                 `)
 
-            res.json({ vendidos: vendidos[0], semana: semana[0], oferta: oferta[0] });
+            res.status(200).json({ vendidos: vendidos[0], semana: semana[0], oferta: oferta[0] });
         } catch (error) {
             utility_console("products.get", error)
             res.status(500).send(msgErrorDefault)

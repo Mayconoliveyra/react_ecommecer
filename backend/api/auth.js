@@ -79,7 +79,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, SECRET_KEY_AUTH))
+                        return res.status(200).json(jwt.encode(payload, SECRET_KEY_AUTH))
                 } catch (error) {
                         utility_console("auth.signinNextAuth", error);
                         return res.status(400).send({ 400: msgErrorDefault })
@@ -145,7 +145,7 @@ module.exports = app => {
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
 
-                        return res.json(jwt.encode(payload, SECRET_KEY_AUTH))
+                        return res.status(200).json(jwt.encode(payload, SECRET_KEY_AUTH))
                 } catch (error) {
                         utility_console("auth.signin", error);
                         return res.status(400).send({ 400: msgErrorDefault })

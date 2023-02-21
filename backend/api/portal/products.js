@@ -32,7 +32,7 @@ module.exports = (app) => {
                 .where({ id: id })
                 .whereNull("deleted_at")
                 .first()
-                .then(products => res.json(products))
+                .then(products => res.status(200).json(products))
                 .catch((error) => {
                     utility_console("portal.products.get", error)
                     return res.status(500).send(msgErrorDefault);
@@ -49,7 +49,7 @@ module.exports = (app) => {
                     .limit(limit).offset(page * limit - limit)
                     .orderBy(sort, order)
 
-                res.json({ produtos: produtos, totalPags: Math.ceil(totalPags / limit) })
+                res.status(200).json({ produtos: produtos, totalPags: Math.ceil(totalPags / limit) })
             } catch (error) {
                 utility_console("portal.products.get", error)
                 return res.status(500).send(msgErrorDefault);
@@ -109,7 +109,7 @@ module.exports = (app) => {
         } else {
             app.db(table)
                 .insert(modelo)
-                .then(() => res.status(204).send())
+                .then(() => res.status(201).send())
                 .catch((error) => {
                     utility_console("products.save.post", error)
                     return res.status(500).send(msgErrorDefault);
