@@ -74,6 +74,7 @@ module.exports = app => {
                                 bloqueado: user.bloqueado,
                                 distancia_km: user.distancia_km,
                                 tempo: user.tempo,
+                                adm: user.adm,
                                 iat: data, // emitido em
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }
@@ -139,6 +140,7 @@ module.exports = app => {
                                 bloqueado: user.bloqueado,
                                 distancia_km: user.distancia_km,
                                 tempo: user.tempo,
+                                adm: user.adm,
                                 iat: data, // emitido em
                                 exp: data + (60 * 60 * 1) /* 24hras para expirar */
                         }

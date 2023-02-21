@@ -24,6 +24,7 @@ exports.up = function (knex) {
             table.double("tempo", 8, 1).notNull().defaultTo(0)
 
             table.boolean("email_auth", 1).notNull().defaultTo(0) /* Quando ta true, significa que o email foi autenticado, quando utiliza facebook e google seta como true tambem. */
+            table.boolean("adm", 1).notNull().defaultTo(0) /* Acesso ao gestão */
 
             table.timestamp("updated_at").defaultTo(knex.raw("NULL ON UPDATE CURRENT_TIMESTAMP"));
             table.timestamp('created_at').defaultTo(knex.fn.now())

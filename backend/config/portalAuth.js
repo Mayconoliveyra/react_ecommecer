@@ -1,19 +1,20 @@
-const { SECRET_KEY_AUTH, SECRET_KEY_SERVER_PORTAL } = require("../.env")
+const { SECRET_KEY_SERVER_PORTAL } = require("../.env")
 const jwt = require("jwt-simple")
 module.exports = middleware => {
         return (req, res, next) => {
                 try {
-                        if (!req.headers || !req.headers.userauth) throw "error"
-                        const body = jwt.decode(req.headers.userauth, SECRET_KEY_AUTH);
-                        if (!body.id) throw "error"
+                        if (!req.headers || !req.headers.portalauth) throw "[1] Autenticação portal inválida"
+                        const body = jwt.decode(req.headers.portalauth, SECRET_KEY_SERVER_PORTAL);
 
-                        if (!req.headers || !req.headers.portalauth) throw "error"
-
-                        jwt.decode(req.headers.portalauth, SECRET_KEY_SERVER_PORTAL);
-
-                        middleware(req, res, next)
+                        if (body && body.id && body.adm && body.email_auth) {
+                                req.portalAuth = body
+                                middleware(req, res, next)
+                        } else {
+                                throw "[2] Autenticação portal inválida"
+                        }
                 } catch (error) {
-                        res.status(401).send("Usuário não está autenticado")
+                        console.log(error)
+                        res.status(401).send("Autenticação portal inválida")
                 }
         }
 }

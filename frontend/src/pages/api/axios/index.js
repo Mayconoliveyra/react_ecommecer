@@ -42,17 +42,12 @@ const apiPortal = (session = {}) => {
     iat: data,
     exp: data + (30)
   }
-  const payloaPortal = {
-    iat: data,
-    exp: data + (30)
-  }
   return axios.create({
     baseURL: URL_SERVER,
     headers: {
       "Authorization": `Bearer ${jwt.encode(payload, SECRET_KEY_SERVER)}`,
       "Access-Control-Allow-Origin": "*",
-      "userauth": jwt.encode(payloadSession, SECRET_KEY_AUTH),
-      "portalauth": jwt.encode(payloaPortal, SECRET_KEY_SERVER_PORTAL)
+      "portalauth": jwt.encode(payloadSession, SECRET_KEY_SERVER_PORTAL) /* mesmo payload de autenticação usuario.*/
     },
   })
 };
