@@ -4,6 +4,7 @@ import { ChevronRight } from "react-bootstrap-icons"
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
+import { getSession } from "next-auth/react";
 
 import { TableVW } from "../../../../../components/portal/table/components"
 import { TitleOne } from "../../../../../components/portal/titulo/components"
@@ -247,19 +248,30 @@ export default function Adicionar({ data }) {
 }
 
 export async function getServerSideProps(context) {
-    const { id } = context.params; /* id do produto; */
+    try {
+        /* Sessão */
+        const { req } = context
+        const session = await getSession({ req })
+        if (!session || !session.id) {
+            throw ""
+        }
 
-    const data = await getProdutoPortal({ id: id })
-    if (!data || !data.id) {
+        const { id } = context.params;
+        const data = await getProdutoPortal({ id: id, session: session })
+        if (!data || !data.id) {
+            throw ""
+        }
+
+        return {
+            props: { data },
+        }
+
+    } catch (error) {
         return {
             redirect: {
                 destination: "/",
                 permanent: false
             }
         }
-    }
-
-    return {
-        props: { data },
     }
 }

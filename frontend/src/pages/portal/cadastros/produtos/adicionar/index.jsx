@@ -8,6 +8,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
+import { getSession } from "next-auth/react";
 
 import { TitleOne } from "../../../../../components/portal/titulo/components"
 import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
@@ -18,7 +19,7 @@ import { FormatObjNull } from "../../../../../../global"
 import { toast } from "react-toastify";
 
 
-export default function Adicionar() {
+export default function Adicionar({ session }) {
     const prefix = "produto"
     const prefixRouter = "/portal/cadastros/produtos"
 
@@ -92,7 +93,7 @@ export default function Adicionar() {
                 initialValues={initialValues}
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
-                    await saveProdutoPortal(valuesFormat)
+                    await saveProdutoPortal({ data: valuesFormat, session: session })
                         .then(() => router.push(prefixRouter))
                         .catch((res) => {
                             /* Se status 400, significa que o erro foi tratado. */
@@ -272,8 +273,24 @@ export default function Adicionar() {
     )
 }
 
-export async function getServerSideProps() {
-    return {
-        props: {},
+export async function getServerSideProps(context) {
+    try {
+        /* Sessão */
+        const { req } = context
+        const session = await getSession({ req })
+        if (!session || !session.id) {
+            throw ""
+        }
+
+        return {
+            props: { session },
+        }
+    } catch (error) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { pt } from "yup-locale-pt";
 Yup.setLocale(pt);
+import { getSession } from "next-auth/react";
 
 import { TitleOne } from "../../../../../components/portal/titulo/components"
 import { FormOne, GroupOne, GroupMoney, GroupSelectOne, TitleFormOne, RowBtns } from "../../../../../components/portal/form/components";
@@ -18,7 +19,7 @@ import { getProdutoPortal, saveProdutoPortal } from "../../../../api/portal/prod
 import { FormatObjNull } from "../../../../../../global"
 
 
-export default function Editar({ data }) {
+export default function Editar({ data, session }) {
     const prefix = "produto"
     const prefixRouter = "/portal/cadastros/produtos"
 
@@ -80,7 +81,7 @@ export default function Editar({ data }) {
                 }}
                 onSubmit={async (values, setValues) => {
                     const valuesFormat = FormatObjNull(values)
-                    await saveProdutoPortal(valuesFormat, data.id)
+                    await saveProdutoPortal({ data: valuesFormat, id: data.id, session: session })
                         .then(() => router.push(prefixRouter))
                         .catch((res) => {
                             /* Se status 400, significa que o erro foi tratado. */
@@ -262,20 +263,27 @@ export default function Editar({ data }) {
 
 export async function getServerSideProps(context) {
     try {
+        /* Sessão */
+        const { req } = context
+        const session = await getSession({ req })
+        if (!session || !session.id) {
+            throw ""
+        }
+
         const { id } = context.params;
-        const data = await getProdutoPortal({ id: id })
+        const data = await getProdutoPortal({ id: id, session })
 
         if (!data || !data.id) {
             throw ""
         }
 
         return {
-            props: { data },
+            props: { data, session },
         }
     } catch (error) {
         return {
             redirect: {
-                destination: "/portal/cadastros/produtos",
+                destination: "/",
                 permanent: false
             }
         }

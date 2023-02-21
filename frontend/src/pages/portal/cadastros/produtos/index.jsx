@@ -2,6 +2,7 @@ import Head from "next/head";
 import { ChevronRight, BoxFill } from "react-bootstrap-icons"
 import Link from "next/link"
 import { PlusCircleDotted, Search, PencilSquare, X, ArrowUp, ArrowDown } from "react-bootstrap-icons"
+import { getSession } from "next-auth/react";
 
 import { TitleOne } from "../../../../components/portal/titulo/components"
 import { HeaderFormOne } from "../../../../components/portal/headerform/components"
@@ -12,7 +13,7 @@ import { TableOne, TdOne, ThOne, Paginador } from "../../../../components/portal
 import { getProdutoPortal } from "../../../api/portal/produtos";
 import { moneyMask } from "../../../../../masks"
 
-export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page }) {
+export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page, session }) {
     const prefix = "produto"
     const prefixRouter = "/portal/cadastros/produtos"
 
@@ -139,16 +140,23 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
 
 export async function getServerSideProps(context) {
     try {
+        /* Sessão */
+        const { req } = context
+        const session = await getSession({ req })
+        if (!session || !session.id) {
+            throw ""
+        }
+
         const { _sort = "id", _order = "DESC", _page = 1 } = context.query;
-        const { produtos, totalPags } = await getProdutoPortal({ _sort: _sort, _order: _order, _page: _page })
+        const { produtos, totalPags } = await getProdutoPortal({ _sort: _sort, _order: _order, _page: _page, session: session })
 
         return {
-            props: { produtos, totalPags, _sort, _order, _page },
+            props: { produtos, totalPags, _sort, _order, _page, session },
         }
     } catch (error) {
         return {
             redirect: {
-                destination: "/portal/cadastros/produtos",
+                destination: "/",
                 permanent: false
             }
         }

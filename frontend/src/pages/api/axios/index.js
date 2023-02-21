@@ -1,4 +1,4 @@
-const { URL_SERVER, SECRET_KEY_SERVER, SECRET_KEY_AUTH } = require("../../../../credentials")
+const { URL_SERVER, SECRET_KEY_SERVER, SECRET_KEY_AUTH, SECRET_KEY_SERVER_PORTAL } = require("../../../../credentials")
 import axios from "axios";
 const jwt = require("jwt-simple")
 
@@ -42,12 +42,17 @@ const apiPortal = (session = {}) => {
     iat: data,
     exp: data + (30)
   }
+  const payloaPortal = {
+    iat: data,
+    exp: data + (30)
+  }
   return axios.create({
     baseURL: URL_SERVER,
     headers: {
       "Authorization": `Bearer ${jwt.encode(payload, SECRET_KEY_SERVER)}`,
       "Access-Control-Allow-Origin": "*",
-      "userauth": jwt.encode(payloadSession, SECRET_KEY_AUTH)
+      "userauth": jwt.encode(payloadSession, SECRET_KEY_AUTH),
+      "portalauth": jwt.encode(payloaPortal, SECRET_KEY_SERVER_PORTAL)
     },
   })
 };

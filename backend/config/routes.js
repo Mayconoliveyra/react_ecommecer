@@ -1,4 +1,5 @@
 const userAuth = require("./userAuth")
+const portalAuth = require("./portalAuth")
 module.exports = (app) => {
   app.route("/store")
     .all(app.config.passport.authenticate())
@@ -59,13 +60,13 @@ module.exports = (app) => {
   const prefixPortal = "/portal"
   app.route(`${prefixPortal}/produtos`)
     .all(app.config.passport.authenticate())
-    .get(app.api.portal.products.get)
-    .post(app.api.portal.products.save)
+    .get(portalAuth(app.api.portal.products.get))
+    .post(portalAuth(app.api.portal.products.save))
 
   app.route(`${prefixPortal}/produtos/:id`)
     .all(app.config.passport.authenticate())
-    .get(app.api.portal.products.get)
-    .put(app.api.portal.products.save)
+    .get(portalAuth(app.api.portal.products.get))
+    .put(portalAuth(app.api.portal.products.save))
 
 
   /* TESTE */
