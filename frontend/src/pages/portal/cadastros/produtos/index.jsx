@@ -8,10 +8,14 @@ import { TitleOne } from "../../../../components/portal/titulo/components"
 import { HeaderFormOne } from "../../../../components/portal/headerform/components"
 import { ButtonVerde, ButtonVermelho, ButtonLaranja, ButtonPreto, ButtonAzul } from "../../../../components/portal/button/components"
 import { InputSearchOne } from "../../../../components/portal/input/components"
-import { TableOne, TdOne, ThOne, Paginador } from "../../../../components/portal/table/components"
+import { TableOne, TdOne, ThOne, Paginador, Vazio } from "../../../../components/portal/table/components"
 
 import { getProdutoPortal } from "../../../api/portal/produtos";
 import { moneyMask } from "../../../../../masks"
+
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page, session }) {
     const prefix = "produto"
@@ -33,8 +37,8 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
             </Link>
         )
     }
-
     return (
+
         <>
             <Head>
                 <title>{`Softconnect - Listar ${prefix}s`}</title>
@@ -65,61 +69,67 @@ export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _
                 </InputSearchOne>
             </HeaderFormOne>
 
-            <TableOne>
-                <table>
-                    <thead>
-                        <tr>
-                            <ThOne maxwidth="100px">
-                                {LinkHrefTable("Cód.", "codigo_interno")}
-                            </ThOne>
-                            <ThOne maxwidth="9999px">
-                                {LinkHrefTable("Nome", "nome")}
-                            </ThOne>
-                            <ThOne maxwidth="100px">
-                                {LinkHrefTable("Estoque", "estoque_atual")}
-                            </ThOne>
-                            <ThOne maxwidth="100px">
-                                {LinkHrefTable("Venda", "preco")}
-                            </ThOne>
-                            <ThOne maxwidth="100px">
-                                {LinkHrefTable("Promoção", "preco_promocao")}
-                            </ThOne>
-                            <ThOne maxwidth="110px">Ações</ThOne>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {produtos.map((product => {
-                            return (
-                                <tr key={product.id}>
-                                    <TdOne maxwidth="100px">{product.codigo_interno}</TdOne>
-                                    <TdOne maxwidth="9999px">{product.nome}</TdOne>
-                                    <TdOne maxwidth="100px">{product.estoque_atual}</TdOne>
-                                    <TdOne maxwidth="100px">{moneyMask(product.preco, false)}</TdOne>
-                                    <TdOne maxwidth="100px">{moneyMask(product.preco_promocao, false)}</TdOne>
-                                    <TdOne margin="0 auto" maxwidth="110px" element="acoes">
-                                        <ButtonAzul margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                            <Link href={`${prefixRouter}/visualizar/${product.id}`}>
-                                                <Search size={13} />
-                                            </Link>
-                                        </ButtonAzul>
-                                        <ButtonLaranja margin="0 3px 0 0" padding="4px 4px 5px 8px">
-                                            <Link href={`${prefixRouter}/editar/${product.id}`}>
-                                                <PencilSquare size={13} />
-                                            </Link>
-                                        </ButtonLaranja>
-                                        <ButtonVermelho margin="0" padding="2px 2px 3px 6px">
-                                            <Link href="">
-                                                <X size={17} />
-                                            </Link>
-                                        </ButtonVermelho>
-                                    </TdOne>
-                                </tr>
-                            )
-                        }))}
-                    </tbody>
-                </table>
-            </TableOne>
-            {totalPags > 1 &&
+            {produtos && produtos.length > 0 ?
+                < TableOne >
+                    <table>
+                        <thead>
+                            <tr>
+                                <ThOne maxwidth="100px">
+                                    {LinkHrefTable("Cód.", "codigo_interno")}
+                                </ThOne>
+                                <ThOne maxwidth="9999px">
+                                    {LinkHrefTable("Nome", "nome")}
+                                </ThOne>
+                                <ThOne maxwidth="100px">
+                                    {LinkHrefTable("Estoque", "estoque_atual")}
+                                </ThOne>
+                                <ThOne maxwidth="100px">
+                                    {LinkHrefTable("Venda", "preco")}
+                                </ThOne>
+                                <ThOne maxwidth="100px">
+                                    {LinkHrefTable("Promoção", "preco_promocao")}
+                                </ThOne>
+                                <ThOne maxwidth="110px">Ações</ThOne>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {produtos.map((product => {
+                                return (
+                                    <tr key={product.id}>
+                                        <TdOne maxwidth="100px">{product.codigo_interno}</TdOne>
+                                        <TdOne maxwidth="9999px">{product.nome}</TdOne>
+                                        <TdOne maxwidth="100px">{product.estoque_atual}</TdOne>
+                                        <TdOne maxwidth="100px">{moneyMask(product.preco, false)}</TdOne>
+                                        <TdOne maxwidth="100px">{moneyMask(product.preco_promocao, false)}</TdOne>
+                                        <TdOne margin="0 auto" maxwidth="110px" element="acoes">
+                                            <ButtonAzul margin="0 3px 0 0" padding="4px 4px 5px 8px">
+                                                <Link href={`${prefixRouter}/visualizar/${product.id}`}>
+                                                    <Search size={13} />
+                                                </Link>
+                                            </ButtonAzul>
+                                            <ButtonLaranja margin="0 3px 0 0" padding="4px 4px 5px 8px">
+                                                <Link href={`${prefixRouter}/editar/${product.id}`}>
+                                                    <PencilSquare size={13} />
+                                                </Link>
+                                            </ButtonLaranja>
+                                            <ButtonVermelho margin="0" padding="2px 2px 3px 6px">
+                                                <Link href="">
+                                                    <X size={17} />
+                                                </Link>
+                                            </ButtonVermelho>
+                                        </TdOne>
+                                    </tr>
+                                )
+                            }))}
+                        </tbody>
+                    </table>
+                </TableOne>
+                :
+                <Vazio nome={prefix} />
+            }
+
+            {
+                totalPags > 1 &&
                 <Paginador>
                     {(() => {
                         const links = [];

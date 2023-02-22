@@ -1,4 +1,6 @@
 import styled from "styled-components"
+import { ExclamationTriangle } from "react-bootstrap-icons"
+
 const TableOneSC = styled.div`
     display: flex;
     padding: 15px 15px;
@@ -208,6 +210,20 @@ const PaginadorSC = styled.div`
         cursor: default;
     } 
 `
+const VazioSC = styled.div`
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #AAAAAA;
+    .icon-vazio{
+        display: flex;
+        flex-direction: column;
+    }
+    h3{
+        margin-top: 10px;
+    }
+`
 
 const TableOne = ({ children, height, maxheight, width, maxwidth, margin, padding, background, color, fontsize, fontweight, border, borderadius, boxshadow }) => {
     return (
@@ -268,5 +284,16 @@ const Paginador = ({ children }) => {
         </PaginadorSC>
     )
 }
+const Vazio = ({ nome }) => {
+    return (
+        <VazioSC>
+            <div className="icon-vazio">
+                <ExclamationTriangle size={75} />
+            </div>
+            <h3>Nenhum {nome} foi encontrada!</h3>
+        </VazioSC>
+    )
+}
 
-export { TableOne, TdOne, ThOne, TableVW, Paginador }
+
+export { TableOne, TdOne, ThOne, TableVW, Paginador, Vazio }
