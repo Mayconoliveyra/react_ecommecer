@@ -68,6 +68,8 @@ export default function MyApp({ Component, pageProps }) {
       case '/portal/cadastros/produtos/adicionar':
       case '/portal/cadastros/produtos/editar/[id]':
       case '/portal/cadastros/produtos/visualizar/[id]':
+
+      case '/portal/pedidos':
         setTemplate({ ...defaultTemplate, portal: true })
         break;
       default:

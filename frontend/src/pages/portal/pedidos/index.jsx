@@ -4,14 +4,14 @@ import Link from "next/link"
 import { PlusCircleDotted, Search, PencilSquare, X, ArrowUp, ArrowDown } from "react-bootstrap-icons"
 import { getSession } from "next-auth/react";
 
-import { TitleOne } from "../../../../components/portal/titulo/components"
-import { HeaderFormOne } from "../../../../components/portal/headerform/components"
-import { ButtonVerde, ButtonVermelho, ButtonLaranja, ButtonPreto, ButtonAzul } from "../../../../components/portal/button/components"
-import { InputSearchOne } from "../../../../components/portal/input/components"
-import { TableOne, TdOne, ThOne, Paginador, Vazio } from "../../../../components/portal/table/components"
+import { TitleOne } from "../../../components/portal/titulo/components"
+import { HeaderFormOne } from "../../../components/portal/headerform/components"
+import { ButtonVerde, ButtonVermelho, ButtonLaranja, ButtonPreto, ButtonAzul } from "../../../components/portal/button/components"
+import { InputSearchOne } from "../../../components/portal/input/components"
+import { TableOne, TdOne, ThOne, Paginador, Vazio } from "../../../components/portal/table/components"
 
-import { getProdutoPortal } from "../../../api/portal/produtos";
-import { moneyMask } from "../../../../../masks"
+import { getProdutoPortal } from "../../api/portal/produtos";
+import { moneyMask } from "../../../../masks"
 
 export default function CadastroProdutos({ produtos, totalPags, _sort, _order, _page, session }) {
     const prefix = "produto"
